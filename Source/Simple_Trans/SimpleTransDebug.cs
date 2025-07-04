@@ -27,15 +27,29 @@ internal class SimpleTransDebug
 		SimpleTransPregnancyUtility.SetCis(pawn);
 	}
 
-	[DebugAction("Simple Trans", "Set Able to Carry", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+	[DebugAction("Simple Trans", "Set Able to Carry (exclusive)", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 	public static void SetAbleCarry(Pawn pawn)
 	{
-		SimpleTransPregnancyUtility.SetCarry(pawn, removeSire: false);
+		SimpleTransPregnancyUtility.SetCarry(pawn, removeSire: true);
 	}
 
-	[DebugAction("Simple Trans", "Set Able to Sire", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+	[DebugAction("Simple Trans", "Set Able to Sire (exclusive)", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 	public static void SetAbleSire(Pawn pawn)
 	{
+		SimpleTransPregnancyUtility.SetSire(pawn, removeCarry: true);
+	}
+
+	[DebugAction("Simple Trans", "Set Dual Reproductive", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+	public static void SetDualReproductive(Pawn pawn)
+	{
+		// Ensure pawn is transgender to allow dual capabilities
+		if (!pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.transDef, false))
+		{
+			SimpleTransPregnancyUtility.SetTrans(pawn);
+		}
+		
+		// Enable both reproductive abilities
+		SimpleTransPregnancyUtility.SetCarry(pawn, removeSire: false);
 		SimpleTransPregnancyUtility.SetSire(pawn, removeCarry: false);
 	}
 
