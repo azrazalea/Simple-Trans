@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Defs>
+  <HediffDef>
+    <defName>Cisgender</defName>
+    <label>cisgender</label>
+    <description>This person's gender identity causes them no issue.</description>
+    <everCurableByItem>false</everCurableByItem>
+    <isBad>false</isBad>
+    <hediffClass>Hediff</hediffClass>
+    <defaultLabelColor>(0.45, 0.35, 0.55)</defaultLabelColor>
+    <stages>
+      <li>
+        <becomeVisible>true</becomeVisible>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>Transgender</defName>
+    <label>transgender</label>
+    <description>This person's gender identity causes them some issues.</description>
+    <everCurableByItem>false</everCurableByItem>
+    <isBad>false</isBad>
+    <hediffClass>Hediff</hediffClass>
+    <defaultLabelColor>(0.45, 0.35, 0.55)</defaultLabelColor>
+    <stages>
+      <li>
+        <becomeVisible>true</becomeVisible>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>PregnancyCarry</defName>
+    <label>able to carry pregnancy</label>
+    <description>This person can carry a pregnancy to term biologically.</description>
+    <everCurableByItem>false</everCurableByItem>
+    <isBad>false</isBad>
+    <hediffClass>Hediff</hediffClass>
+    <defaultLabelColor>(0.35, 0.45, 0.55)</defaultLabelColor>
+    <stages>
+      <li>
+        <becomeVisible>true</becomeVisible>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>PregnancySire</defName>
+    <label>able to sire children</label>
+    <description>This person can biologically sire a child.</description>
+    <everCurableByItem>false</everCurableByItem>
+    <isBad>false</isBad>
+    <hediffClass>Hediff</hediffClass>
+    <defaultLabelColor>(0.35, 0.45, 0.55)</defaultLabelColor>
+    <stages>
+      <li>
+        <becomeVisible>true</becomeVisible>
+      </li>
+    </stages>
+  </HediffDef>
+  <!--
+    <HediffDef>
+        <defName>PregnancyInfertile</defName>
+        <label>unable to have children</label>
+        <description>This person cannot have biological children.</description>
+        <hediffClass>Hediff</hediffClass>
+        <defaultLabelColor>(0.9, 1.0, 0.35)</defaultLabelColor>
+        <stages>
+            <li>
+                <becomeVisible>false</becomeVisible>
+            </li>
+            <li>
+                <capMods>
+                    <li>
+                        <capacity>Fertility</capacity>
+                        <setMax>0.0</setMax>
+                    </li>
+                </capMods>
+            </li>
+        </stages>
+    </HediffDef>
+    -->
+</Defs>

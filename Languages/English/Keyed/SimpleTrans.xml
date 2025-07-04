@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LanguageData>
+  <SimpleTrans.PawnsCannotCarryChild>Neither {PAWN1_nameDef} nor {PAWN2_nameDef} can carrychildren.</SimpleTrans.PawnsCannotCarryChild>
+  <SimpleTrans.PawnsCannotSireChild>Neither {PAWN1_nameDef} nor {PAWN2_nameDef} can sire children.</SimpleTrans.PawnsCannotSireChild>
+  <SimpleTrans.SameGender>same gender</SimpleTrans.SameGender>
+</LanguageData>

@@ -1,0 +1,90 @@
+<Defs>
+  <XmlExtensions.SettingsMenuDef>
+    <modId>runaway.simpletrans</modId>
+    <label>Simple Trans</label>
+    <settings>
+      <li Class="XmlExtensions.Setting.Slider">
+        <key>cisPercent</key>
+        <label>Percent of population who are cisgender: {cisPercent}%</label>
+        <defaultValue>90</defaultValue>
+        <min>0</min>
+        <max>100</max>
+        <decimals>0</decimals>
+      </li>
+      <li Class="XmlExtensions.Setting.Checkbox">
+        <key>debugMode</key>
+        <label>Turn on Debug Mode</label>
+        <defaultValue>false</defaultValue>
+        <tooltip>If this is checked, more messages will be published to the log.</tooltip>
+      </li>
+      <li Class="XmlExtensions.Setting.GapLine" />
+      <li Class="XmlExtensions.Setting.SplitColumn">
+        <leftCol>
+          <li Class="XmlExtensions.Setting.Text">
+            <text>Percent of trans men who can carry: {mCarryPercent}%</text>
+            <keys>
+              <li>mCarryPercent</li>
+            </keys>
+            <tooltip>The rest will be able to sire.</tooltip>
+          </li>
+          <li Class="XmlExtensions.Setting.Text">
+            <text>Percent of trans women who can sire: {fSirePercent}%</text>
+            <keys>
+              <li>fSirePercent</li>
+            </keys>
+            <tooltip>The rest will be able to carry.</tooltip>
+          </li>
+        </leftCol>
+        <rightCol>
+          <li Class="XmlExtensions.Setting.Slider">
+            <key>mCarryPercent</key>
+            <defaultValue>100</defaultValue>
+            <min>0</min>
+            <max>100</max>
+            <decimals>0</decimals>
+          </li>
+          <li Class="XmlExtensions.Setting.Slider">
+            <key>fSirePercent</key>
+            <defaultValue>100</defaultValue>
+            <min>0</min>
+            <max>100</max>
+            <decimals>0</decimals>
+          </li>
+        </rightCol>
+      </li>
+      <li Class="XmlExtensions.Setting.GapLine" />
+      <li Class="XmlExtensions.Setting.Text">
+        <text>Mod Interactions</text>
+        <anchor>Middle</anchor>
+        <font>Medium</font>
+      </li>
+      <li Class="XmlExtensions.Setting.Checkbox">
+        <key>genesAreAgab</key>
+        <label>Modded gender-only genes (for example, Vanilla Expanded Phytokin) are AGAB</label>
+        <defaultValue>true</defaultValue>
+        <tooltip>If this is checked, forced-gender genes will be considered sex, not gender. By default they are considered sex.</tooltip>
+      </li>
+      <li Class="XmlExtensions.Setting.SplitColumn">
+        <leftCol>
+          <li Class="XmlExtensions.Setting.Text">
+            <text>Percent of nonbinary people who can carry: {nCarryPercent}%</text>
+            <keys>
+              <li>nCarryPercent</li>
+            </keys>
+            <tooltip>The rest will be able to sire. This has no effect if you don't have nonbinary people in your game.</tooltip>
+          </li>
+        </leftCol>
+        <rightCol>
+          <li Class="XmlExtensions.Setting.Slider">
+            <key>nCarryPercent</key>
+            <defaultValue>50</defaultValue>
+            <min>0</min>
+            <max>100</max>
+            <decimals>0</decimals>
+          </li>
+        </rightCol>
+      </li>
+      <li Class="XmlExtensions.Setting.ResetSettings" />
+    </settings>
+  </XmlExtensions.SettingsMenuDef>
+</Defs>

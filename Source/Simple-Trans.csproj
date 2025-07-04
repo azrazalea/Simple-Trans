@@ -1,0 +1,75 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Simple-Trans</AssemblyName>
+    <RootNamespace>Simple_Trans</RootNamespace>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    
+    <!-- Output directly to mod folder for easy deployment -->
+    <OutputPath>../1.6/Assemblies/</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    
+    <!-- Debug symbols -->
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    
+    <!-- Enable post-build events -->
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- RimWorld installation path - UPDATE THIS to your RimWorld installation path -->
+    <RimWorldPath Condition="'$(RimWorldPath)' == ''">C:\Program Files (x86)\Steam\steamapps\common\RimWorld</RimWorldPath>
+    <ModName>Simple Trans</ModName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- RimWorld Core References -->
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(RimWorldPath)\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(RimWorldPath)\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    
+    <!-- Harmony -->
+    <PackageReference Include="Lib.Harmony" Version="2.3.3" ExcludeAssets="runtime" />
+    
+    <!-- Mod Dependencies -->
+    <Reference Include="VEF">
+      <HintPath>$(RimWorldPath)\Mods\Vanilla Expanded Framework\1.6\Assemblies\VEF.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="XmlExtensions">
+      <HintPath>$(RimWorldPath)\Mods\XML Extensions\1.6\Assemblies\XmlExtensions.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    
+    <!-- Optional dependency -->
+    <Reference Include="NonBinaryGender" Condition="Exists('$(RimWorldPath)\Mods\Non-Binary Gender\1.6\Assemblies\NonBinaryGender.dll')">
+      <HintPath>$(RimWorldPath)\Mods\Non-Binary Gender\1.6\Assemblies\NonBinaryGender.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Post-build deployment -->
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Message Text="Deploying Simple Trans to RimWorld..." Importance="high" />
+    
+    <!-- Remove existing mod from RimWorld if it exists -->
+    <RemoveDir Directories="$(RimWorldPath)\Mods\$(ModName)" Condition="Exists('$(RimWorldPath)\Mods\$(ModName)')" />
+    
+    <!-- Copy entire mod folder to RimWorld -->
+    <ItemGroup>
+      <ModFiles Include="$(MSBuildProjectDirectory)\..\**\*.*" Exclude="$(MSBuildProjectDirectory)\..\Source\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ModFiles)" DestinationFiles="@(ModFiles->'$(RimWorldPath)\Mods\$(ModName)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    
+    <Message Text="Simple Trans deployed successfully to $(RimWorldPath)\Mods\$(ModName)" Importance="high" />
+  </Target>
+</Project>
