@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ModMetaData>
-    <name>Simple Trans</name>
-    <description>This mod adds a simple system for differentiating how pawns interact with pregnancy and AGAR (Assigned Gender at Rimworld).</description>
-    <author>Runaway</author>
+    <name>Simple Trans (Continued)</name>
+    <description>This mod adds a simple system for differentiating how pawns interact with pregnancy and AGAR (Assigned Gender at Rimworld).
+
+NEW AUTHOR UPDATE: This is a continued version of the original Simple Trans mod by Runaway, completely decompiled and modernized for RimWorld 1.6 compatibility. The original mod was created for RimWorld 1.5. This version maintains all original functionality while adding comprehensive error handling, improved documentation, and modern code practices.
+
+This continued version preserves the original mod's philosophy and design while ensuring compatibility with current RimWorld versions and improved stability.</description>
+    <author>Original author Runaway, Current azrazalea</author>
     <supportedVersions>
         <li>1.5</li>
         <li>1.6</li>
@@ -34,6 +38,7 @@
         <li>Ludeon.RimWorld.Biotech</li>
         <li>brrainz.harmony</li>
         <li>vanillaexpanded.vanillasocialinteractionsexpanded</li>
+        <li>divinederivative.nonbinarygender</li>
     </loadAfter>
     <incompatibleWith>
         <li>rim.job.world</li>
