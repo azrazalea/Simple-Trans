@@ -87,4 +87,39 @@
   <SimpleTrans.Terms.BasicProsthetic>basic prosthetic</SimpleTrans.Terms.BasicProsthetic>
   <SimpleTrans.Terms.BionicProsthetic>bionic prosthetic</SimpleTrans.Terms.BionicProsthetic>
 
+  <!-- Informed Consent Dialog -->
+  <SimpleTrans.ConsentDialogTitle>Informed Consent: {0} Transformation</SimpleTrans.ConsentDialogTitle>
+  <SimpleTrans.ConsentDialogSubtitle>The following changes will be made to {PAWN_nameDef}:</SimpleTrans.ConsentDialogSubtitle>
+  <SimpleTrans.ConsentChangesHeader>Transformation Changes:</SimpleTrans.ConsentChangesHeader>
+  <SimpleTrans.ConsentWarning>This transformation is permanent and will fundamentally alter this person's biology and identity. Please ensure this aligns with their wishes and your colony's needs.</SimpleTrans.ConsentWarning>
+  <SimpleTrans.ConsentProceed>I Understand - Proceed</SimpleTrans.ConsentProceed>
+  <SimpleTrans.NoChangesConfirm>{PAWN_nameDef} already matches the target configuration for {1}. Proceed anyway?</SimpleTrans.NoChangesConfirm>
+
+  <!-- Biosculpter Cycle Labels -->
+  <SimpleTrans.Biosculpter.MasculinizingLabel>Masculinizing Transformation</SimpleTrans.Biosculpter.MasculinizingLabel>
+  <SimpleTrans.Biosculpter.FeminizingLabel>Feminizing Transformation</SimpleTrans.Biosculpter.FeminizingLabel>
+  <SimpleTrans.Biosculpter.FertilityRestorationLabel>Fertility Restoration</SimpleTrans.Biosculpter.FertilityRestorationLabel>
+  <SimpleTrans.Biosculpter.AndrogynizeLabel>Androgynizing Transformation</SimpleTrans.Biosculpter.AndrogynizeLabel>
+  <SimpleTrans.Biosculpter.DuosexLabel>Duosex Transformation</SimpleTrans.Biosculpter.DuosexLabel>
+
+  <!-- Transformation Change Descriptions -->
+  <SimpleTrans.Change.SetGenderMale>Gender will be set to male</SimpleTrans.Change.SetGenderMale>
+  <SimpleTrans.Change.SetGenderFemale>Gender will be set to female</SimpleTrans.Change.SetGenderFemale>
+  <SimpleTrans.Change.SetGenderNonBinary>Gender will be set to non-binary</SimpleTrans.Change.SetGenderNonBinary>
+  <SimpleTrans.Change.SetBodyTypeMale>Body type will be changed to male</SimpleTrans.Change.SetBodyTypeMale>
+  <SimpleTrans.Change.SetBodyTypeFemale>Body type will be changed to female</SimpleTrans.Change.SetBodyTypeFemale>
+  <SimpleTrans.Change.SetBodyTypeThin>Body type will be changed to thin/androgynous</SimpleTrans.Change.SetBodyTypeThin>
+  <SimpleTrans.Change.AddCarryingAbility>Carrying capability will be granted</SimpleTrans.Change.AddCarryingAbility>
+  <SimpleTrans.Change.AddSiringAbility>Siring capability will be granted</SimpleTrans.Change.AddSiringAbility>
+  <SimpleTrans.Change.RemoveCarryingAbility>Carrying capability will be removed</SimpleTrans.Change.RemoveCarryingAbility>
+  <SimpleTrans.Change.RemoveSiringAbility>Siring capability will be removed</SimpleTrans.Change.RemoveSiringAbility>
+  <SimpleTrans.Change.RestoreNaturalCarrying>Natural carrying capability will be restored</SimpleTrans.Change.RestoreNaturalCarrying>
+  <SimpleTrans.Change.RestoreNaturalSiring>Natural siring capability will be restored</SimpleTrans.Change.RestoreNaturalSiring>
+  <SimpleTrans.Change.SetCisgender>Gender identity will be set to cisgender</SimpleTrans.Change.SetCisgender>
+  <SimpleTrans.Change.SetTransgender>Gender identity will be set to transgender</SimpleTrans.Change.SetTransgender>
+  <SimpleTrans.Change.RemoveBasicCarryProsthetic>Basic carrying prosthetic will be removed</SimpleTrans.Change.RemoveBasicCarryProsthetic>
+  <SimpleTrans.Change.RemoveBasicSireProsthetic>Basic siring prosthetic will be removed</SimpleTrans.Change.RemoveBasicSireProsthetic>
+  <SimpleTrans.Change.RemoveBionicCarryProsthetic>Bionic carrying prosthetic will be removed</SimpleTrans.Change.RemoveBionicCarryProsthetic>
+  <SimpleTrans.Change.RemoveBionicSireProsthetic>Bionic siring prosthetic will be removed</SimpleTrans.Change.RemoveBionicSireProsthetic>
+
 </LanguageData>

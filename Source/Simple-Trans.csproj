@@ -36,23 +36,31 @@
       <HintPath>$(RimWorldPath)\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(RimWorldPath)\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(RimWorldPath)\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     
     <!-- Harmony -->
     <PackageReference Include="Lib.Harmony" Version="2.3.3" ExcludeAssets="runtime" />
     
-    <!-- Mod Dependencies -->
+    <!-- Mod Dependencies - Look in parent directory -->
     <Reference Include="VEF">
-      <HintPath>$(RimWorldPath)\Mods\Vanilla Expanded Framework\1.6\Assemblies\VEF.dll</HintPath>
+      <HintPath>..\..\VanillaExpandedFramework\1.6\Assemblies\VEF.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="XmlExtensions">
-      <HintPath>$(RimWorldPath)\Mods\XML Extensions\1.6\Assemblies\XmlExtensions.dll</HintPath>
+      <HintPath>..\..\XML Extensions\1.6\Assemblies\XmlExtensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
     
     <!-- Optional dependency -->
-    <Reference Include="NonBinaryGender" Condition="Exists('$(RimWorldPath)\Mods\Non-Binary Gender\1.6\Assemblies\NonBinaryGender.dll')">
-      <HintPath>$(RimWorldPath)\Mods\Non-Binary Gender\1.6\Assemblies\NonBinaryGender.dll</HintPath>
+    <Reference Include="NonBinaryGender" Condition="Exists('..\..\Non-Binary Gender\1.6\Assemblies\NonBinaryGender.dll')">
+      <HintPath>..\..\Non-Binary Gender\1.6\Assemblies\NonBinaryGender.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
