@@ -4,141 +4,165 @@ using Verse;
 
 namespace Simple_Trans;
 
+/// <summary>
+/// Harmony patch for PregnancyUtility.CanEverProduceChild
+/// Allows same-gender pairs to produce children if they have compatible reproductive capabilities
+/// </summary>
 [HarmonyPatch(typeof(PregnancyUtility), "CanEverProduceChild")]
 public class PregnancyUtility_CanEverProduceChild_Patch
 {
+	/// <summary>
+	/// Postfix method to handle same-gender reproduction and verify reproductive capabilities
+	/// </summary>
+	/// <param name="__result">The result from the original method</param>
+	/// <param name="first">First pawn in the pair</param>
+	/// <param name="second">Second pawn in the pair</param>
 	public static void Postfix(ref AcceptanceReport __result, Pawn first, Pawn second)
 	{
-		//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0010: Unknown result type (might be due to invalid IL or missing references)
-		//IL_028d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0053: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0058: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0077: Unknown result type (might be due to invalid IL or missing references)
-		//IL_007c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0081: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0089: Unknown result type (might be due to invalid IL or missing references)
-		//IL_008e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_02da: Unknown result type (might be due to invalid IL or missing references)
-		//IL_02e5: Unknown result type (might be due to invalid IL or missing references)
-		//IL_02ea: Unknown result type (might be due to invalid IL or missing references)
-		//IL_02ef: Unknown result type (might be due to invalid IL or missing references)
-		//IL_02f7: Unknown result type (might be due to invalid IL or missing references)
-		//IL_02fc: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ac: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00be: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00c3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0311: Unknown result type (might be due to invalid IL or missing references)
-		//IL_031c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0321: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0326: Unknown result type (might be due to invalid IL or missing references)
-		//IL_032e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0333: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0109: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0114: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0119: Unknown result type (might be due to invalid IL or missing references)
-		//IL_011e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0126: Unknown result type (might be due to invalid IL or missing references)
-		//IL_012b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_019f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01aa: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01af: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01b4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01bc: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01c1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0146: Unknown result type (might be due to invalid IL or missing references)
-		//IL_014b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0150: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0158: Unknown result type (might be due to invalid IL or missing references)
-		//IL_015d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01df: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01e4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01e9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01f1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01f6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_022c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0237: Unknown result type (might be due to invalid IL or missing references)
-		//IL_023c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0241: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0249: Unknown result type (might be due to invalid IL or missing references)
-		//IL_024e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_026f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0274: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0279: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0281: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0286: Unknown result type (might be due to invalid IL or missing references)
 		string reason = __result.Reason;
-		TaggedString val = Translator.Translate("SimpleTrans.SameGender");
-		if (reason.Contains(val.Resolve()))
+		TaggedString sameGenderText = Translator.Translate("SimpleTrans.SameGender");
+		
+		// Handle originally rejected same-gender pairs
+		if (reason.Contains(sameGenderText.Resolve()))
 		{
-			Pawn val2 = (SimpleTransPregnancyUtility.CanSire(first) ? first : (SimpleTransPregnancyUtility.CanSire(second) ? second : null));
-			Pawn obj = (SimpleTransPregnancyUtility.CanCarry(second) ? second : (SimpleTransPregnancyUtility.CanCarry(first) ? first : null));
-			__result = true;
-			if (val2 == null)
-			{
-				val = TranslatorFormattedStringExtensions.Translate("SimpleTrans.PawnsCannotSireChild", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
-				__result = val.Resolve();
-			}
-			if (obj == null)
-			{
-				val = TranslatorFormattedStringExtensions.Translate("SimpleTrans.PawnsCannotCarryChild", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
-				__result = val.Resolve();
-			}
-			bool flag = StatExtension.GetStatValue((Thing)(object)first, StatDefOf.Fertility, true, -1) <= 0f;
-			bool flag2 = StatExtension.GetStatValue((Thing)(object)second, StatDefOf.Fertility, true, -1) <= 0f;
-			if (flag && flag2)
-			{
-				val = TranslatorFormattedStringExtensions.Translate("PawnsAreInfertile", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
-				__result = val.Resolve();
-			}
-			if (flag != flag2)
-			{
-				val = TranslatorFormattedStringExtensions.Translate("PawnIsInfertile", NamedArgumentUtility.Named((object)(flag ? val2 : second), "PAWN"));
-				__result = val.Resolve();
-			}
-			bool flag3 = !first.ageTracker.CurLifeStage.reproductive;
-			bool flag4 = !second.ageTracker.CurLifeStage.reproductive;
-			if (flag3 && flag4)
-			{
-				val = TranslatorFormattedStringExtensions.Translate("PawnsAreTooYoung", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
-				__result = val.Resolve();
-			}
-			if (flag3 != flag4)
-			{
-				val = TranslatorFormattedStringExtensions.Translate("PawnIsTooYoung", NamedArgumentUtility.Named((object)(flag3 ? first : second), "PAWN"));
-				__result = val.Resolve();
-			}
-			bool flag5 = second.Sterile() && PregnancyUtility.GetPregnancyHediff(second) == null;
-			bool flag6 = first.Sterile();
-			if (flag6 && flag5)
-			{
-				val = TranslatorFormattedStringExtensions.Translate("PawnsAreSterile", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
-				__result = val.Resolve();
-			}
-			if (flag6 != flag5)
-			{
-				val = TranslatorFormattedStringExtensions.Translate("PawnIsSterile", NamedArgumentUtility.Named((object)(flag6 ? first : second), "PAWN"));
-				__result = val.Resolve();
-			}
+			HandleSameGenderPair(ref __result, first, second);
 		}
+		// Verify reproductive capabilities for originally accepted pairs
 		else if (__result)
 		{
-			Pawn obj2 = (SimpleTransPregnancyUtility.CanSire(first) ? first : (SimpleTransPregnancyUtility.CanSire(second) ? second : null));
-			Pawn val3 = (SimpleTransPregnancyUtility.CanCarry(second) ? second : (SimpleTransPregnancyUtility.CanCarry(first) ? first : null));
-			if (obj2 == null)
-			{
-				val = TranslatorFormattedStringExtensions.Translate("SimpleTrans.PawnsCannotSireChild", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
-				__result = val.Resolve();
-			}
-			if (val3 == null)
-			{
-				val = TranslatorFormattedStringExtensions.Translate("SimpleTrans.PawnsCannotCarryChild", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
-				__result = val.Resolve();
-			}
+			VerifyReproductiveCapabilities(ref __result, first, second);
+		}
+	}
+	
+	/// <summary>
+	/// Handles same-gender pairs by checking if they have compatible reproductive capabilities
+	/// </summary>
+	/// <param name="result">The acceptance report to modify</param>
+	/// <param name="first">First pawn in the pair</param>
+	/// <param name="second">Second pawn in the pair</param>
+	private static void HandleSameGenderPair(ref AcceptanceReport result, Pawn first, Pawn second)
+	{
+		Pawn sirer = (SimpleTransPregnancyUtility.CanSire(first) ? first : (SimpleTransPregnancyUtility.CanSire(second) ? second : null));
+		Pawn carrier = (SimpleTransPregnancyUtility.CanCarry(second) ? second : (SimpleTransPregnancyUtility.CanCarry(first) ? first : null));
+		
+		// Initially accept the pair
+		result = true;
+		
+		// Check for reproductive capability issues
+		if (sirer == null)
+		{
+			TaggedString message = TranslatorFormattedStringExtensions.Translate("SimpleTrans.PawnsCannotSireChild", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
+			result = message.Resolve();
+			return;
+		}
+		
+		if (carrier == null)
+		{
+			TaggedString message = TranslatorFormattedStringExtensions.Translate("SimpleTrans.PawnsCannotCarryChild", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
+			result = message.Resolve();
+			return;
+		}
+		
+		// Check fertility issues
+		CheckFertilityIssues(ref result, first, second, sirer);
+		
+		// Check age issues
+		CheckAgeIssues(ref result, first, second);
+		
+		// Check sterility issues
+		CheckSterilityIssues(ref result, first, second);
+	}
+	
+	/// <summary>
+	/// Verifies that already-accepted pairs have the necessary reproductive capabilities
+	/// </summary>
+	/// <param name="result">The acceptance report to modify</param>
+	/// <param name="first">First pawn in the pair</param>
+	/// <param name="second">Second pawn in the pair</param>
+	private static void VerifyReproductiveCapabilities(ref AcceptanceReport result, Pawn first, Pawn second)
+	{
+		Pawn sirer = (SimpleTransPregnancyUtility.CanSire(first) ? first : (SimpleTransPregnancyUtility.CanSire(second) ? second : null));
+		Pawn carrier = (SimpleTransPregnancyUtility.CanCarry(second) ? second : (SimpleTransPregnancyUtility.CanCarry(first) ? first : null));
+		
+		if (sirer == null)
+		{
+			TaggedString message = TranslatorFormattedStringExtensions.Translate("SimpleTrans.PawnsCannotSireChild", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
+			result = message.Resolve();
+		}
+		else if (carrier == null)
+		{
+			TaggedString message = TranslatorFormattedStringExtensions.Translate("SimpleTrans.PawnsCannotCarryChild", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
+			result = message.Resolve();
+		}
+	}
+	
+	/// <summary>
+	/// Checks for fertility issues between pawns
+	/// </summary>
+	/// <param name="result">The acceptance report to modify</param>
+	/// <param name="first">First pawn in the pair</param>
+	/// <param name="second">Second pawn in the pair</param>
+	/// <param name="sirer">The pawn that can sire</param>
+	private static void CheckFertilityIssues(ref AcceptanceReport result, Pawn first, Pawn second, Pawn sirer)
+	{
+		bool firstIsInfertile = StatExtension.GetStatValue((Thing)(object)first, StatDefOf.Fertility, true, -1) <= 0f;
+		bool secondIsInfertile = StatExtension.GetStatValue((Thing)(object)second, StatDefOf.Fertility, true, -1) <= 0f;
+		
+		if (firstIsInfertile && secondIsInfertile)
+		{
+			TaggedString message = TranslatorFormattedStringExtensions.Translate("PawnsAreInfertile", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
+			result = message.Resolve();
+		}
+		else if (firstIsInfertile != secondIsInfertile)
+		{
+			TaggedString message = TranslatorFormattedStringExtensions.Translate("PawnIsInfertile", NamedArgumentUtility.Named((object)(firstIsInfertile ? sirer : second), "PAWN"));
+			result = message.Resolve();
+		}
+	}
+	
+	/// <summary>
+	/// Checks for age-related reproduction issues
+	/// </summary>
+	/// <param name="result">The acceptance report to modify</param>
+	/// <param name="first">First pawn in the pair</param>
+	/// <param name="second">Second pawn in the pair</param>
+	private static void CheckAgeIssues(ref AcceptanceReport result, Pawn first, Pawn second)
+	{
+		bool firstIsTooYoung = !first.ageTracker.CurLifeStage.reproductive;
+		bool secondIsTooYoung = !second.ageTracker.CurLifeStage.reproductive;
+		
+		if (firstIsTooYoung && secondIsTooYoung)
+		{
+			TaggedString message = TranslatorFormattedStringExtensions.Translate("PawnsAreTooYoung", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
+			result = message.Resolve();
+		}
+		else if (firstIsTooYoung != secondIsTooYoung)
+		{
+			TaggedString message = TranslatorFormattedStringExtensions.Translate("PawnIsTooYoung", NamedArgumentUtility.Named((object)(firstIsTooYoung ? first : second), "PAWN"));
+			result = message.Resolve();
+		}
+	}
+	
+	/// <summary>
+	/// Checks for sterility issues between pawns
+	/// </summary>
+	/// <param name="result">The acceptance report to modify</param>
+	/// <param name="first">First pawn in the pair</param>
+	/// <param name="second">Second pawn in the pair</param>
+	private static void CheckSterilityIssues(ref AcceptanceReport result, Pawn first, Pawn second)
+	{
+		bool firstIsSterile = first.Sterile();
+		bool secondIsSterile = second.Sterile() && PregnancyUtility.GetPregnancyHediff(second) == null;
+		
+		if (firstIsSterile && secondIsSterile)
+		{
+			TaggedString message = TranslatorFormattedStringExtensions.Translate("PawnsAreSterile", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
+			result = message.Resolve();
+		}
+		else if (firstIsSterile != secondIsSterile)
+		{
+			TaggedString message = TranslatorFormattedStringExtensions.Translate("PawnIsSterile", NamedArgumentUtility.Named((object)(firstIsSterile ? first : second), "PAWN"));
+			result = message.Resolve();
 		}
 	}
 }

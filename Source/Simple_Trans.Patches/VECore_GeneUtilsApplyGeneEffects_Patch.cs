@@ -10,71 +10,105 @@ using Verse;
 
 namespace Simple_Trans.Patches;
 
+/// <summary>
+/// Harmony transpiler patch for VEF GeneUtils.ApplyGeneEffects
+/// Modifies gene effect application to respect cisgender status for body type changes
+/// </summary>
 [HarmonyPatch(typeof(GeneUtils), "ApplyGeneEffects")]
 public static class VECore_GeneUtilsApplyGeneEffects_Patch
 {
+	/// <summary>
+	/// Transpiler that modifies GeneUtils.ApplyGeneEffects to check for cisgender status
+	/// This prevents body type changes from affecting transgender pawns
+	/// </summary>
+	/// <param name="instructions">The original IL instructions</param>
+	/// <param name="il">The IL generator for creating labels</param>
+	/// <returns>Modified IL instructions</returns>
 	public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il)
 	{
-		//IL_014d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0157: Expected O, but got Unknown
-		//IL_0172: Unknown result type (might be due to invalid IL or missing references)
-		//IL_017c: Expected O, but got Unknown
-		//IL_0197: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01a1: Expected O, but got Unknown
-		//IL_01bc: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01c6: Expected O, but got Unknown
-		//IL_01d2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01dc: Expected O, but got Unknown
-		//IL_01f9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0203: Expected O, but got Unknown
-		//IL_020b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0215: Expected O, but got Unknown
-		//IL_0251: Unknown result type (might be due to invalid IL or missing references)
-		//IL_025b: Expected O, but got Unknown
-		//IL_0268: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0272: Expected O, but got Unknown
-		int num = -1;
-		bool flag = false;
-		List<CodeInstruction> list = new List<CodeInstruction>(instructions);
-		Label? label = il.DefineLabel();
-		for (int i = 0; i < list.Count; i++)
+		int insertionIndex = -1;
+		bool foundFemaleCheck = false;
+		List<CodeInstruction> instructionList = new List<CodeInstruction>(instructions);
+		Label? branchLabel = il.DefineLabel();
+		
+		// Find the appropriate insertion point by locating the female body type check
+		for (int i = 0; i < instructionList.Count; i++)
 		{
-			if (list[i].opcode == OpCodes.Ldloc_0 && i + 1 < list.Count && (FieldInfo)list[i + 1].operand == AccessTools.Field(typeof(GeneExtension), "forceFemale"))
+			// Look for forceFemale field access
+			if (instructionList[i].opcode == OpCodes.Ldloc_0 && 
+				i + 1 < instructionList.Count && 
+				(FieldInfo)instructionList[i + 1].operand == AccessTools.Field(typeof(GeneExtension), "forceFemale"))
 			{
-				num = i;
+				insertionIndex = i;
 			}
-			if (num > -1 && list[i].opcode == OpCodes.Ldsfld && i + 1 < list.Count && (FieldInfo)list[i].operand == AccessTools.Field(typeof(BodyTypeDefOf), "Female") && list[i + 1].opcode == OpCodes.Ceq)
+			
+			// Look for Female body type comparison
+			if (insertionIndex > -1 && 
+				instructionList[i].opcode == OpCodes.Ldsfld && 
+				i + 1 < instructionList.Count && 
+				(FieldInfo)instructionList[i].operand == AccessTools.Field(typeof(BodyTypeDefOf), "Female") && 
+				instructionList[i + 1].opcode == OpCodes.Ceq)
 			{
-				flag = true;
+				foundFemaleCheck = true;
 			}
-			if (flag && list[i].opcode == OpCodes.Brfalse_S)
+			
+			// Find the branch instruction to get the target label
+			if (foundFemaleCheck && instructionList[i].opcode == OpCodes.Brfalse_S)
 			{
-				CodeInstructionExtensions.Branches(list[i], out label);
+				CodeInstructionExtensions.Branches(instructionList[i], out branchLabel);
 				break;
 			}
 		}
-		if (num > -1 && label.HasValue)
+		
+		// Apply the modifications if we found the insertion point
+		if (insertionIndex > -1 && branchLabel.HasValue)
 		{
-			List<CodeInstruction> list2 = new List<CodeInstruction>();
-			list2.Add(new CodeInstruction(OpCodes.Ldarg_0, (object)null));
-			list2.Add(new CodeInstruction(OpCodes.Ldfld, (object)AccessTools.Field(typeof(Gene), "pawn")));
-			list2.Add(new CodeInstruction(OpCodes.Ldfld, (object)AccessTools.Field(typeof(Pawn), "health")));
-			list2.Add(new CodeInstruction(OpCodes.Ldfld, (object)AccessTools.Field(typeof(Pawn_HealthTracker), "hediffSet")));
-			list2.Add(new CodeInstruction(OpCodes.Ldstr, (object)"Cisgender"));
-			list2.Add(new CodeInstruction(OpCodes.Call, (object)AccessTools.Method(typeof(HediffDef), "Named", (Type[])null, (Type[])null)));
-			list2.Add(new CodeInstruction(OpCodes.Ldc_I4_0, (object)null));
-			list2.Add(new CodeInstruction(OpCodes.Callvirt, (object)AccessTools.Method(typeof(HediffSet), "HasHediff", new Type[2]
-			{
-				typeof(HediffDef),
-				typeof(bool)
-			}, (Type[])null)));
-			list2.Add(new CodeInstruction(OpCodes.Brfalse_S, (object)label));
-			list.InsertRange(num, list2);
+			ApplyGeneEffectsModifications(instructionList, insertionIndex, branchLabel.Value);
 		}
 		else
 		{
-			Log.Error("Failed to transpile VECore GeneUtils.ApplyGeneEffects().");
+			Log.Error("[Simple Trans] Failed to transpile VECore GeneUtils.ApplyGeneEffects() - could not find insertion point");
 		}
-		return list.AsEnumerable();
+		
+		return instructionList.AsEnumerable();
+	}
+	
+	/// <summary>
+	/// Applies the actual IL code modifications for the gene effects transpiler
+	/// </summary>
+	/// <param name="instructionList">The instruction list to modify</param>
+	/// <param name="insertionIndex">The index where to insert new instructions</param>
+	/// <param name="branchLabel">The label to branch to if cisgender check fails</param>
+	private static void ApplyGeneEffectsModifications(List<CodeInstruction> instructionList, int insertionIndex, Label branchLabel)
+	{
+		// Create instructions to check for cisgender hediff
+		List<CodeInstruction> injectedInstructions = new List<CodeInstruction>
+		{
+			// Load 'this' (the gene)
+			new CodeInstruction(OpCodes.Ldarg_0, null),
+			// Load pawn field
+			new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Gene), "pawn")),
+			// Load health field
+			new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Pawn), "health")),
+			// Load hediffSet field
+			new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Pawn_HealthTracker), "hediffSet")),
+			// Load "Cisgender" string
+			new CodeInstruction(OpCodes.Ldstr, "Cisgender"),
+			// Call HediffDef.Named
+			new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(HediffDef), "Named", null, null)),
+			// Load false boolean
+			new CodeInstruction(OpCodes.Ldc_I4_0, null),
+			// Call HasHediff method
+			new CodeInstruction(OpCodes.Callvirt, AccessTools.Method(typeof(HediffSet), "HasHediff", new Type[2]
+			{
+				typeof(HediffDef),
+				typeof(bool)
+			}, null)),
+			// Branch if not cisgender (skip the body type change)
+			new CodeInstruction(OpCodes.Brfalse_S, branchLabel)
+		};
+		
+		// Insert the new instructions
+		instructionList.InsertRange(insertionIndex, injectedInstructions);
 	}
 }
