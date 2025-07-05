@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Patch>
+  <Operation Class="PatchOperationFindMod">
+    <mods>
+      <li>Ideology</li>
+    </mods>
+    <match Class="PatchOperationSequence">
+      <operations>
+        <li Class="PatchOperationTest">
+          <xpath>Defs/ThingDef[defName="BiosculpterPod"]</xpath>
+        </li>
+        <li Class="PatchOperationAdd">
+          <xpath>Defs/ThingDef[defName="BiosculpterPod"]/comps</xpath>
+          <value>
+            <li Class="Simple_Trans.CompProperties_BiosculpterPod_ReproductiveReconstructionMasculinizing">
+              <key>simpleTransMasculinizing</key>
+              <label>masculinizing</label>
+              <description>Complete masculinizing transformation: grants sire ability, removes carry ability, adjusts body type to match gender identity, removes prosthetics, and resets gender presentation.</description>
+              <iconPath>UI/Gizmos/BiosculpterCycleBioregeneration</iconPath>
+              <durationDays>25</durationDays>
+              <operatingColor>(0.75, 0.35, 0.85)</operatingColor>
+              <requiredResearch>
+                <li>FertilityProcedures</li>
+              </requiredResearch>
+            </li>
+            <li Class="Simple_Trans.CompProperties_BiosculpterPod_ReproductiveReconstructionFeminizing">
+              <key>simpleTransFeminizing</key>
+              <label>feminizing</label>
+              <description>Complete feminizing transformation: grants carry ability, removes sire ability, adjusts body type to match gender identity, removes prosthetics, and resets gender presentation.</description>
+              <iconPath>UI/Gizmos/BiosculpterCycleBioregeneration</iconPath>
+              <durationDays>25</durationDays>
+              <operatingColor>(0.85, 0.35, 0.75)</operatingColor>
+              <requiredResearch>
+                <li>FertilityProcedures</li>
+              </requiredResearch>
+            </li>
+            <li Class="Simple_Trans.CompProperties_BiosculpterPod_FertilityRestoration">
+              <key>simpleTransFertilityRestoration</key>
+              <label>fertility</label>
+              <description>Restores natural reproductive capabilities by removing prosthetics and granting appropriate natural abilities based on current gender identity and biological factors.</description>
+              <iconPath>UI/Gizmos/BiosculpterCycleBioregeneration</iconPath>
+              <durationDays>15</durationDays>
+              <operatingColor>(0.35, 0.85, 0.85)</operatingColor>
+              <requiredResearch>
+                <li>FertilityProcedures</li>
+              </requiredResearch>
+            </li>
+            <li Class="Simple_Trans.CompProperties_BiosculpterPod_Androgynize">
+              <key>simpleTransAndrogynize</key>
+              <label>androgynize</label>
+              <description>Complete androgynizing transformation: removes all reproductive abilities, removes prosthetics, sets thin body type, and creates neutral gender presentation.</description>
+              <iconPath>UI/Gizmos/BiosculpterCycleBioregeneration</iconPath>
+              <durationDays>20</durationDays>
+              <operatingColor>(0.65, 0.45, 0.85)</operatingColor>
+              <requiredResearch>
+                <li>FertilityProcedures</li>
+              </requiredResearch>
+            </li>
+            <li Class="Simple_Trans.CompProperties_BiosculpterPod_Binary">
+              <key>simpleTransBinary</key>
+              <label>dual systems</label>
+              <description>Complete dual system transformation: grants both carry and sire abilities, removes prosthetics, adjusts body type to match gender identity, and provides maximum reproductive flexibility.</description>
+              <iconPath>UI/Gizmos/BiosculpterCycleBioregeneration</iconPath>
+              <durationDays>35</durationDays>
+              <operatingColor>(0.85, 0.35, 0.65)</operatingColor>
+              <requiredResearch>
+                <li>FertilityProcedures</li>
+              </requiredResearch>
+            </li>
+          </value>
+        </li>
+      </operations>
+    </match>
+  </Operation>
+</Patch>

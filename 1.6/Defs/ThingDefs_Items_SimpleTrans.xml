@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Defs>
+  <!-- Harvestable Organs -->
+  <ThingDef ParentName="BodyPartNaturalBase">
+    <defName>CarryingOrgans</defName>
+    <label>reproductive organs (carry)</label>
+    <description>Reproductive organs that enable carrying pregnancies. Can be surgically transplanted.</description>
+    <statBases>
+      <MarketValue>1500</MarketValue>
+      <Mass>1</Mass>
+    </statBases>
+  </ThingDef>
+
+  <ThingDef ParentName="BodyPartNaturalBase">
+    <defName>SiringOrgans</defName>
+    <label>reproductive organs (sire)</label>
+    <description>Reproductive organs that enable siring offspring. Can be surgically transplanted.</description>
+    <statBases>
+      <MarketValue>1500</MarketValue>
+      <Mass>1</Mass>
+    </statBases>
+  </ThingDef>
+
+  <!-- Basic Prosthetics -->
+  <ThingDef ParentName="BodyPartProstheticMakeableBase">
+    <defName>BasicReproductiveProsthetic_Carry</defName>
+    <label>basic reproductive prosthetic (carry)</label>
+    <description>A basic prosthetic reproductive system that enables carrying pregnancies. Reduces carry fertility by 30% compared to natural organs but provides reliable function.</description>
+    <techLevel>Industrial</techLevel>
+    <statBases>
+      <MarketValue>400</MarketValue>
+      <Mass>2</Mass>
+      <WorkToMake>15000</WorkToMake>
+    </statBases>
+    <costList>
+      <Steel>15</Steel>
+      <ComponentIndustrial>4</ComponentIndustrial>
+    </costList>
+    <recipeMaker>
+      <researchPrerequisite>Prosthetics</researchPrerequisite>
+      <skillRequirements>
+        <Crafting>4</Crafting>
+      </skillRequirements>
+      <recipeUsers>
+        <li>TableMachining</li>
+      </recipeUsers>
+    </recipeMaker>
+  </ThingDef>
+
+  <ThingDef ParentName="BodyPartProstheticMakeableBase">
+    <defName>BasicReproductiveProsthetic_Sire</defName>
+    <label>basic reproductive prosthetic (sire)</label>
+    <description>A basic prosthetic reproductive system that enables siring offspring. Reduces sire fertility by 30% compared to natural organs but provides reliable function.</description>
+    <techLevel>Industrial</techLevel>
+    <statBases>
+      <MarketValue>400</MarketValue>
+      <Mass>2</Mass>
+      <WorkToMake>15000</WorkToMake>
+    </statBases>
+    <costList>
+      <Steel>15</Steel>
+      <ComponentIndustrial>4</ComponentIndustrial>
+    </costList>
+    <recipeMaker>
+      <researchPrerequisite>Prosthetics</researchPrerequisite>
+      <skillRequirements>
+        <Crafting>4</Crafting>
+      </skillRequirements>
+      <recipeUsers>
+        <li>TableMachining</li>
+      </recipeUsers>
+    </recipeMaker>
+  </ThingDef>
+
+  <!-- Bionic Prosthetics -->
+  <ThingDef ParentName="BodyPartBionicBase">
+    <defName>BionicReproductiveProsthetic_Carry</defName>
+    <label>bionic reproductive prosthetic (carry)</label>
+    <description>A bionic reproductive system that enables carrying pregnancies with perfect contraception control. Increases carry fertility by 20%, guarantees pregnancy when both partners have bionics and want children, prevents pregnancy when the bionic user wants to avoid it.</description>
+    <techLevel>Spacer</techLevel>
+    <statBases>
+      <MarketValue>2500</MarketValue>
+      <Mass>2</Mass>
+      <WorkToMake>30000</WorkToMake>
+    </statBases>
+    <costList>
+      <Plasteel>20</Plasteel>
+      <ComponentSpacer>6</ComponentSpacer>
+      <Gold>5</Gold>
+    </costList>
+    <recipeMaker>
+      <researchPrerequisite>Bionics</researchPrerequisite>
+      <skillRequirements>
+        <Crafting>10</Crafting>
+      </skillRequirements>
+      <recipeUsers>
+        <li>FabricationBench</li>
+      </recipeUsers>
+    </recipeMaker>
+  </ThingDef>
+
+  <ThingDef ParentName="BodyPartBionicBase">
+    <defName>BionicReproductiveProsthetic_Sire</defName>
+    <label>bionic reproductive prosthetic (sire)</label>
+    <description>A bionic reproductive system that enables siring offspring with perfect contraception control. Increases sire fertility by 20%, guarantees pregnancy when both partners have bionics and want children, prevents pregnancy when the bionic user wants to avoid it.</description>
+    <techLevel>Spacer</techLevel>
+    <statBases>
+      <MarketValue>2500</MarketValue>
+      <Mass>2</Mass>
+      <WorkToMake>30000</WorkToMake>
+    </statBases>
+    <costList>
+      <Plasteel>20</Plasteel>
+      <ComponentSpacer>6</ComponentSpacer>
+      <Gold>5</Gold>
+    </costList>
+    <recipeMaker>
+      <researchPrerequisite>Bionics</researchPrerequisite>
+      <skillRequirements>
+        <Crafting>10</Crafting>
+      </skillRequirements>
+      <recipeUsers>
+        <li>FabricationBench</li>
+      </recipeUsers>
+    </recipeMaker>
+  </ThingDef>
+</Defs>

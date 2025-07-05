@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Defs>
+  <BodyPartDef>
+    <defName>ReproductiveOrgans_Carry</defName>
+    <label>reproductive organs (carry)</label>
+    <labelShort>carry organs</labelShort>
+    <hitPoints>15</hitPoints>
+    <spawnThingOnRemoved>CarryingOrgans</spawnThingOnRemoved>
+    <canSuggestAmputation>false</canSuggestAmputation>
+    <skinCovered>false</skinCovered>
+    <solid>false</solid>
+    <bleedRate>0.3</bleedRate>
+  </BodyPartDef>
+
+  <BodyPartDef>
+    <defName>ReproductiveOrgans_Sire</defName>
+    <label>reproductive organs (sire)</label>
+    <labelShort>sire organs</labelShort>
+    <hitPoints>15</hitPoints>
+    <spawnThingOnRemoved>SiringOrgans</spawnThingOnRemoved>
+    <canSuggestAmputation>false</canSuggestAmputation>
+    <skinCovered>false</skinCovered>
+    <solid>false</solid>
+    <bleedRate>0.3</bleedRate>
+  </BodyPartDef>
+
+  <BodyPartDef>
+    <defName>ReproductiveProsthetic_Carry</defName>
+    <label>reproductive prosthetic (carry)</label>
+    <labelShort>carry prosthetic</labelShort>
+    <hitPoints>25</hitPoints>
+    <canSuggestAmputation>false</canSuggestAmputation>
+    <skinCovered>false</skinCovered>
+    <solid>false</solid>
+    <bleedRate>0.0</bleedRate>
+  </BodyPartDef>
+
+  <BodyPartDef>
+    <defName>ReproductiveProsthetic_Sire</defName>
+    <label>reproductive prosthetic (sire)</label>
+    <labelShort>sire prosthetic</labelShort>
+    <hitPoints>25</hitPoints>
+    <canSuggestAmputation>false</canSuggestAmputation>
+    <skinCovered>false</skinCovered>
+    <solid>false</solid>
+    <bleedRate>0.0</bleedRate>
+  </BodyPartDef>
+</Defs>

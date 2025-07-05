@@ -3,4 +3,31 @@
   <SimpleTrans.PawnsCannotCarryChild>Neither {PAWN1_nameDef} nor {PAWN2_nameDef} can carrychildren.</SimpleTrans.PawnsCannotCarryChild>
   <SimpleTrans.PawnsCannotSireChild>Neither {PAWN1_nameDef} nor {PAWN2_nameDef} can sire children.</SimpleTrans.PawnsCannotSireChild>
   <SimpleTrans.SameGender>same gender</SimpleTrans.SameGender>
+  
+  <!-- Surgery System -->
+  <SimpleTransOrganExtracted>{PAWN_nameDef}'s {1} have been successfully extracted.</SimpleTransOrganExtracted>
+  <SimpleTransNoOrganToExtract>{PAWN_nameDef} does not have the required reproductive organs to extract.</SimpleTransNoOrganToExtract>
+  <SimpleTransOrganTransplanted>{PAWN_nameDef} has successfully received {1}.</SimpleTransOrganTransplanted>
+  <SimpleTransProstheticInstalled>{PAWN_nameDef} has successfully received {1}.</SimpleTransProstheticInstalled>
+  
+  <!-- Biosculpter System -->
+  <SimpleTransBiosculpterComplete>{PAWN_nameDef} has completed reproductive reconstruction.</SimpleTransBiosculpterComplete>
+  <SimpleTransFertilityRestored>{PAWN_nameDef}'s natural fertility has been restored.</SimpleTransFertilityRestored>
+  
+  <!-- Masculinizing Cycle Messages -->
+  <SimpleTransMasculinizingNoEffect>{PAWN_nameDef} already had sire ability - masculinizing cycle had no effect.</SimpleTransMasculinizingNoEffect>
+  <SimpleTransMasculinizingRemovedCarry>{PAWN_nameDef}'s carry ability was removed, retaining sire ability.</SimpleTransMasculinizingRemovedCarry>
+  <SimpleTransMasculinizingConverted>{PAWN_nameDef}'s carry ability was converted to sire ability.</SimpleTransMasculinizingConverted>
+  <SimpleTransMasculinizingGranted>{PAWN_nameDef} has been granted sire ability.</SimpleTransMasculinizingGranted>
+  
+  <!-- Feminizing Cycle Messages -->
+  <SimpleTransFeminizingNoEffect>{PAWN_nameDef} already had carry ability - feminizing cycle had no effect.</SimpleTransFeminizingNoEffect>
+  <SimpleTransFeminizingRemovedSire>{PAWN_nameDef}'s sire ability was removed, retaining carry ability.</SimpleTransFeminizingRemovedSire>
+  <SimpleTransFeminizingConverted>{PAWN_nameDef}'s sire ability was converted to carry ability.</SimpleTransFeminizingConverted>
+  <SimpleTransFeminizingGranted>{PAWN_nameDef} has been granted carry ability.</SimpleTransFeminizingGranted>
+  
+  <!-- New Cycle Messages -->
+  <SimpleTransCompleteReset>{PAWN_nameDef} has undergone complete biological and identity reset - a fresh start.</SimpleTransCompleteReset>
+  <SimpleTransAndrogynized>{PAWN_nameDef} has been androgynized - all reproductive capabilities removed, body made androgynous.</SimpleTransAndrogynized>
+  <SimpleTransBinaryComplete>{PAWN_nameDef} now has dual reproductive systems - complete biological flexibility achieved.</SimpleTransBinaryComplete>
 </LanguageData>

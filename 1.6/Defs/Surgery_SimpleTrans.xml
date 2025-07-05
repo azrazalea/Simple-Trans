@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Defs>
+  <!-- REMOVE SURGERIES - Extract existing parts and get them back -->
+  
+  <RecipeDef ParentName="FertilitySurgery">
+    <defName>RemoveCarryAbility</defName>
+    <label>remove carry ability</label>
+    <description>Remove the ability to carry pregnancies and extract the organs/prosthetics for use elsewhere.</description>
+    <workerClass>Simple_Trans.Recipe_RemoveCarryAbility</workerClass>
+    <workAmount>3000</workAmount>
+    <surgerySuccessChanceFactor>3</surgerySuccessChanceFactor>
+    <deathOnFailedSurgeryChance>0.015</deathOnFailedSurgeryChance>
+    <skillRequirements>
+      <Medicine>7</Medicine>
+    </skillRequirements>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+    <ingredients Inherit="False">
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>2</count>
+      </li>
+    </ingredients>
+    <uiIconThing>CarryingOrgans</uiIconThing>
+  </RecipeDef>
+
+  <RecipeDef ParentName="FertilitySurgery">
+    <defName>RemoveSireAbility</defName>
+    <label>remove sire ability</label>
+    <description>Remove the ability to sire offspring and extract the organs/prosthetics for use elsewhere.</description>
+    <workerClass>Simple_Trans.Recipe_RemoveSireAbility</workerClass>
+    <workAmount>3000</workAmount>
+    <surgerySuccessChanceFactor>3</surgerySuccessChanceFactor>
+    <deathOnFailedSurgeryChance>0.015</deathOnFailedSurgeryChance>
+    <skillRequirements>
+      <Medicine>7</Medicine>
+    </skillRequirements>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+    <ingredients Inherit="False">
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>2</count>
+      </li>
+    </ingredients>
+    <uiIconThing>SiringOrgans</uiIconThing>
+  </RecipeDef>
+
+  <!-- ADD SURGERIES - Add abilities without removing existing ones -->
+  
+  <!-- Natural Organs -->
+  <RecipeDef ParentName="FertilitySurgery">
+    <defName>AddCarryOrgans</defName>
+    <label>add carry organs</label>
+    <description>Add natural reproductive organs that enable carrying pregnancies. Does not remove existing abilities.</description>
+    <workerClass>Simple_Trans.Recipe_AddReproductiveAbility</workerClass>
+    <workAmount>2800</workAmount>
+    <surgerySuccessChanceFactor>3</surgerySuccessChanceFactor>
+    <deathOnFailedSurgeryChance>0.015</deathOnFailedSurgeryChance>
+    <skillRequirements>
+      <Medicine>7</Medicine>
+    </skillRequirements>
+    <incompatibleWithHediffTags>
+      <li>PregnancyCarry</li>
+    </incompatibleWithHediffTags>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+    <ingredients Inherit="False">
+      <li>
+        <filter>
+          <thingDefs>
+            <li>CarryingOrgans</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>2</count>
+      </li>
+    </ingredients>
+    <uiIconThing>CarryingOrgans</uiIconThing>
+  </RecipeDef>
+
+  <RecipeDef ParentName="FertilitySurgery">
+    <defName>AddSireOrgans</defName>
+    <label>add sire organs</label>
+    <description>Add natural reproductive organs that enable siring offspring. Does not remove existing abilities.</description>
+    <workerClass>Simple_Trans.Recipe_AddReproductiveAbility</workerClass>
+    <workAmount>2800</workAmount>
+    <surgerySuccessChanceFactor>3</surgerySuccessChanceFactor>
+    <deathOnFailedSurgeryChance>0.015</deathOnFailedSurgeryChance>
+    <skillRequirements>
+      <Medicine>7</Medicine>
+    </skillRequirements>
+    <incompatibleWithHediffTags>
+      <li>PregnancySire</li>
+    </incompatibleWithHediffTags>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+    <ingredients Inherit="False">
+      <li>
+        <filter>
+          <thingDefs>
+            <li>SiringOrgans</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>2</count>
+      </li>
+    </ingredients>
+    <uiIconThing>SiringOrgans</uiIconThing>
+  </RecipeDef>
+
+  <!-- Basic Prosthetics -->
+  <RecipeDef ParentName="FertilitySurgery">
+    <defName>AddBasicCarryProsthetic</defName>
+    <label>add basic carry prosthetic</label>
+    <description>Add a basic reproductive prosthetic that enables carrying pregnancies. Does not remove existing abilities. Reduces carry fertility by 30% compared to natural organs.</description>
+    <workerClass>Simple_Trans.Recipe_AddReproductiveAbility</workerClass>
+    <workAmount>2500</workAmount>
+    <surgerySuccessChanceFactor>4</surgerySuccessChanceFactor>
+    <deathOnFailedSurgeryChance>0.01</deathOnFailedSurgeryChance>
+    <skillRequirements>
+      <Medicine>6</Medicine>
+    </skillRequirements>
+    <incompatibleWithHediffTags>
+      <li>PregnancyCarry</li>
+    </incompatibleWithHediffTags>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+    <ingredients Inherit="False">
+      <li>
+        <filter>
+          <thingDefs>
+            <li>BasicReproductiveProsthetic_Carry</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>2</count>
+      </li>
+    </ingredients>
+    <uiIconThing>BasicReproductiveProsthetic_Carry</uiIconThing>
+  </RecipeDef>
+
+  <RecipeDef ParentName="FertilitySurgery">
+    <defName>AddBasicSireProsthetic</defName>
+    <label>add basic sire prosthetic</label>
+    <description>Add a basic reproductive prosthetic that enables siring offspring. Does not remove existing abilities. Reduces sire fertility by 30% compared to natural organs.</description>
+    <workerClass>Simple_Trans.Recipe_AddReproductiveAbility</workerClass>
+    <workAmount>2500</workAmount>
+    <surgerySuccessChanceFactor>4</surgerySuccessChanceFactor>
+    <deathOnFailedSurgeryChance>0.01</deathOnFailedSurgeryChance>
+    <skillRequirements>
+      <Medicine>6</Medicine>
+    </skillRequirements>
+    <incompatibleWithHediffTags>
+      <li>PregnancySire</li>
+    </incompatibleWithHediffTags>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+    <ingredients Inherit="False">
+      <li>
+        <filter>
+          <thingDefs>
+            <li>BasicReproductiveProsthetic_Sire</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>2</count>
+      </li>
+    </ingredients>
+    <uiIconThing>BasicReproductiveProsthetic_Sire</uiIconThing>
+  </RecipeDef>
+
+  <!-- Bionic Prosthetics -->
+  <RecipeDef ParentName="FertilitySurgery">
+    <defName>AddBionicCarryProsthetic</defName>
+    <label>add bionic carry prosthetic</label>
+    <description>Add a bionic reproductive prosthetic that enables carrying pregnancies. Does not remove existing abilities. Increases carry fertility by 20% and provides perfect contraception control - 100% pregnancy when both partners have bionics and want children, 0% when bionic user avoids pregnancy.</description>
+    <workerClass>Simple_Trans.Recipe_AddReproductiveAbility</workerClass>
+    <workAmount>3500</workAmount>
+    <surgerySuccessChanceFactor>2</surgerySuccessChanceFactor>
+    <deathOnFailedSurgeryChance>0.02</deathOnFailedSurgeryChance>
+    <skillRequirements>
+      <Medicine>9</Medicine>
+    </skillRequirements>
+    <incompatibleWithHediffTags>
+      <li>PregnancyCarry</li>
+    </incompatibleWithHediffTags>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+    <ingredients Inherit="False">
+      <li>
+        <filter>
+          <thingDefs>
+            <li>BionicReproductiveProsthetic_Carry</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>3</count>
+      </li>
+    </ingredients>
+    <uiIconThing>BionicReproductiveProsthetic_Carry</uiIconThing>
+  </RecipeDef>
+
+  <RecipeDef ParentName="FertilitySurgery">
+    <defName>AddBionicSireProsthetic</defName>
+    <label>add bionic sire prosthetic</label>
+    <description>Add a bionic reproductive prosthetic that enables siring offspring. Does not remove existing abilities. Increases sire fertility by 20% and provides perfect contraception control - 100% pregnancy when both partners have bionics and want children, 0% when bionic user avoids pregnancy.</description>
+    <workerClass>Simple_Trans.Recipe_AddReproductiveAbility</workerClass>
+    <workAmount>3500</workAmount>
+    <surgerySuccessChanceFactor>2</surgerySuccessChanceFactor>
+    <deathOnFailedSurgeryChance>0.02</deathOnFailedSurgeryChance>
+    <skillRequirements>
+      <Medicine>9</Medicine>
+    </skillRequirements>
+    <incompatibleWithHediffTags>
+      <li>PregnancySire</li>
+    </incompatibleWithHediffTags>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+    <ingredients Inherit="False">
+      <li>
+        <filter>
+          <thingDefs>
+            <li>BionicReproductiveProsthetic_Sire</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>3</count>
+      </li>
+    </ingredients>
+    <uiIconThing>BionicReproductiveProsthetic_Sire</uiIconThing>
+  </RecipeDef>
+
+  <!-- REPLACE SURGERIES - Replace existing with new, get old parts back -->
+  
+  <!-- Replace with Natural Organs -->
+  <RecipeDef ParentName="FertilitySurgery">
+    <defName>ReplaceWithCarryOrgans</defName>
+    <label>replace with carry organs</label>
+    <description>Replace existing reproductive abilities with natural carry organs. Extracts current parts.</description>
+    <workerClass>Simple_Trans.Recipe_ReplaceReproductiveAbility</workerClass>
+    <workAmount>4000</workAmount>
+    <surgerySuccessChanceFactor>2</surgerySuccessChanceFactor>
+    <deathOnFailedSurgeryChance>0.025</deathOnFailedSurgeryChance>
+    <skillRequirements>
+      <Medicine>8</Medicine>
+    </skillRequirements>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+    <ingredients Inherit="False">
+      <li>
+        <filter>
+          <thingDefs>
+            <li>CarryingOrgans</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>3</count>
+      </li>
+    </ingredients>
+    <uiIconThing>CarryingOrgans</uiIconThing>
+  </RecipeDef>
+
+  <RecipeDef ParentName="FertilitySurgery">
+    <defName>ReplaceWithSireOrgans</defName>
+    <label>replace with sire organs</label>
+    <description>Replace existing reproductive abilities with natural sire organs. Extracts current parts.</description>
+    <workerClass>Simple_Trans.Recipe_ReplaceReproductiveAbility</workerClass>
+    <workAmount>4000</workAmount>
+    <surgerySuccessChanceFactor>2</surgerySuccessChanceFactor>
+    <deathOnFailedSurgeryChance>0.025</deathOnFailedSurgeryChance>
+    <skillRequirements>
+      <Medicine>8</Medicine>
+    </skillRequirements>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+    <ingredients Inherit="False">
+      <li>
+        <filter>
+          <thingDefs>
+            <li>SiringOrgans</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>3</count>
+      </li>
+    </ingredients>
+    <uiIconThing>SiringOrgans</uiIconThing>
+  </RecipeDef>
+
+  <!-- Replace with Basic Prosthetics -->
+  <RecipeDef ParentName="FertilitySurgery">
+    <defName>ReplaceWithBasicCarryProsthetic</defName>
+    <label>replace with basic carry prosthetic</label>
+    <description>Replace existing reproductive abilities with a basic carry prosthetic. Extracts current parts. Reduces carry fertility by 30% compared to natural organs.</description>
+    <workerClass>Simple_Trans.Recipe_ReplaceReproductiveAbility</workerClass>
+    <workAmount>3800</workAmount>
+    <surgerySuccessChanceFactor>2.5</surgerySuccessChanceFactor>
+    <deathOnFailedSurgeryChance>0.02</deathOnFailedSurgeryChance>
+    <skillRequirements>
+      <Medicine>7</Medicine>
+    </skillRequirements>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+    <ingredients Inherit="False">
+      <li>
+        <filter>
+          <thingDefs>
+            <li>BasicReproductiveProsthetic_Carry</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>3</count>
+      </li>
+    </ingredients>
+    <uiIconThing>BasicReproductiveProsthetic_Carry</uiIconThing>
+  </RecipeDef>
+
+  <RecipeDef ParentName="FertilitySurgery">
+    <defName>ReplaceWithBasicSireProsthetic</defName>
+    <label>replace with basic sire prosthetic</label>
+    <description>Replace existing reproductive abilities with a basic sire prosthetic. Extracts current parts. Reduces sire fertility by 30% compared to natural organs.</description>
+    <workerClass>Simple_Trans.Recipe_ReplaceReproductiveAbility</workerClass>
+    <workAmount>3800</workAmount>
+    <surgerySuccessChanceFactor>2.5</surgerySuccessChanceFactor>
+    <deathOnFailedSurgeryChance>0.02</deathOnFailedSurgeryChance>
+    <skillRequirements>
+      <Medicine>7</Medicine>
+    </skillRequirements>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+    <ingredients Inherit="False">
+      <li>
+        <filter>
+          <thingDefs>
+            <li>BasicReproductiveProsthetic_Sire</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>3</count>
+      </li>
+    </ingredients>
+    <uiIconThing>BasicReproductiveProsthetic_Sire</uiIconThing>
+  </RecipeDef>
+
+  <!-- Replace with Bionic Prosthetics -->
+  <RecipeDef ParentName="FertilitySurgery">
+    <defName>ReplaceWithBionicCarryProsthetic</defName>
+    <label>replace with bionic carry prosthetic</label>
+    <description>Replace existing reproductive abilities with a bionic carry prosthetic. Extracts current parts. Increases carry fertility by 20% and provides perfect contraception control - 100% pregnancy when both partners have bionics and want children, 0% when bionic user avoids pregnancy.</description>
+    <workerClass>Simple_Trans.Recipe_ReplaceReproductiveAbility</workerClass>
+    <workAmount>4500</workAmount>
+    <surgerySuccessChanceFactor>1.5</surgerySuccessChanceFactor>
+    <deathOnFailedSurgeryChance>0.03</deathOnFailedSurgeryChance>
+    <skillRequirements>
+      <Medicine>10</Medicine>
+    </skillRequirements>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+    <ingredients Inherit="False">
+      <li>
+        <filter>
+          <thingDefs>
+            <li>BionicReproductiveProsthetic_Carry</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>4</count>
+      </li>
+    </ingredients>
+    <uiIconThing>BionicReproductiveProsthetic_Carry</uiIconThing>
+  </RecipeDef>
+
+  <RecipeDef ParentName="FertilitySurgery">
+    <defName>ReplaceWithBionicSireProsthetic</defName>
+    <label>replace with bionic sire prosthetic</label>
+    <description>Replace existing reproductive abilities with a bionic sire prosthetic. Extracts current parts. Increases sire fertility by 20% and provides perfect contraception control - 100% pregnancy when both partners have bionics and want children, 0% when bionic user avoids pregnancy.</description>
+    <workerClass>Simple_Trans.Recipe_ReplaceReproductiveAbility</workerClass>
+    <workAmount>4500</workAmount>
+    <surgerySuccessChanceFactor>1.5</surgerySuccessChanceFactor>
+    <deathOnFailedSurgeryChance>0.03</deathOnFailedSurgeryChance>
+    <skillRequirements>
+      <Medicine>10</Medicine>
+    </skillRequirements>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+    <ingredients Inherit="False">
+      <li>
+        <filter>
+          <thingDefs>
+            <li>BionicReproductiveProsthetic_Sire</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>4</count>
+      </li>
+    </ingredients>
+    <uiIconThing>BionicReproductiveProsthetic_Sire</uiIconThing>
+  </RecipeDef>
+
+</Defs>

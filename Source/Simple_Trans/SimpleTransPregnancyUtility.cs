@@ -1,3 +1,4 @@
+using System.Linq;
 using RimWorld;
 using VEF.Genes;
 using Verse;
@@ -37,6 +38,31 @@ public static class SimpleTransPregnancyUtility
 	/// Whether genes represent assigned gender at birth (AGAB)
 	/// </summary>
 	public static bool genesAreAgab;
+	
+	/// <summary>
+	/// Rate at which trans people have both abilities
+	/// </summary>
+	public static float transBothRate;
+	
+	/// <summary>
+	/// Rate at which trans people have neither ability
+	/// </summary>
+	public static float transNeitherRate;
+	
+	/// <summary>
+	/// Rate at which cis males can carry
+	/// </summary>
+	public static float cisMCarryRate;
+	
+	/// <summary>
+	/// Rate at which cis females can sire
+	/// </summary>
+	public static float cisFSireRate;
+	
+	/// <summary>
+	/// Rate at which cis people have both abilities
+	/// </summary>
+	public static float cisBothRate;
 	
 	#endregion
 
@@ -123,41 +149,94 @@ public static class SimpleTransPregnancyUtility
 			// Load mod settings
 			LoadSettings();
 
-			// Determine gender identity and reproductive capabilities based on Simple Trans logic
-			// Binary genders (Male/Female) get assigned trans/cis status; non-binary pawns are handled differently
+			// Determine gender identity and reproductive capabilities
 			bool hasBinaryGender = pawn.gender == Gender.Male || pawn.gender == Gender.Female;
 			
-			// Randomly determine if this pawn is transgender based on configured rates
-			bool isTransgender = DecideTransgender(pawn);
+			// First determine if transgender
+			bool isTransgender = Rand.Range(0f, 1f) > cisRate;
 			
-			// Reproductive capability assignment follows trans-inclusive logic:
-			// - Carrying ability: Cis females (F->F) OR Trans males (M->F identity, can carry)
-			// - Siring ability: Cis males (M->M) OR Trans females (F->M identity, can sire)
-			// This allows for realistic reproductive diversity while respecting gender identity
-			bool canCarry = (pawn.gender == Gender.Female && !isTransgender) || (pawn.gender == Gender.Male && isTransgender);
-			bool canSire = (pawn.gender == Gender.Male && !isTransgender) || (pawn.gender == Gender.Female && isTransgender);
-
-			// Apply gender identity hediffs (visible in health tab)
+			// Apply gender identity hediff
 			if (isTransgender)
 			{
 				SetTrans(pawn);
 			}
 			else if (hasBinaryGender)
 			{
-				// Only apply cisgender hediff to binary genders
 				SetCis(pawn);
 			}
 			
-			// Apply reproductive capability hediffs
-			// The removeSire/removeCarry logic ensures pawns don't have conflicting abilities
-			// unless they're transgender (allowing for intersex/non-standard combinations)
+			// Now determine reproductive abilities based on gender and trans status
+			bool canCarry = false;
+			bool canSire = false;
+			
+			// Handle non-binary pawns separately (if NBG mod adds them)
+			if (pawn.gender != Gender.Male && pawn.gender != Gender.Female)
+			{
+				// Non-binary pawn - use nCarryRate setting
+				canCarry = Rand.Range(0f, 1f) <= nCarryRate;
+				canSire = !canCarry; // Rest get sire ability
+			}
+			else if (isTransgender)
+			{
+				// Check for special cases first
+				float roll = Rand.Range(0f, 1f);
+				if (roll < transBothRate)
+				{
+					// Both abilities
+					canCarry = true;
+					canSire = true;
+				}
+				else if (roll < transBothRate + transNeitherRate)
+				{
+					// Neither ability
+					canCarry = false;
+					canSire = false;
+				}
+				else
+				{
+					// Standard trans logic
+					if (pawn.gender == Gender.Male)
+					{
+						canCarry = Rand.Range(0f, 1f) <= mCarryRate;
+						canSire = !canCarry;
+					}
+					else if (pawn.gender == Gender.Female)
+					{
+						canSire = Rand.Range(0f, 1f) <= fSireRate;
+						canCarry = !canSire;
+					}
+				}
+			}
+			else
+			{
+				// Cisgender logic
+				float roll = Rand.Range(0f, 1f);
+				if (roll < cisBothRate)
+				{
+					// Both abilities (rare)
+					canCarry = true;
+					canSire = true;
+				}
+				else if (pawn.gender == Gender.Male)
+				{
+					canSire = true;
+					canCarry = Rand.Range(0f, 1f) <= cisMCarryRate;
+				}
+				else if (pawn.gender == Gender.Female)
+				{
+					canCarry = true;
+					canSire = Rand.Range(0f, 1f) <= cisFSireRate;
+				}
+			}
+			
+			// Apply reproductive abilities
 			if (canCarry)
 			{
-				SetCarry(pawn, !isTransgender || !canSire);
+				SetCarry(pawn, false);
 			}
 			if (canSire)
 			{
-				SetSire(pawn, !isTransgender || !canCarry);
+				SetSire(pawn, false);
 			}
 
 			// Process genes for additional gender/reproductive overrides
@@ -178,6 +257,17 @@ public static class SimpleTransPregnancyUtility
 	}
 	
 	/// <summary>
+	/// Whether organ transplant system is enabled
+	/// </summary>
+	public static bool enableOrganTransplants;
+	
+	/// <summary>
+	/// Whether prosthetic system is enabled
+	/// </summary>
+	public static bool enableProsthetics;
+	
+
+	/// <summary>
 	/// Loads mod settings from the settings manager
 	/// </summary>
 	private static void LoadSettings()
@@ -190,6 +280,13 @@ public static class SimpleTransPregnancyUtility
 			string fSirePercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "fSirePercent");
 			string nCarryPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "nCarryPercent");
 			string genesAreAgabSetting = SettingsManager.GetSetting("runaway.simpletrans", "genesAreAgab");
+			string enableOrganTransplantsSetting = SettingsManager.GetSetting("runaway.simpletrans", "enableOrganTransplants");
+			string enableProstheticsSetting = SettingsManager.GetSetting("runaway.simpletrans", "enableProsthetics");
+			string transBothPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "transBothPercent");
+			string transNeitherPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "transNeitherPercent");
+			string cisMCarryPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "cisMCarryPercent");
+			string cisFSirePercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "cisFSirePercent");
+			string cisBothPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "cisBothPercent");
 
 			// Parse settings with error handling and defaults
 			cisRate = TryParseFloat(cisPercentSetting, SimpleTransConstants.DefaultCisRate * SimpleTransConstants.PercentageToDecimal) / SimpleTransConstants.PercentageToDecimal;
@@ -197,6 +294,13 @@ public static class SimpleTransPregnancyUtility
 			fSireRate = TryParseFloat(fSirePercentSetting, SimpleTransConstants.DefaultFemaleSireRate * SimpleTransConstants.PercentageToDecimal) / SimpleTransConstants.PercentageToDecimal;
 			nCarryRate = TryParseFloat(nCarryPercentSetting, SimpleTransConstants.DefaultNonBinaryCarryRate * SimpleTransConstants.PercentageToDecimal) / SimpleTransConstants.PercentageToDecimal;
 			genesAreAgab = TryParseBool(genesAreAgabSetting, true);
+			enableOrganTransplants = TryParseBool(enableOrganTransplantsSetting, true);
+			enableProsthetics = TryParseBool(enableProstheticsSetting, true);
+			transBothRate = TryParseFloat(transBothPercentSetting, 5f) / SimpleTransConstants.PercentageToDecimal;
+			transNeitherRate = TryParseFloat(transNeitherPercentSetting, 5f) / SimpleTransConstants.PercentageToDecimal;
+			cisMCarryRate = TryParseFloat(cisMCarryPercentSetting, 1f) / SimpleTransConstants.PercentageToDecimal;
+			cisFSireRate = TryParseFloat(cisFSirePercentSetting, 1f) / SimpleTransConstants.PercentageToDecimal;
+			cisBothRate = TryParseFloat(cisBothPercentSetting, 0f) / SimpleTransConstants.PercentageToDecimal;
 		}
 		catch (System.Exception ex)
 		{
@@ -207,6 +311,13 @@ public static class SimpleTransPregnancyUtility
 			fSireRate = SimpleTransConstants.DefaultFemaleSireRate;
 			nCarryRate = SimpleTransConstants.DefaultNonBinaryCarryRate;
 			genesAreAgab = true;
+			enableOrganTransplants = true;
+			enableProsthetics = true;
+			transBothRate = 0.05f;
+			transNeitherRate = 0.05f;
+			cisMCarryRate = 0.01f;
+			cisFSireRate = 0.01f;
+			cisBothRate = 0f;
 		}
 	}
 	
@@ -336,6 +447,7 @@ public static class SimpleTransPregnancyUtility
 	
 	/// <summary>
 	/// Determines if a pawn should be transgender based on configuration rates
+	/// Legacy method for NBG patches - main logic now in ValidateOrSetGender
 	/// </summary>
 	/// <param name="pawn">The pawn to evaluate</param>
 	/// <returns>True if the pawn should be transgender</returns>
@@ -350,32 +462,6 @@ public static class SimpleTransPregnancyUtility
 		try
 		{
 			bool isTransgender = Rand.Range(0f, 1f) > cisRate;
-			
-			if (pawn.gender == Gender.Male && isTransgender)
-			{
-				SetTrans(pawn);
-				if (pawn.gender == Gender.Male && Rand.Range(0f, 1f) <= mCarryRate)
-				{
-					SetCarry(pawn);
-				}
-				else if (pawn.gender == Gender.Male && Rand.Range(0f, 1f) > mCarryRate)
-				{
-					SetSire(pawn);
-				}
-			}
-			else if (pawn.gender == Gender.Female && isTransgender)
-			{
-				SetTrans(pawn);
-				if (pawn.gender == Gender.Female && Rand.Range(0f, 1f) <= fSireRate)
-				{
-					SetSire(pawn);
-				}
-				else if (pawn.gender == Gender.Female && Rand.Range(0f, 1f) > fSireRate)
-				{
-					SetCarry(pawn);
-				}
-			}
-			
 			SimpleTransDebug.Log("Transgender = " + isTransgender, 3);
 			return isTransgender;
 		}
@@ -485,6 +571,9 @@ public static class SimpleTransPregnancyUtility
 				// Otherwise becomes cis female (F gender, F reproductive role)
 				pawn.gender = (Rand.Range(0f, 1f) > cisRate) ? Gender.Male : Gender.Female;
 				
+				// Clear any existing reproductive hediffs first
+				ClearGender(pawn);
+				
 				if (pawn.gender == Gender.Male)
 				{
 					// Trans male: male gender identity, can carry pregnancies
@@ -496,8 +585,25 @@ public static class SimpleTransPregnancyUtility
 					SetCis(pawn);
 				}
 				
-				// Always grant carrying ability for forceFemale genes
-				SetCarry(pawn, removeSire: false);
+				// Check for special variations even with forced genes
+				float roll = Rand.Range(0f, 1f);
+				if (roll < cisBothRate && pawn.gender == Gender.Female)
+				{
+					// Rare case: cis female with both abilities
+					SetCarry(pawn, false);
+					SetSire(pawn, false);
+				}
+				else if (roll < transBothRate && pawn.gender == Gender.Male)
+				{
+					// Rare case: trans male with both abilities
+					SetCarry(pawn, false);
+					SetSire(pawn, false);
+				}
+				else
+				{
+					// Standard: always grant carrying ability for forceFemale genes
+					SetCarry(pawn, false);
+				}
 			}
 			
 			// Handle genes that force male reproductive capabilities
@@ -507,6 +613,9 @@ public static class SimpleTransPregnancyUtility
 				// Logic is inverted: if NOT above cis rate, assign male gender (cis male)
 				// If above cis rate, assign female gender (trans female)
 				pawn.gender = (!(Rand.Range(0f, 1f) > cisRate)) ? Gender.Male : Gender.Female;
+				
+				// Clear any existing reproductive hediffs first
+				ClearGender(pawn);
 				
 				if (pawn.gender == Gender.Female)
 				{
@@ -519,8 +628,25 @@ public static class SimpleTransPregnancyUtility
 					SetCis(pawn);
 				}
 				
-				// Always grant siring ability for forceMale genes
-				SetSire(pawn, removeCarry: false);
+				// Check for special variations even with forced genes
+				float roll = Rand.Range(0f, 1f);
+				if (roll < cisBothRate && pawn.gender == Gender.Male)
+				{
+					// Rare case: cis male with both abilities
+					SetCarry(pawn, false);
+					SetSire(pawn, false);
+				}
+				else if (roll < transBothRate && pawn.gender == Gender.Female)
+				{
+					// Rare case: trans female with both abilities
+					SetCarry(pawn, false);
+					SetSire(pawn, false);
+				}
+				else
+				{
+					// Standard: always grant siring ability for forceMale genes
+					SetSire(pawn, false);
+				}
 			}
 		}
 		catch (System.Exception ex)
@@ -582,7 +708,7 @@ public static class SimpleTransPregnancyUtility
 	#region Utility Methods
 	
 	/// <summary>
-	/// Removes all gender-related hediffs from a pawn
+	/// Removes all gender-related and reproductive hediffs from a pawn
 	/// </summary>
 	/// <param name="pawn">The pawn to clear</param>
 	public static void ClearGender(Pawn pawn)
@@ -611,6 +737,18 @@ public static class SimpleTransPregnancyUtility
 			if (pawn.health.hediffSet.HasHediff(canSireDef, false))
 			{
 				pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(canSireDef));
+			}
+			
+			// Also remove all prosthetic hediffs
+			var prostheticHediffs = pawn.health.hediffSet.hediffs.Where(h => 
+				h.def.defName == "BasicProstheticCarry" || 
+				h.def.defName == "BasicProstheticSire" || 
+				h.def.defName == "BionicProstheticCarry" || 
+				h.def.defName == "BionicProstheticSire").ToList();
+			
+			foreach (var hediff in prostheticHediffs)
+			{
+				pawn.health.RemoveHediff(hediff);
 			}
 		}
 		catch (System.Exception ex)

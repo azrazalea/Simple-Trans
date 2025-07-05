@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Defs>
+  <HediffDef>
+    <defName>Cisgender</defName>
+    <label>cisgender</label>
+    <description>This person's gender identity causes them no issue.</description>
+    <everCurableByItem>false</everCurableByItem>
+    <isBad>false</isBad>
+    <hediffClass>Hediff</hediffClass>
+    <defaultLabelColor>(0.45, 0.35, 0.55)</defaultLabelColor>
+    <stages>
+      <li>
+        <becomeVisible>true</becomeVisible>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>Transgender</defName>
+    <label>transgender</label>
+    <description>This person's gender identity causes them some issues.</description>
+    <everCurableByItem>false</everCurableByItem>
+    <isBad>false</isBad>
+    <hediffClass>Hediff</hediffClass>
+    <defaultLabelColor>(0.45, 0.35, 0.55)</defaultLabelColor>
+    <stages>
+      <li>
+        <becomeVisible>true</becomeVisible>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>PregnancyCarry</defName>
+    <label>able to carry pregnancy</label>
+    <description>This person can carry a pregnancy to term biologically.</description>
+    <everCurableByItem>false</everCurableByItem>
+    <isBad>false</isBad>
+    <hediffClass>Hediff</hediffClass>
+    <defaultLabelColor>(0.35, 0.45, 0.55)</defaultLabelColor>
+    <tags>
+      <li>PregnancyCarry</li>
+    </tags>
+    <stages>
+      <li>
+        <becomeVisible>true</becomeVisible>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>PregnancySire</defName>
+    <label>able to sire children</label>
+    <description>This person can biologically sire a child.</description>
+    <everCurableByItem>false</everCurableByItem>
+    <isBad>false</isBad>
+    <hediffClass>Hediff</hediffClass>
+    <defaultLabelColor>(0.35, 0.45, 0.55)</defaultLabelColor>
+    <tags>
+      <li>PregnancySire</li>
+    </tags>
+    <stages>
+      <li>
+        <becomeVisible>true</becomeVisible>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <!-- Prosthetic Modifier Hediffs (additive to base abilities) -->
+  <HediffDef>
+    <defName>BasicProstheticCarry</defName>
+    <label>basic reproductive prosthetic (carry)</label>
+    <description>A basic prosthetic reproductive system that enables carrying pregnancies. Reduces carry fertility by 30% compared to natural organs. Counts as an implant for transhumanist ideology.</description>
+    <everCurableByItem>false</everCurableByItem>
+    <isBad>false</isBad>
+    <hediffClass>Hediff</hediffClass>
+    <defaultLabelColor>(0.55, 0.55, 0.75)</defaultLabelColor>
+    <countsAsAddedPartOrImplant>true</countsAsAddedPartOrImplant>
+    <stages>
+      <li>
+        <becomeVisible>true</becomeVisible>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>BasicProstheticSire</defName>
+    <label>basic reproductive prosthetic (sire)</label>
+    <description>A basic prosthetic reproductive system that enables siring offspring. Reduces sire fertility by 30% compared to natural organs. Counts as an implant for transhumanist ideology.</description>
+    <everCurableByItem>false</everCurableByItem>
+    <isBad>false</isBad>
+    <hediffClass>Hediff</hediffClass>
+    <defaultLabelColor>(0.55, 0.55, 0.75)</defaultLabelColor>
+    <countsAsAddedPartOrImplant>true</countsAsAddedPartOrImplant>
+    <stages>
+      <li>
+        <becomeVisible>true</becomeVisible>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>BionicProstheticCarry</defName>
+    <label>bionic reproductive prosthetic (carry)</label>
+    <description>A bionic reproductive system that enables carrying pregnancies. Increases carry fertility by 20% compared to natural organs. Provides perfect contraception control - 100% pregnancy chance when both partners have bionics and want children, 0% when the bionic user wants to avoid pregnancy. Counts as an implant for transhumanist ideology.</description>
+    <everCurableByItem>false</everCurableByItem>
+    <isBad>false</isBad>
+    <hediffClass>Hediff</hediffClass>
+    <defaultLabelColor>(0.75, 0.75, 0.95)</defaultLabelColor>
+    <countsAsAddedPartOrImplant>true</countsAsAddedPartOrImplant>
+    <stages>
+      <li>
+        <becomeVisible>true</becomeVisible>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>BionicProstheticSire</defName>
+    <label>bionic reproductive prosthetic (sire)</label>
+    <description>A bionic reproductive system that enables siring offspring. Increases sire fertility by 20% compared to natural organs. Provides perfect contraception control - 100% pregnancy chance when both partners have bionics and want children, 0% when the bionic user wants to avoid pregnancy. Counts as an implant for transhumanist ideology.</description>
+    <everCurableByItem>false</everCurableByItem>
+    <isBad>false</isBad>
+    <hediffClass>Hediff</hediffClass>
+    <defaultLabelColor>(0.75, 0.75, 0.95)</defaultLabelColor>
+    <countsAsAddedPartOrImplant>true</countsAsAddedPartOrImplant>
+    <stages>
+      <li>
+        <becomeVisible>true</becomeVisible>
+      </li>
+    </stages>
+  </HediffDef>
+  <!--
+    <HediffDef>
+        <defName>PregnancyInfertile</defName>
+        <label>unable to have children</label>
+        <description>This person cannot have biological children.</description>
+        <hediffClass>Hediff</hediffClass>
+        <defaultLabelColor>(0.9, 1.0, 0.35)</defaultLabelColor>
+        <stages>
+            <li>
+                <becomeVisible>false</becomeVisible>
+            </li>
+            <li>
+                <capMods>
+                    <li>
+                        <capacity>Fertility</capacity>
+                        <setMax>0.0</setMax>
+                    </li>
+                </capMods>
+            </li>
+        </stages>
+    </HediffDef>
+    -->
+</Defs>
