@@ -37,6 +37,7 @@ This continued version preserves the original mod's philosophy and design while 
         <li>imranfish.xmlextensions</li>
         <li>Ludeon.RimWorld.Biotech</li>
         <li>brrainz.harmony</li>
+        <li>OskarPotocki.VanillaFactionsExpanded.Core</li>
         <li>vanillaexpanded.vanillasocialinteractionsexpanded</li>
         <li>divinederivative.nonbinarygender</li>
     </loadAfter>
