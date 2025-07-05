@@ -74,12 +74,7 @@ namespace Simple_Trans
 
         public override void CycleCompleted(Pawn pawn)
         {
-            // Handle pregnancy termination if pawn had carry ability (before changes)
-            if (SimpleTransPregnancyUtility.CanCarry(pawn) && RimWorld.PregnancyUtility.GetPregnancyHediff(pawn) != null && RimWorld.PregnancyUtility.TryTerminatePregnancy(pawn) && PawnUtility.ShouldSendNotificationAbout(pawn))
-            {
-                Messages.Message("MessagePregnancyTerminated".Translate(pawn.Named("PAWN")), pawn, MessageTypeDefOf.PositiveEvent);
-            }
-            
+            // Feminizing preserves pregnancy - we're adding/keeping carry ability
             // Complete reset - clear all gender and reproductive hediffs
             SimpleTransPregnancyUtility.ClearGender(pawn);
             

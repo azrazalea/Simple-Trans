@@ -26,6 +26,7 @@ namespace Simple_Trans
         {
             // Simple fertility restoration - remove sterility and restore natural abilities
             // This is much simpler than the other cycles - no full reset, no visual changes
+            // For pregnant females, we preserve the pregnancy
             
             // Remove sterility-related hediffs
             var sterilityHediffs = pawn.health.hediffSet.hediffs.Where(h => 
@@ -44,7 +45,8 @@ namespace Simple_Trans
             bool isTrans = pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.transDef);
             bool isCis = pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.cisDef);
             
-            // Only restore abilities if pawn has clear gender identity, preserve existing setup
+            // Only restore abilities for binary genders with clear identity
+            // For non-binary pawns, we don't assume what reproductive abilities they want
             if (pawn.gender == Gender.Male && isTrans)
             {
                 // Trans male - should have carry ability
@@ -69,7 +71,7 @@ namespace Simple_Trans
                 if (!SimpleTransPregnancyUtility.CanCarry(pawn))
                     SimpleTransPregnancyUtility.SetCarry(pawn, false);
             }
-            // For non-binary or unclear cases, leave reproductive abilities as-is
+            // For non-binary pawns, only remove sterility - don't modify reproductive abilities
             
             // No visual changes needed - this is purely internal fertility restoration
             

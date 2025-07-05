@@ -125,6 +125,7 @@
   <SimpleTrans.Change.RemoveBionicCarryProsthetic>Bionic carrying prosthetic will be removed</SimpleTrans.Change.RemoveBionicCarryProsthetic>
   <SimpleTrans.Change.RemoveBionicSireProsthetic>Bionic siring prosthetic will be removed</SimpleTrans.Change.RemoveBionicSireProsthetic>
   <SimpleTrans.Change.TerminatePregnancy>Current pregnancy will be terminated</SimpleTrans.Change.TerminatePregnancy>
+  <SimpleTrans.Change.PreservePregnancy>Current pregnancy will be safely preserved</SimpleTrans.Change.PreservePregnancy>
 
   <!-- Biosculpter Cycle Detail Descriptions -->
   <SimpleTrans.CycleDesc.FertilityRestoration>Fertility restoration treatment:</SimpleTrans.CycleDesc.FertilityRestoration>

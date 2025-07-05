@@ -160,6 +160,9 @@ namespace Simple_Trans
                 case TransformationChangeType.Modification:
                     GUI.color = Color.yellow;
                     break;
+                case TransformationChangeType.Information:
+                    GUI.color = Color.cyan;
+                    break;
                 default:
                     GUI.color = Color.white;
                     break;
@@ -171,6 +174,7 @@ namespace Simple_Trans
                 TransformationChangeType.Addition => "+",
                 TransformationChangeType.Removal => "-",
                 TransformationChangeType.Modification => "~",
+                TransformationChangeType.Information => "ℹ",
                 _ => "•"
             };
             
@@ -193,11 +197,17 @@ namespace Simple_Trans
         {
             var changes = new List<TransformationChange>();
 
-            // Check for pregnancy termination first
+            // Check for pregnancy effects first
             bool willTerminatePregnancy = WillTerminatePregnancy(pawn, cycle);
+            bool willPreservePregnancy = WillPreservePregnancy(pawn, cycle);
+            
             if (willTerminatePregnancy)
             {
                 changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.TerminatePregnancy".Translate()));
+            }
+            else if (willPreservePregnancy)
+            {
+                changes.Add(new TransformationChange(TransformationChangeType.Information, "SimpleTrans.Change.PreservePregnancy".Translate()));
             }
 
             // We need to cast to our specific cycle types to analyze changes
@@ -232,16 +242,48 @@ namespace Simple_Trans
             if (RimWorld.PregnancyUtility.GetPregnancyHediff(pawn) == null || !SimpleTransPregnancyUtility.CanCarry(pawn))
                 return false;
 
-            // Check which cycles affect carry ability
+            // Only terminate pregnancy when REMOVING carry ability (the metaphorical uterus)
             switch (cycle)
             {
                 case CompBiosculpterPod_ReproductiveReconstructionMasculinizing:
+                    return true; // Removes carry, adds sire
                 case CompBiosculpterPod_ReproductiveReconstructionFeminizing:
+                    return false; // Removes sire, adds/keeps carry - preserve pregnancy
                 case CompBiosculpterPod_Androgynize:
+                    return true; // Removes both carry and sire
                 case CompBiosculpterPod_Duosex:
-                    return true; // These cycles clear/reset reproductive abilities
+                    return false; // Adds both abilities including carry - preserve pregnancy
                 case CompBiosculpterPod_FertilityRestoration:
-                    return false; // This cycle doesn't remove abilities
+                    // Only terminate when changing FROM carry TO sire
+                    // Cis males and trans females lose carry ability, others keep/get carry
+                    bool isTrans = pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.transDef);
+                    bool isCis = pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.cisDef);
+                    return (pawn.gender == Gender.Male && isCis) || (pawn.gender == Gender.Female && isTrans);
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Determines if a transformation will preserve pregnancy (show positive message)
+        /// </summary>
+        private static bool WillPreservePregnancy(Pawn pawn, CompBiosculpterPod_Cycle cycle)
+        {
+            // Only show preserve message if pawn is actually pregnant
+            if (RimWorld.PregnancyUtility.GetPregnancyHediff(pawn) == null)
+                return false;
+                
+            // Show preserve message for cycles that keep/add carry ability
+            switch (cycle)
+            {
+                case CompBiosculpterPod_ReproductiveReconstructionFeminizing:
+                case CompBiosculpterPod_Duosex:
+                    return true; // These add/keep carry ability
+                case CompBiosculpterPod_FertilityRestoration:
+                    // Preserve for trans males, cis females, and non-binary
+                    bool isTrans = pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.transDef);
+                    bool isCis = pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.cisDef);
+                    return !((pawn.gender == Gender.Male && isCis) || (pawn.gender == Gender.Female && isTrans));
                 default:
                     return false;
             }
