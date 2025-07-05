@@ -56,10 +56,10 @@
                 <li>FertilityProcedures</li>
               </requiredResearch>
             </li>
-            <li Class="Simple_Trans.CompProperties_BiosculpterPod_Binary">
-              <key>simpleTransBinary</key>
-              <label>dual systems</label>
-              <description>Complete dual system transformation: grants both carry and sire abilities, removes prosthetics, adjusts body type to match gender identity, and provides maximum reproductive flexibility.</description>
+            <li Class="Simple_Trans.CompProperties_BiosculpterPod_Duosex">
+              <key>simpleTransDuosex</key>
+              <label>duosex</label>
+              <description>Complete duosex transformation: grants both carry and sire abilities, removes prosthetics, adjusts body type to match gender identity, and provides maximum reproductive flexibility.</description>
               <iconPath>UI/Gizmos/BiosculpterCycleBioregeneration</iconPath>
               <durationDays>35</durationDays>
               <operatingColor>(0.85, 0.35, 0.65)</operatingColor>
