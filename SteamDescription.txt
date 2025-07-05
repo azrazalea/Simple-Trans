@@ -1,0 +1,119 @@
+ 🔄 NEW AUTHOR UPDATE - RimWorld 1.6 Compatible
+
+  This is a continued version of the original Simple Trans mod by Runaway, completely decompiled and modernized for
+   RimWorld 1.6 compatibility. The original mod was created for RimWorld 1.5.
+
+  Original Author: Runaway
+  Current Maintainer: azrazalea
+  Source: Decompiled and modernized from original mod
+  Versions: RimWorld 1.5 (legacy), 1.6+ (actively maintained)
+
+  ⚠️ Version Note: While this mod supports both RimWorld 1.5 and 1.6, only the 1.6 version receives updates and
+  improvements. The 1.5 version remains available as-is from the original mod but will not receive new features or
+  fixes.
+  
+  ---
+  What This Mod Does
+
+  This mod adds a comprehensive system for differentiating how pawns interact with pregnancy and AGAR (Assigned
+  Gender at Rimworld). This mod was inspired by frustration with other options for having explicitly trans pawns.
+  No shade on RJW, Universal Pregnancy, or Dysphoria, but none of those were what the original author was looking
+  for.
+
+  Trans rights are human rights. If you are here to complain about the existence of this mod, please leave. You have
+   the ability to not click into this mod if you don't like the idea. Goodbye.
+
+  ---
+  Continued Version Features
+
+  This RimWorld 1.6 version includes all original functionality plus:
+  - Complete decompilation and modernization of the original source code
+  - Enhanced error handling and stability improvements
+  - Comprehensive documentation for better maintainability
+  - Modern C# practices throughout the codebase
+  - Improved debugging tools for troubleshooting
+
+  ---
+  Core Features
+
+  Gender Identity System:
+  - Pawns are assigned cis or trans on generation, based on configurable % cis chance in settings
+  - Pawns are assigned carrier or sire capabilities based on gender identity and configurable percentages
+  - Pregnancy systems check against ability to carry or sire instead of gender
+  - Lovin' pregnancy chance checks against reproductive capabilities instead of gender
+
+  Compatibility:
+  - Gender-restricting genes work correctly with Vanilla Extended Framework
+  - Full compatibility with Non-Binary Gender mod
+  - Comprehensive Biotech DLC integration
+
+  ---
+  Dev Mode Tools
+
+  Comprehensive debugging options:
+  - Validate all Humanlike genders: checks if all generated pawns have valid cis/trans + carry/sire status
+  - Set Transgender/Cisgender: manage gender identity of target pawns
+  - Clear ST hediffs: clears cis/trans/carry/sire from target pawn
+  - Set reproductive abilities: manage carry/sire capabilities
+  - Regenerate ST hediffs: completely refresh gender assignments
+
+  This mod should be mid-save safe!
+
+  ---
+  Planned Features
+
+  - Move cis/trans to traits system
+  - Pawn Editor compatibility improvements
+  - Ability to both carry and sire, or neither (configurable percentages)
+  - Gendered surgeries checking carry/sire instead of gender
+  - Reproductive capability generation only in reproductive lifestages
+  - Ovum extraction and fertilization system
+  - Enhanced compatibility with other mods
+
+  ---
+  Required Mods
+
+  - Harmony (brrainz.harmony)
+  - XML Extensions (imranfish.xmlextensions)
+  - Vanilla Expanded Framework (OskarPotocki.VanillaFactionsExpanded.Core)
+
+  Recommended Mods
+
+  - Samesex IVF - Additional reproductive options
+  - Way Better Romance - Enhanced romance mechanics (tested compatible)
+  - Intimacy - Currently testing compatibility and I will write a patch if needed
+  - Non-Binary Gender - Adds non-binary gender options (full compatibility!)
+
+  ⚠️ Don't use WBR or Intimacy & NBG together! Known incompatibility between those two mods. I may work on a patch though in the future.
+
+  ---
+  Incompatible Mods
+
+  - RJW (You can already do most of this mod with RJW + Character Editor, it's just manual instead of generated)
+  - Universal Pregnancy (Possibly - touches same code, untested)
+  - Dysphoria (Possibly - different approaches to transgender mechanics)
+  - Hermaphrodite Gene Continued (Patches same code paths with conflicts)
+
+  ---
+  Known Issues
+
+  - Must be loaded after Vanilla Social Interactions Expanded or no one will get pregnant, even cis/het couples
+
+  ---
+  About This Continuation
+
+  This version was created by completely decompiling the original mod using ILSpy and modernizing the entire
+  codebase for RimWorld 1.6. The original concept, design, and philosophy remain unchanged - this is purely a
+  technical update to preserve the mod's functionality for current RimWorld versions.
+
+  All credit for the original design and implementation goes to Runaway. This continuation focuses on technical
+  modernization, stability improvements, and ensuring compatibility with RimWorld 1.6+.
+
+  The original mod's message remains unchanged: This mod exists to provide representation and gameplay options for
+  transgender pawns in RimWorld. Trans rights are human rights.
+
+  ---
+  This is a community-maintained continuation created from decompiled source code to preserve the original mod's
+  functionality for RimWorld 1.6.
+
+  ---
