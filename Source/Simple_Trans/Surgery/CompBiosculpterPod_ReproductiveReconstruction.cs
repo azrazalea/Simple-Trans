@@ -14,18 +14,24 @@ namespace Simple_Trans
             string baseDesc = Props.description;
             
             // Add comprehensive description of what the cycle does
-            baseDesc += "\n\n<color=cyan>Complete masculinizing transformation:</color>";
-            baseDesc += "\n• Sets gender to male";
-            baseDesc += "\n• Changes body type to male";
-            baseDesc += "\n• Grants sire ability, removes carry ability";
-            baseDesc += "\n• Removes all reproductive prosthetics";
-            baseDesc += "\n• Sets gender identity to cisgender";
+            baseDesc += "\n\n<color=cyan>" + "SimpleTrans.CycleDesc.MasculinizingTransformation".Translate() + "</color>";
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.SetsGenderMale".Translate();
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.ChangeBodyMale".Translate();
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.GrantSireRemoveCarry".Translate();
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.RemoveAllProsthetics".Translate();
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.SetCisgender".Translate();
             
             return baseDesc;
         }
 
         public override void CycleCompleted(Pawn pawn)
         {
+            // Handle pregnancy termination if pawn had carry ability
+            if (SimpleTransPregnancyUtility.CanCarry(pawn) && RimWorld.PregnancyUtility.GetPregnancyHediff(pawn) != null && RimWorld.PregnancyUtility.TryTerminatePregnancy(pawn) && PawnUtility.ShouldSendNotificationAbout(pawn))
+            {
+                Messages.Message("MessagePregnancyTerminated".Translate(pawn.Named("PAWN")), pawn, MessageTypeDefOf.PositiveEvent);
+            }
+            
             // Complete reset - clear all gender and reproductive hediffs
             SimpleTransPregnancyUtility.ClearGender(pawn);
             
@@ -56,18 +62,24 @@ namespace Simple_Trans
             string baseDesc = Props.description;
             
             // Add comprehensive description of what the cycle does
-            baseDesc += "\n\n<color=#FF69B4>Complete feminizing transformation:</color>";
-            baseDesc += "\n• Sets gender to female";
-            baseDesc += "\n• Changes body type to female";
-            baseDesc += "\n• Grants carry ability, removes sire ability";
-            baseDesc += "\n• Removes all reproductive prosthetics";
-            baseDesc += "\n• Sets gender identity to cisgender";
+            baseDesc += "\n\n<color=#FF69B4>" + "SimpleTrans.CycleDesc.FeminizingTransformation".Translate() + "</color>";
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.SetsGenderFemale".Translate();
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.ChangeBodyFemale".Translate();
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.GrantCarryRemoveSire".Translate();
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.RemoveAllProsthetics".Translate();
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.SetCisgender".Translate();
             
             return baseDesc;
         }
 
         public override void CycleCompleted(Pawn pawn)
         {
+            // Handle pregnancy termination if pawn had carry ability (before changes)
+            if (SimpleTransPregnancyUtility.CanCarry(pawn) && RimWorld.PregnancyUtility.GetPregnancyHediff(pawn) != null && RimWorld.PregnancyUtility.TryTerminatePregnancy(pawn) && PawnUtility.ShouldSendNotificationAbout(pawn))
+            {
+                Messages.Message("MessagePregnancyTerminated".Translate(pawn.Named("PAWN")), pawn, MessageTypeDefOf.PositiveEvent);
+            }
+            
             // Complete reset - clear all gender and reproductive hediffs
             SimpleTransPregnancyUtility.ClearGender(pawn);
             

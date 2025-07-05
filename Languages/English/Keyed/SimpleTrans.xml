@@ -51,6 +51,8 @@
   <SimpleTrans.Surgery.InvalidRecipeType>Invalid recipe type</SimpleTrans.Surgery.InvalidRecipeType>
   <SimpleTrans.Surgery.CannotReplace>Cannot replace with this type</SimpleTrans.Surgery.CannotReplace>
   <SimpleTrans.Surgery.NoAbilitiesToReplace>No reproductive abilities to replace</SimpleTrans.Surgery.NoAbilitiesToReplace>
+  <SimpleTrans.Surgery.PregnancyWarning>WARNING: {PAWN_nameDef} is currently pregnant. The surgery '{1}' will terminate the pregnancy. Do you want to proceed?</SimpleTrans.Surgery.PregnancyWarning>
+  <SimpleTrans.Surgery.PregnantPawnWarning>Pawn is pregnant - surgery will terminate pregnancy</SimpleTrans.Surgery.PregnantPawnWarning>
   
   <!-- Item Labels for Surgery -->
   <SimpleTrans.Items.NaturalCarryOrgans>natural carrying anatomy</SimpleTrans.Items.NaturalCarryOrgans>
@@ -91,7 +93,8 @@
   <SimpleTrans.ConsentDialogTitle>Informed Consent: {0} Transformation</SimpleTrans.ConsentDialogTitle>
   <SimpleTrans.ConsentDialogSubtitle>The following changes will be made to {PAWN_nameDef}:</SimpleTrans.ConsentDialogSubtitle>
   <SimpleTrans.ConsentChangesHeader>Transformation Changes:</SimpleTrans.ConsentChangesHeader>
-  <SimpleTrans.ConsentWarning>This transformation is permanent and will fundamentally alter this person's biology and identity. Please ensure this aligns with their wishes and your colony's needs.</SimpleTrans.ConsentWarning>
+  <SimpleTrans.ConsentWarning>This transformation will alter this person's biology and identity. Changes can be reversed with additional surgeries or biosculpter treatments. Please ensure this aligns with their wishes and your colony's needs.</SimpleTrans.ConsentWarning>
+  <SimpleTrans.ConsentPregnancyWarning>WARNING: {PAWN_nameDef} is currently pregnant. This transformation will terminate the pregnancy. This action cannot be undone.</SimpleTrans.ConsentPregnancyWarning>
   <SimpleTrans.ConsentProceed>I Understand - Proceed</SimpleTrans.ConsentProceed>
   <SimpleTrans.NoChangesConfirm>{PAWN_nameDef} already matches the target configuration for {1}. Proceed anyway?</SimpleTrans.NoChangesConfirm>
 
@@ -121,5 +124,35 @@
   <SimpleTrans.Change.RemoveBasicSireProsthetic>Basic siring prosthetic will be removed</SimpleTrans.Change.RemoveBasicSireProsthetic>
   <SimpleTrans.Change.RemoveBionicCarryProsthetic>Bionic carrying prosthetic will be removed</SimpleTrans.Change.RemoveBionicCarryProsthetic>
   <SimpleTrans.Change.RemoveBionicSireProsthetic>Bionic siring prosthetic will be removed</SimpleTrans.Change.RemoveBionicSireProsthetic>
+  <SimpleTrans.Change.TerminatePregnancy>Current pregnancy will be terminated</SimpleTrans.Change.TerminatePregnancy>
+
+  <!-- Biosculpter Cycle Detail Descriptions -->
+  <SimpleTrans.CycleDesc.FertilityRestoration>Fertility restoration treatment:</SimpleTrans.CycleDesc.FertilityRestoration>
+  <SimpleTrans.CycleDesc.FixesSterility>Fixes sterility and fertility issues</SimpleTrans.CycleDesc.FixesSterility>
+  <SimpleTrans.CycleDesc.RestoresNaturalAbilities>Restores natural reproductive abilities based on gender identity</SimpleTrans.CycleDesc.RestoresNaturalAbilities>
+  <SimpleTrans.CycleDesc.NoGenderChange>Does not change gender, body type, or gender identity</SimpleTrans.CycleDesc.NoGenderChange>
+  <SimpleTrans.CycleDesc.PreservesProsthetics>Preserves existing prosthetics and enhancements</SimpleTrans.CycleDesc.PreservesProsthetics>
+  
+  <SimpleTrans.CycleDesc.MasculinizingTransformation>Complete masculinizing transformation:</SimpleTrans.CycleDesc.MasculinizingTransformation>
+  <SimpleTrans.CycleDesc.SetsGenderMale>Sets gender to male</SimpleTrans.CycleDesc.SetsGenderMale>
+  <SimpleTrans.CycleDesc.ChangeBodyMale>Changes body type to male</SimpleTrans.CycleDesc.ChangeBodyMale>
+  <SimpleTrans.CycleDesc.GrantSireRemoveCarry>Grants sire ability, removes carry ability</SimpleTrans.CycleDesc.GrantSireRemoveCarry>
+  <SimpleTrans.CycleDesc.RemoveAllProsthetics>Removes all reproductive prosthetics</SimpleTrans.CycleDesc.RemoveAllProsthetics>
+  <SimpleTrans.CycleDesc.SetCisgender>Sets gender identity to cisgender</SimpleTrans.CycleDesc.SetCisgender>
+  
+  <SimpleTrans.CycleDesc.FeminizingTransformation>Complete feminizing transformation:</SimpleTrans.CycleDesc.FeminizingTransformation>
+  <SimpleTrans.CycleDesc.SetsGenderFemale>Sets gender to female</SimpleTrans.CycleDesc.SetsGenderFemale>
+  <SimpleTrans.CycleDesc.ChangeBodyFemale>Changes body type to female</SimpleTrans.CycleDesc.ChangeBodyFemale>
+  <SimpleTrans.CycleDesc.GrantCarryRemoveSire>Grants carry ability, removes sire ability</SimpleTrans.CycleDesc.GrantCarryRemoveSire>
+  
+  <SimpleTrans.CycleDesc.AndrogynizingTransformation>Complete androgynizing transformation:</SimpleTrans.CycleDesc.AndrogynizingTransformation>
+  <SimpleTrans.CycleDesc.SetsGenderNonBinary>Sets gender to non-binary</SimpleTrans.CycleDesc.SetsGenderNonBinary>
+  <SimpleTrans.CycleDesc.GenderUnchanged>Gender remains unchanged (non-binary mod not loaded)</SimpleTrans.CycleDesc.GenderUnchanged>
+  <SimpleTrans.CycleDesc.ChangeBodyThin>Changes body type to thin</SimpleTrans.CycleDesc.ChangeBodyThin>
+  <SimpleTrans.CycleDesc.RemoveAllAbilities>Removes all reproductive abilities</SimpleTrans.CycleDesc.RemoveAllAbilities>
+  <SimpleTrans.CycleDesc.SetTransgender>Sets gender identity to transgender</SimpleTrans.CycleDesc.SetTransgender>
+  
+  <SimpleTrans.CycleDesc.DuosexTransformation>Complete duosex transformation:</SimpleTrans.CycleDesc.DuosexTransformation>
+  <SimpleTrans.CycleDesc.GrantBothAbilities>Grants BOTH reproductive abilities</SimpleTrans.CycleDesc.GrantBothAbilities>
 
 </LanguageData>

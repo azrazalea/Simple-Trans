@@ -13,11 +13,11 @@ namespace Simple_Trans
             string baseDesc = Props.description;
             
             // Add comprehensive description of what the cycle does
-            baseDesc += "\n\n<color=green>Fertility restoration treatment:</color>";
-            baseDesc += "\n• Fixes sterility and fertility issues";
-            baseDesc += "\n• Restores natural reproductive abilities based on gender identity";
-            baseDesc += "\n• Does not change gender, body type, or gender identity";
-            baseDesc += "\n• Preserves existing prosthetics and enhancements";
+            baseDesc += "\n\n<color=green>" + "SimpleTrans.CycleDesc.FertilityRestoration".Translate() + "</color>";
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.FixesSterility".Translate();
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.RestoresNaturalAbilities".Translate();
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.NoGenderChange".Translate();
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.PreservesProsthetics".Translate();
             
             return baseDesc;
         }

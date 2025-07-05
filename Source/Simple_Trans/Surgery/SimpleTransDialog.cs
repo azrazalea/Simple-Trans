@@ -21,7 +21,7 @@ namespace Simple_Trans
         private readonly List<TransformationChange> changes;
         
         private Vector2 scrollPosition = Vector2.zero;
-        public override Vector2 InitialSize => new Vector2(600f, 500f);
+        public override Vector2 InitialSize => new Vector2(750f, 550f);
 
         public static void CreateDialog(Pawn pawn, CompBiosculpterPod_Cycle cycle, string cycleLabel, Action proceedAction)
         {
@@ -67,13 +67,17 @@ namespace Simple_Trans
             
             // Title
             Text.Font = GameFont.Medium;
-            Widgets.Label(new Rect(0f, y, inRect.width, 42f), "SimpleTrans.ConsentDialogTitle".Translate(cycleLabel));
-            y += 35f;
+            var titleText = "SimpleTrans.ConsentDialogTitle".Translate(cycleLabel);
+            float titleHeight = Text.CalcHeight(titleText, inRect.width);
+            Widgets.Label(new Rect(0f, y, inRect.width, titleHeight), titleText);
+            y += titleHeight + 5f; // Add small buffer after title
 
             // Subtitle with pawn name
             Text.Font = GameFont.Small;
-            Widgets.Label(new Rect(0f, y, inRect.width, 28f), "SimpleTrans.ConsentDialogSubtitle".Translate(pawn.Named("PAWN")));
-            y += 35f;
+            var subtitleText = "SimpleTrans.ConsentDialogSubtitle".Translate(pawn.Named("PAWN"));
+            float subtitleHeight = Text.CalcHeight(subtitleText, inRect.width);
+            Widgets.Label(new Rect(0f, y, inRect.width, subtitleHeight), subtitleText);
+            y += subtitleHeight + 15f; // Add larger buffer for spacing
 
             // Changes section
             Text.Font = GameFont.Small;
@@ -81,8 +85,8 @@ namespace Simple_Trans
             Widgets.Label(new Rect(0f, y, inRect.width, 25f), changesLabel);
             y += 30f;
 
-            // Scrollable changes list
-            Rect outRect = new Rect(inRect.x, y, inRect.width, inRect.height - 100f - y);
+            // Scrollable changes list  
+            Rect outRect = new Rect(inRect.x, y, inRect.width, inRect.height - 135f - y);
             float contentHeight = CalculateContentHeight(outRect.width);
             Rect viewRect = new Rect(0f, 0f, outRect.width - 16f, contentHeight);
             
@@ -97,8 +101,25 @@ namespace Simple_Trans
             
             Widgets.EndScrollView();
 
-            // Warning text
-            y = inRect.height - 85f;
+            // Warning text - start further up to accommodate both warnings
+            float warningsStartY = inRect.height - 120f;
+            y = warningsStartY;
+            
+            // Check if pregnancy warning is needed
+            bool showPregnancyWarning = WillTerminatePregnancy(pawn, cycle);
+            
+            if (showPregnancyWarning)
+            {
+                // Pregnancy warning in red
+                GUI.color = Color.red;
+                Text.Font = GameFont.Tiny;
+                var pregnancyWarningText = "SimpleTrans.ConsentPregnancyWarning".Translate(pawn.Named("PAWN"));
+                float pregnancyWarningHeight = Text.CalcHeight(pregnancyWarningText, inRect.width);
+                Widgets.Label(new Rect(0f, y, inRect.width, pregnancyWarningHeight), pregnancyWarningText);
+                y += pregnancyWarningHeight + 5f;
+            }
+            
+            // General warning in yellow
             GUI.color = Color.yellow;
             Text.Font = GameFont.Tiny;
             var warningText = "SimpleTrans.ConsentWarning".Translate();
@@ -172,6 +193,13 @@ namespace Simple_Trans
         {
             var changes = new List<TransformationChange>();
 
+            // Check for pregnancy termination first
+            bool willTerminatePregnancy = WillTerminatePregnancy(pawn, cycle);
+            if (willTerminatePregnancy)
+            {
+                changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.TerminatePregnancy".Translate()));
+            }
+
             // We need to cast to our specific cycle types to analyze changes
             switch (cycle)
             {
@@ -193,6 +221,30 @@ namespace Simple_Trans
             }
 
             return changes;
+        }
+
+        /// <summary>
+        /// Determines if a transformation will terminate pregnancy
+        /// </summary>
+        private static bool WillTerminatePregnancy(Pawn pawn, CompBiosculpterPod_Cycle cycle)
+        {
+            // Only matters if pawn is pregnant and has carry ability
+            if (RimWorld.PregnancyUtility.GetPregnancyHediff(pawn) == null || !SimpleTransPregnancyUtility.CanCarry(pawn))
+                return false;
+
+            // Check which cycles affect carry ability
+            switch (cycle)
+            {
+                case CompBiosculpterPod_ReproductiveReconstructionMasculinizing:
+                case CompBiosculpterPod_ReproductiveReconstructionFeminizing:
+                case CompBiosculpterPod_Androgynize:
+                case CompBiosculpterPod_Duosex:
+                    return true; // These cycles clear/reset reproductive abilities
+                case CompBiosculpterPod_FertilityRestoration:
+                    return false; // This cycle doesn't remove abilities
+                default:
+                    return false;
+            }
         }
 
         private static void AnalyzeMasculinizingChanges(Pawn pawn, List<TransformationChange> changes)

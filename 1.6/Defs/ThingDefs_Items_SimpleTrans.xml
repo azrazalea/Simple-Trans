@@ -37,7 +37,10 @@
       <ComponentIndustrial>4</ComponentIndustrial>
     </costList>
     <recipeMaker>
-      <researchPrerequisite>Prosthetics</researchPrerequisite>
+      <researchPrerequisites>
+        <li>Prosthetics</li>
+        <li>FertilityProcedures</li>
+      </researchPrerequisites>
       <skillRequirements>
         <Crafting>4</Crafting>
       </skillRequirements>
@@ -62,7 +65,10 @@
       <ComponentIndustrial>4</ComponentIndustrial>
     </costList>
     <recipeMaker>
-      <researchPrerequisite>Prosthetics</researchPrerequisite>
+      <researchPrerequisites>
+        <li>Prosthetics</li>
+        <li>FertilityProcedures</li>
+      </researchPrerequisites>
       <skillRequirements>
         <Crafting>4</Crafting>
       </skillRequirements>
@@ -89,7 +95,10 @@
       <Gold>5</Gold>
     </costList>
     <recipeMaker>
-      <researchPrerequisite>Bionics</researchPrerequisite>
+      <researchPrerequisites>
+        <li>FleshShaping</li>
+        <li>FertilityProcedures</li>
+      </researchPrerequisites>
       <skillRequirements>
         <Crafting>10</Crafting>
       </skillRequirements>
@@ -115,7 +124,10 @@
       <Gold>5</Gold>
     </costList>
     <recipeMaker>
-      <researchPrerequisite>Bionics</researchPrerequisite>
+      <researchPrerequisites>
+        <li>FleshShaping</li>
+        <li>FertilityProcedures</li>
+      </researchPrerequisites>
       <skillRequirements>
         <Crafting>10</Crafting>
       </skillRequirements>

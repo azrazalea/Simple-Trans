@@ -21,6 +21,7 @@
               <operatingColor>(0.75, 0.35, 0.85)</operatingColor>
               <requiredResearch>
                 <li>FertilityProcedures</li>
+                <li>Bioregeneration</li>
               </requiredResearch>
             </li>
             <li Class="Simple_Trans.CompProperties_BiosculpterPod_ReproductiveReconstructionFeminizing">
@@ -32,6 +33,7 @@
               <operatingColor>(0.85, 0.35, 0.75)</operatingColor>
               <requiredResearch>
                 <li>FertilityProcedures</li>
+                <li>Bioregeneration</li>
               </requiredResearch>
             </li>
             <li Class="Simple_Trans.CompProperties_BiosculpterPod_FertilityRestoration">
@@ -43,6 +45,7 @@
               <operatingColor>(0.35, 0.85, 0.85)</operatingColor>
               <requiredResearch>
                 <li>FertilityProcedures</li>
+                <li>Bioregeneration</li>
               </requiredResearch>
             </li>
             <li Class="Simple_Trans.CompProperties_BiosculpterPod_Androgynize">
@@ -54,6 +57,7 @@
               <operatingColor>(0.65, 0.45, 0.85)</operatingColor>
               <requiredResearch>
                 <li>FertilityProcedures</li>
+                <li>Bioregeneration</li>
               </requiredResearch>
             </li>
             <li Class="Simple_Trans.CompProperties_BiosculpterPod_Duosex">
@@ -65,6 +69,7 @@
               <operatingColor>(0.85, 0.35, 0.65)</operatingColor>
               <requiredResearch>
                 <li>FertilityProcedures</li>
+                <li>Bioregeneration</li>
               </requiredResearch>
             </li>
           </value>

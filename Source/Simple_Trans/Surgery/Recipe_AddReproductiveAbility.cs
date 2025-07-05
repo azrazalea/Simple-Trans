@@ -100,34 +100,40 @@ namespace Simple_Trans
                 return;
             }
 
-            var ingredientAbility = GetIngredientAbilityType(ingredients);
-            
-            Log.Message($"[Simple Trans] Ingredient: {ingredient.Label}, Ability: {ingredientAbility}");
-
-            // Add the appropriate hediffs based on ingredient type
-            var hediffsToAdd = GetHediffsForIngredient(ingredient);
-            if (hediffsToAdd != null && hediffsToAdd.Count > 0)
+            if (billDoer != null && !CheckSurgeryFail(billDoer, pawn, ingredients, part, bill))
             {
-                foreach (var hediffName in hediffsToAdd)
+                var ingredientAbility = GetIngredientAbilityType(ingredients);
+                
+                Log.Message($"[Simple Trans] Ingredient: {ingredient.Label}, Ability: {ingredientAbility}");
+
+                // Add the appropriate hediffs based on ingredient type
+                var hediffsToAdd = GetHediffsForIngredient(ingredient);
+                if (hediffsToAdd != null && hediffsToAdd.Count > 0)
                 {
-                    var hediffDef = DefDatabase<HediffDef>.GetNamed(hediffName);
-                    var hediff = HediffMaker.MakeHediff(hediffDef, pawn);
-                    pawn.health.AddHediff(hediff);
-                    Log.Message($"[Simple Trans] Added hediff: {hediffName}");
+                    foreach (var hediffName in hediffsToAdd)
+                    {
+                        var hediffDef = DefDatabase<HediffDef>.GetNamed(hediffName);
+                        var hediff = HediffMaker.MakeHediff(hediffDef, pawn);
+                        pawn.health.AddHediff(hediff);
+                        Log.Message($"[Simple Trans] Added hediff: {hediffName}");
+                    }
                 }
-            }
-            else
-            {
-                Log.Warning($"[Simple Trans] Could not determine hediffs for ingredient: {ingredient.def.defName}");
-                return;
-            }
+                else
+                {
+                    Log.Warning($"[Simple Trans] Could not determine hediffs for ingredient: {ingredient.def.defName}");
+                    return;
+                }
 
-            Log.Message($"[Simple Trans] After surgery - CanCarry: {SimpleTransPregnancyUtility.CanCarry(pawn)}, CanSire: {SimpleTransPregnancyUtility.CanSire(pawn)}");
-            
-            // Use appropriate message based on ingredient type
-            string messageKey = ingredient.def.defName.Contains("Prosthetic") ? "SimpleTransProstheticInstalled" : "SimpleTransOrganTransplanted";
-            Messages.Message(messageKey.Translate(pawn.Named("PAWN"), ingredient.Label), 
-                pawn, MessageTypeDefOf.PositiveEvent);
+                // Record tale for surgery
+                TaleRecorder.RecordTale(TaleDefOf.DidSurgery, billDoer, pawn);
+
+                Log.Message($"[Simple Trans] After surgery - CanCarry: {SimpleTransPregnancyUtility.CanCarry(pawn)}, CanSire: {SimpleTransPregnancyUtility.CanSire(pawn)}");
+                
+                // Use appropriate message based on ingredient type
+                string messageKey = ingredient.def.defName.Contains("Prosthetic") ? "SimpleTransProstheticInstalled" : "SimpleTransOrganTransplanted";
+                Messages.Message(messageKey.Translate(pawn.Named("PAWN"), ingredient.Label), 
+                    pawn, MessageTypeDefOf.PositiveEvent);
+            }
         }
 
         private Thing GetReproductiveIngredient(List<Thing> ingredients)

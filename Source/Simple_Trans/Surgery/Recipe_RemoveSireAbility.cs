@@ -22,34 +22,40 @@ namespace Simple_Trans
                 return;
             }
 
-            // Determine what type of part to spawn back based on current hediffs
-            var itemToSpawn = GetItemForCurrentSireType(pawn);
-            Thing extractedItem = ThingMaker.MakeThing(ThingDef.Named(itemToSpawn));
-            
-            // Remove all sire-related hediffs (base + any prosthetic modifiers)
-            var hediffsToRemove = new List<Hediff>();
-            foreach (var hediff in pawn.health.hediffSet.hediffs)
+            if (billDoer != null && !CheckSurgeryFail(billDoer, pawn, ingredients, part, bill))
             {
-                if (hediff.def.defName == "PregnancySire" ||
-                    hediff.def.defName == "BasicProstheticSire" ||
-                    hediff.def.defName == "BionicProstheticSire")
+                // Determine what type of part to spawn back based on current hediffs
+                var itemToSpawn = GetItemForCurrentSireType(pawn);
+                Thing extractedItem = ThingMaker.MakeThing(ThingDef.Named(itemToSpawn));
+                
+                // Remove all sire-related hediffs (base + any prosthetic modifiers)
+                var hediffsToRemove = new List<Hediff>();
+                foreach (var hediff in pawn.health.hediffSet.hediffs)
                 {
-                    hediffsToRemove.Add(hediff);
+                    if (hediff.def.defName == "PregnancySire" ||
+                        hediff.def.defName == "BasicProstheticSire" ||
+                        hediff.def.defName == "BionicProstheticSire")
+                    {
+                        hediffsToRemove.Add(hediff);
+                    }
                 }
-            }
-            
-            foreach (var hediff in hediffsToRemove)
-            {
-                pawn.health.RemoveHediff(hediff);
-            }
-            
-            // Spawn the extracted item
-            GenPlace.TryPlaceThing(extractedItem, pawn.Position, pawn.Map, ThingPlaceMode.Near);
+                
+                foreach (var hediff in hediffsToRemove)
+                {
+                    pawn.health.RemoveHediff(hediff);
+                }
+                
+                // Spawn the extracted item
+                GenPlace.TryPlaceThing(extractedItem, pawn.Position, pawn.Map, ThingPlaceMode.Near);
 
-            Log.Message($"[Simple Trans] After surgery - CanCarry: {SimpleTransPregnancyUtility.CanCarry(pawn)}, CanSire: {SimpleTransPregnancyUtility.CanSire(pawn)}");
-            
-            Messages.Message("SimpleTransOrganExtracted".Translate(pawn.Named("PAWN"), extractedItem.Label), 
-                pawn, MessageTypeDefOf.NeutralEvent);
+                // Record tale for surgery
+                TaleRecorder.RecordTale(TaleDefOf.DidSurgery, billDoer, pawn);
+
+                Log.Message($"[Simple Trans] After surgery - CanCarry: {SimpleTransPregnancyUtility.CanCarry(pawn)}, CanSire: {SimpleTransPregnancyUtility.CanSire(pawn)}");
+                
+                Messages.Message("SimpleTransOrganExtracted".Translate(pawn.Named("PAWN"), extractedItem.Label), 
+                    pawn, MessageTypeDefOf.NeutralEvent);
+            }
         }
 
         private string GetItemForCurrentSireType(Pawn pawn)

@@ -14,25 +14,31 @@ namespace Simple_Trans
             string baseDesc = Props.description;
             
             // Add comprehensive description of what the cycle does
-            baseDesc += "\n\n<color=purple>Complete androgynizing transformation:</color>";
+            baseDesc += "\n\n<color=purple>" + "SimpleTrans.CycleDesc.AndrogynizingTransformation".Translate() + "</color>";
             
             // Check if NonBinary Gender mod is loaded
             bool hasNBGMod = ModsConfig.IsActive("Coraizon.NonBinaryGenderMod") || ModsConfig.IsActive("Coraizon.NBGM");
             
             if (hasNBGMod)
-                baseDesc += "\n• Sets gender to non-binary";
+                baseDesc += "\n• " + "SimpleTrans.CycleDesc.SetsGenderNonBinary".Translate();
             else
-                baseDesc += "\n• Gender remains unchanged (non-binary mod not loaded)";
-            baseDesc += "\n• Changes body type to thin";
-            baseDesc += "\n• Removes all reproductive abilities";
-            baseDesc += "\n• Removes all reproductive prosthetics";
-            baseDesc += "\n• Sets gender identity to transgender";
+                baseDesc += "\n• " + "SimpleTrans.CycleDesc.GenderUnchanged".Translate();
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.ChangeBodyThin".Translate();
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.RemoveAllAbilities".Translate();
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.RemoveAllProsthetics".Translate();
+            baseDesc += "\n• " + "SimpleTrans.CycleDesc.SetTransgender".Translate();
                 
             return baseDesc;
         }
 
         public override void CycleCompleted(Pawn pawn)
         {
+            // Handle pregnancy termination if pawn had carry ability
+            if (SimpleTransPregnancyUtility.CanCarry(pawn) && RimWorld.PregnancyUtility.GetPregnancyHediff(pawn) != null && RimWorld.PregnancyUtility.TryTerminatePregnancy(pawn) && PawnUtility.ShouldSendNotificationAbout(pawn))
+            {
+                Messages.Message("MessagePregnancyTerminated".Translate(pawn.Named("PAWN")), pawn, MessageTypeDefOf.PositiveEvent);
+            }
+            
             // Complete reset - clear all gender and reproductive hediffs
             SimpleTransPregnancyUtility.ClearGender(pawn);
             

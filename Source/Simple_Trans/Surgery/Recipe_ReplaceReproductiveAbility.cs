@@ -149,61 +149,80 @@ namespace Simple_Trans
                 return;
             }
 
-            var ingredientType = GetIngredientType(ingredients);
-            var ingredientAbility = GetIngredientAbilityType(ingredients);
-            
-            Log.Message($"[Simple Trans] Ingredient: {ingredient.Label}, Type: {ingredientType}, Ability: {ingredientAbility}");
+            if (billDoer != null && !CheckSurgeryFail(billDoer, pawn, ingredients, part, bill))
+            {
+                var ingredientType = GetIngredientType(ingredients);
+                var ingredientAbility = GetIngredientAbilityType(ingredients);
+                
+                Log.Message($"[Simple Trans] Ingredient: {ingredient.Label}, Type: {ingredientType}, Ability: {ingredientAbility}");
 
-            bool hasCarry = SimpleTransPregnancyUtility.CanCarry(pawn);
-            bool hasSire = SimpleTransPregnancyUtility.CanSire(pawn);
+                bool hasCarry = SimpleTransPregnancyUtility.CanCarry(pawn);
+                bool hasSire = SimpleTransPregnancyUtility.CanSire(pawn);
 
-            // Determine what to replace
-            AbilityType targetToReplace;
-            
-            // First priority: same type replacement
-            if (ingredientAbility == AbilityType.Carry && hasCarry)
-            {
-                targetToReplace = AbilityType.Carry;
-            }
-            else if (ingredientAbility == AbilityType.Sire && hasSire)
-            {
-                targetToReplace = AbilityType.Sire;
-            }
-            // Second priority: opposite type replacement
-            else if (ingredientAbility == AbilityType.Carry && hasSire)
-            {
-                targetToReplace = AbilityType.Sire;
-            }
-            else if (ingredientAbility == AbilityType.Sire && hasCarry)
-            {
-                targetToReplace = AbilityType.Carry;
-            }
-            else
-            {
-                Log.Warning($"[Simple Trans] Could not determine what to replace!");
-                return;
-            }
-
-            // Extract current part
-            ExtractCurrentPart(pawn, targetToReplace);
-
-            // Add new ability with appropriate hediffs based on ingredient type
-            var hediffsToAdd = GetHediffsForIngredient(ingredient);
-            if (hediffsToAdd != null && hediffsToAdd.Count > 0)
-            {
-                foreach (var hediffName in hediffsToAdd)
+                // Determine what to replace
+                AbilityType targetToReplace;
+                
+                // First priority: same type replacement
+                if (ingredientAbility == AbilityType.Carry && hasCarry)
                 {
-                    var hediffDef = DefDatabase<HediffDef>.GetNamed(hediffName);
-                    var hediff = HediffMaker.MakeHediff(hediffDef, pawn);
-                    pawn.health.AddHediff(hediff);
-                    Log.Message($"[Simple Trans] Added hediff: {hediffName}");
+                    targetToReplace = AbilityType.Carry;
                 }
-            }
+                else if (ingredientAbility == AbilityType.Sire && hasSire)
+                {
+                    targetToReplace = AbilityType.Sire;
+                }
+                // Second priority: opposite type replacement
+                else if (ingredientAbility == AbilityType.Carry && hasSire)
+                {
+                    targetToReplace = AbilityType.Sire;
+                }
+                else if (ingredientAbility == AbilityType.Sire && hasCarry)
+                {
+                    targetToReplace = AbilityType.Carry;
+                }
+                else
+                {
+                    Log.Warning($"[Simple Trans] Could not determine what to replace!");
+                    return;
+                }
 
-            Log.Message($"[Simple Trans] After surgery - CanCarry: {SimpleTransPregnancyUtility.CanCarry(pawn)}, CanSire: {SimpleTransPregnancyUtility.CanSire(pawn)}");
-            
-            Messages.Message("SimpleTransOrganTransplanted".Translate(pawn.Named("PAWN"), ingredient.Label), 
-                pawn, MessageTypeDefOf.PositiveEvent);
+                // Handle pregnancy termination if carry ability is being replaced
+                if (targetToReplace == AbilityType.Carry)
+                {
+                    if (RimWorld.PregnancyUtility.GetPregnancyHediff(pawn) != null && RimWorld.PregnancyUtility.TryTerminatePregnancy(pawn) && PawnUtility.ShouldSendNotificationAbout(pawn))
+                    {
+                        Messages.Message("MessagePregnancyTerminated".Translate(pawn.Named("PAWN")), pawn, MessageTypeDefOf.PositiveEvent);
+                        if (IsViolationOnPawn(pawn, part, Faction.OfPlayerSilentFail))
+                        {
+                            ReportViolation(pawn, billDoer, pawn.HomeFaction, -70);
+                        }
+                    }
+                }
+
+                // Extract current part
+                ExtractCurrentPart(pawn, targetToReplace);
+
+                // Add new ability with appropriate hediffs based on ingredient type
+                var hediffsToAdd = GetHediffsForIngredient(ingredient);
+                if (hediffsToAdd != null && hediffsToAdd.Count > 0)
+                {
+                    foreach (var hediffName in hediffsToAdd)
+                    {
+                        var hediffDef = DefDatabase<HediffDef>.GetNamed(hediffName);
+                        var hediff = HediffMaker.MakeHediff(hediffDef, pawn);
+                        pawn.health.AddHediff(hediff);
+                        Log.Message($"[Simple Trans] Added hediff: {hediffName}");
+                    }
+                }
+
+                // Record tale for surgery
+                TaleRecorder.RecordTale(TaleDefOf.DidSurgery, billDoer, pawn);
+
+                Log.Message($"[Simple Trans] After surgery - CanCarry: {SimpleTransPregnancyUtility.CanCarry(pawn)}, CanSire: {SimpleTransPregnancyUtility.CanSire(pawn)}");
+                
+                Messages.Message("SimpleTransOrganTransplanted".Translate(pawn.Named("PAWN"), ingredient.Label), 
+                    pawn, MessageTypeDefOf.PositiveEvent);
+            }
         }
 
         private Thing GetReproductiveIngredient(List<Thing> ingredients)

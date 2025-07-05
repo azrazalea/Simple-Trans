@@ -22,41 +22,57 @@ namespace Simple_Trans
                 return;
             }
 
-            // Determine what type of part to spawn back based on current hediff
-            var carryHediff = GetCarryHediff(pawn);
-            if (carryHediff == null)
+            if (billDoer != null && !CheckSurgeryFail(billDoer, pawn, ingredients, part, bill))
             {
-                Log.Warning($"[Simple Trans] No carry hediff found to remove!");
-                return;
-            }
-
-            var itemToSpawn = GetItemForCurrentCarryType(pawn);
-            Thing extractedItem = ThingMaker.MakeThing(ThingDef.Named(itemToSpawn));
-            
-            // Remove all carry-related hediffs (base + any prosthetic modifiers)
-            var hediffsToRemove = new List<Hediff>();
-            foreach (var hediff in pawn.health.hediffSet.hediffs)
-            {
-                if (hediff.def.defName == "PregnancyCarry" ||
-                    hediff.def.defName == "BasicProstheticCarry" ||
-                    hediff.def.defName == "BionicProstheticCarry")
+                // Determine what type of part to spawn back based on current hediff
+                var carryHediff = GetCarryHediff(pawn);
+                if (carryHediff == null)
                 {
-                    hediffsToRemove.Add(hediff);
+                    Log.Warning($"[Simple Trans] No carry hediff found to remove!");
+                    return;
                 }
-            }
-            
-            foreach (var hediff in hediffsToRemove)
-            {
-                pawn.health.RemoveHediff(hediff);
-            }
-            
-            // Spawn the extracted item
-            GenPlace.TryPlaceThing(extractedItem, pawn.Position, pawn.Map, ThingPlaceMode.Near);
 
-            Log.Message($"[Simple Trans] After surgery - CanCarry: {SimpleTransPregnancyUtility.CanCarry(pawn)}, CanSire: {SimpleTransPregnancyUtility.CanSire(pawn)}");
-            
-            Messages.Message("SimpleTransOrganExtracted".Translate(pawn.Named("PAWN"), extractedItem.Label), 
-                pawn, MessageTypeDefOf.NeutralEvent);
+                var itemToSpawn = GetItemForCurrentCarryType(pawn);
+                Thing extractedItem = ThingMaker.MakeThing(ThingDef.Named(itemToSpawn));
+                
+                // Handle pregnancy termination before removing carry ability
+                if (RimWorld.PregnancyUtility.GetPregnancyHediff(pawn) != null && RimWorld.PregnancyUtility.TryTerminatePregnancy(pawn) && PawnUtility.ShouldSendNotificationAbout(pawn))
+                {
+                    Messages.Message("MessagePregnancyTerminated".Translate(pawn.Named("PAWN")), pawn, MessageTypeDefOf.PositiveEvent);
+                    if (IsViolationOnPawn(pawn, part, Faction.OfPlayerSilentFail))
+                    {
+                        ReportViolation(pawn, billDoer, pawn.HomeFaction, -70);
+                    }
+                }
+                
+                // Remove all carry-related hediffs (base + any prosthetic modifiers)
+                var hediffsToRemove = new List<Hediff>();
+                foreach (var hediff in pawn.health.hediffSet.hediffs)
+                {
+                    if (hediff.def.defName == "PregnancyCarry" ||
+                        hediff.def.defName == "BasicProstheticCarry" ||
+                        hediff.def.defName == "BionicProstheticCarry")
+                    {
+                        hediffsToRemove.Add(hediff);
+                    }
+                }
+                
+                foreach (var hediff in hediffsToRemove)
+                {
+                    pawn.health.RemoveHediff(hediff);
+                }
+                
+                // Spawn the extracted item
+                GenPlace.TryPlaceThing(extractedItem, pawn.Position, pawn.Map, ThingPlaceMode.Near);
+
+                // Record tale for surgery
+                TaleRecorder.RecordTale(TaleDefOf.DidSurgery, billDoer, pawn);
+
+                Log.Message($"[Simple Trans] After surgery - CanCarry: {SimpleTransPregnancyUtility.CanCarry(pawn)}, CanSire: {SimpleTransPregnancyUtility.CanSire(pawn)}");
+                
+                Messages.Message("SimpleTransOrganExtracted".Translate(pawn.Named("PAWN"), extractedItem.Label), 
+                    pawn, MessageTypeDefOf.NeutralEvent);
+            }
         }
 
         private Hediff GetCarryHediff(Pawn pawn)
