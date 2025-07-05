@@ -5,7 +5,7 @@
   <RecipeDef ParentName="FertilitySurgery">
     <defName>RemoveCarryAbility</defName>
     <label>remove carry ability</label>
-    <description>Remove the ability to carry pregnancies and extract the organs/prosthetics for use elsewhere.</description>
+    <description>Modify reproductive anatomy to remove pregnancy carrying capability, preserving components for potential transplantation.</description>
     <workerClass>Simple_Trans.Recipe_RemoveCarryAbility</workerClass>
     <workAmount>3000</workAmount>
     <surgerySuccessChanceFactor>3</surgerySuccessChanceFactor>
@@ -32,7 +32,7 @@
   <RecipeDef ParentName="FertilitySurgery">
     <defName>RemoveSireAbility</defName>
     <label>remove sire ability</label>
-    <description>Remove the ability to sire offspring and extract the organs/prosthetics for use elsewhere.</description>
+    <description>Modify reproductive anatomy to remove offspring siring capability, preserving components for potential transplantation.</description>
     <workerClass>Simple_Trans.Recipe_RemoveSireAbility</workerClass>
     <workAmount>3000</workAmount>
     <surgerySuccessChanceFactor>3</surgerySuccessChanceFactor>
@@ -62,7 +62,7 @@
   <RecipeDef ParentName="FertilitySurgery">
     <defName>AddCarryOrgans</defName>
     <label>add carry organs</label>
-    <description>Add natural reproductive organs that enable carrying pregnancies. Does not remove existing abilities.</description>
+    <description>Add natural reproductive anatomy that enables carrying pregnancies. Does not remove existing capabilities.</description>
     <workerClass>Simple_Trans.Recipe_AddReproductiveAbility</workerClass>
     <workAmount>2800</workAmount>
     <surgerySuccessChanceFactor>3</surgerySuccessChanceFactor>
@@ -100,7 +100,7 @@
   <RecipeDef ParentName="FertilitySurgery">
     <defName>AddSireOrgans</defName>
     <label>add sire organs</label>
-    <description>Add natural reproductive organs that enable siring offspring. Does not remove existing abilities.</description>
+    <description>Add natural reproductive anatomy that enables siring offspring. Does not remove existing capabilities.</description>
     <workerClass>Simple_Trans.Recipe_AddReproductiveAbility</workerClass>
     <workAmount>2800</workAmount>
     <surgerySuccessChanceFactor>3</surgerySuccessChanceFactor>
@@ -139,7 +139,7 @@
   <RecipeDef ParentName="FertilitySurgery">
     <defName>AddBasicCarryProsthetic</defName>
     <label>add basic carry prosthetic</label>
-    <description>Add a basic reproductive prosthetic that enables carrying pregnancies. Does not remove existing abilities. Reduces carry fertility by 30% compared to natural organs.</description>
+    <description>Add a basic reproductive prosthetic that enables carrying pregnancies. Does not remove existing capabilities. Reduces carrying fertility by 30% compared to natural anatomy.</description>
     <workerClass>Simple_Trans.Recipe_AddReproductiveAbility</workerClass>
     <workAmount>2500</workAmount>
     <surgerySuccessChanceFactor>4</surgerySuccessChanceFactor>
@@ -177,7 +177,7 @@
   <RecipeDef ParentName="FertilitySurgery">
     <defName>AddBasicSireProsthetic</defName>
     <label>add basic sire prosthetic</label>
-    <description>Add a basic reproductive prosthetic that enables siring offspring. Does not remove existing abilities. Reduces sire fertility by 30% compared to natural organs.</description>
+    <description>Add a basic reproductive prosthetic that enables siring offspring. Does not remove existing capabilities. Reduces siring fertility by 30% compared to natural anatomy.</description>
     <workerClass>Simple_Trans.Recipe_AddReproductiveAbility</workerClass>
     <workAmount>2500</workAmount>
     <surgerySuccessChanceFactor>4</surgerySuccessChanceFactor>
@@ -216,7 +216,7 @@
   <RecipeDef ParentName="FertilitySurgery">
     <defName>AddBionicCarryProsthetic</defName>
     <label>add bionic carry prosthetic</label>
-    <description>Add a bionic reproductive prosthetic that enables carrying pregnancies. Does not remove existing abilities. Increases carry fertility by 20% and provides perfect contraception control - 100% pregnancy when both partners have bionics and want children, 0% when bionic user avoids pregnancy.</description>
+    <description>Add a bionic reproductive prosthetic that enables carrying pregnancies. Does not remove existing capabilities. Increases carrying fertility by 20% and provides perfect contraception control - 100% pregnancy when both partners have bionics and want children, 0% when bionic user avoids pregnancy.</description>
     <workerClass>Simple_Trans.Recipe_AddReproductiveAbility</workerClass>
     <workAmount>3500</workAmount>
     <surgerySuccessChanceFactor>2</surgerySuccessChanceFactor>
@@ -254,7 +254,7 @@
   <RecipeDef ParentName="FertilitySurgery">
     <defName>AddBionicSireProsthetic</defName>
     <label>add bionic sire prosthetic</label>
-    <description>Add a bionic reproductive prosthetic that enables siring offspring. Does not remove existing abilities. Increases sire fertility by 20% and provides perfect contraception control - 100% pregnancy when both partners have bionics and want children, 0% when bionic user avoids pregnancy.</description>
+    <description>Add a bionic reproductive prosthetic that enables siring offspring. Does not remove existing capabilities. Increases siring fertility by 20% and provides perfect contraception control - 100% pregnancy when both partners have bionics and want children, 0% when bionic user avoids pregnancy.</description>
     <workerClass>Simple_Trans.Recipe_AddReproductiveAbility</workerClass>
     <workAmount>3500</workAmount>
     <surgerySuccessChanceFactor>2</surgerySuccessChanceFactor>
@@ -295,7 +295,7 @@
   <RecipeDef ParentName="FertilitySurgery">
     <defName>ReplaceWithCarryOrgans</defName>
     <label>replace with carry organs</label>
-    <description>Replace existing reproductive abilities with natural carry organs. Extracts current parts.</description>
+    <description>Replace existing reproductive capabilities with natural carrying anatomy. Extracts current components.</description>
     <workerClass>Simple_Trans.Recipe_ReplaceReproductiveAbility</workerClass>
     <workAmount>4000</workAmount>
     <surgerySuccessChanceFactor>2</surgerySuccessChanceFactor>
@@ -330,7 +330,7 @@
   <RecipeDef ParentName="FertilitySurgery">
     <defName>ReplaceWithSireOrgans</defName>
     <label>replace with sire organs</label>
-    <description>Replace existing reproductive abilities with natural sire organs. Extracts current parts.</description>
+    <description>Replace existing reproductive capabilities with natural siring anatomy. Extracts current components.</description>
     <workerClass>Simple_Trans.Recipe_ReplaceReproductiveAbility</workerClass>
     <workAmount>4000</workAmount>
     <surgerySuccessChanceFactor>2</surgerySuccessChanceFactor>
@@ -366,7 +366,7 @@
   <RecipeDef ParentName="FertilitySurgery">
     <defName>ReplaceWithBasicCarryProsthetic</defName>
     <label>replace with basic carry prosthetic</label>
-    <description>Replace existing reproductive abilities with a basic carry prosthetic. Extracts current parts. Reduces carry fertility by 30% compared to natural organs.</description>
+    <description>Replace existing reproductive capabilities with a basic carrying prosthetic. Extracts current components. Reduces carrying fertility by 30% compared to natural anatomy.</description>
     <workerClass>Simple_Trans.Recipe_ReplaceReproductiveAbility</workerClass>
     <workAmount>3800</workAmount>
     <surgerySuccessChanceFactor>2.5</surgerySuccessChanceFactor>
@@ -401,7 +401,7 @@
   <RecipeDef ParentName="FertilitySurgery">
     <defName>ReplaceWithBasicSireProsthetic</defName>
     <label>replace with basic sire prosthetic</label>
-    <description>Replace existing reproductive abilities with a basic sire prosthetic. Extracts current parts. Reduces sire fertility by 30% compared to natural organs.</description>
+    <description>Replace existing reproductive capabilities with a basic siring prosthetic. Extracts current components. Reduces siring fertility by 30% compared to natural anatomy.</description>
     <workerClass>Simple_Trans.Recipe_ReplaceReproductiveAbility</workerClass>
     <workAmount>3800</workAmount>
     <surgerySuccessChanceFactor>2.5</surgerySuccessChanceFactor>
@@ -437,7 +437,7 @@
   <RecipeDef ParentName="FertilitySurgery">
     <defName>ReplaceWithBionicCarryProsthetic</defName>
     <label>replace with bionic carry prosthetic</label>
-    <description>Replace existing reproductive abilities with a bionic carry prosthetic. Extracts current parts. Increases carry fertility by 20% and provides perfect contraception control - 100% pregnancy when both partners have bionics and want children, 0% when bionic user avoids pregnancy.</description>
+    <description>Replace existing reproductive capabilities with a bionic carrying prosthetic. Extracts current components. Increases carrying fertility by 20% and provides perfect contraception control - 100% pregnancy when both partners have bionics and want children, 0% when bionic user avoids pregnancy.</description>
     <workerClass>Simple_Trans.Recipe_ReplaceReproductiveAbility</workerClass>
     <workAmount>4500</workAmount>
     <surgerySuccessChanceFactor>1.5</surgerySuccessChanceFactor>
@@ -472,7 +472,7 @@
   <RecipeDef ParentName="FertilitySurgery">
     <defName>ReplaceWithBionicSireProsthetic</defName>
     <label>replace with bionic sire prosthetic</label>
-    <description>Replace existing reproductive abilities with a bionic sire prosthetic. Extracts current parts. Increases sire fertility by 20% and provides perfect contraception control - 100% pregnancy when both partners have bionics and want children, 0% when bionic user avoids pregnancy.</description>
+    <description>Replace existing reproductive capabilities with a bionic siring prosthetic. Extracts current components. Increases siring fertility by 20% and provides perfect contraception control - 100% pregnancy when both partners have bionics and want children, 0% when bionic user avoids pregnancy.</description>
     <workerClass>Simple_Trans.Recipe_ReplaceReproductiveAbility</workerClass>
     <workAmount>4500</workAmount>
     <surgerySuccessChanceFactor>1.5</surgerySuccessChanceFactor>

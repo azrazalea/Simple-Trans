@@ -5,7 +5,7 @@ using Verse;
 
 namespace Simple_Trans
 {
-    public class CompBiosculpterPod_Binary : CompBiosculpterPod_Cycle
+    public class CompBiosculpterPod_Duosex : CompBiosculpterPod_Cycle
     {
         public override string Description(Pawn tunedFor)
         {
@@ -14,7 +14,7 @@ namespace Simple_Trans
             string baseDesc = Props.description;
             
             // Add comprehensive description of what the cycle does
-            baseDesc += "\n\n<color=magenta>Complete binary transformation:</color>";
+            baseDesc += "\n\n<color=magenta>Complete duosex transformation:</color>";
             
             // Check if NonBinary Gender mod is loaded
             bool hasNBGMod = ModsConfig.IsActive("Coraizon.NonBinaryGenderMod") || ModsConfig.IsActive("Coraizon.NBGM");
@@ -50,7 +50,7 @@ namespace Simple_Trans
                 }
             }
             
-            // Grant BOTH reproductive abilities - this is the binary result
+            // Grant BOTH reproductive abilities - this is the duosex result
             SimpleTransPregnancyUtility.SetCarry(pawn, false);
             SimpleTransPregnancyUtility.SetSire(pawn, false);
             
@@ -63,7 +63,7 @@ namespace Simple_Trans
             // Refresh graphics
             pawn.Drawer.renderer.SetAllGraphicsDirty();
             
-            Messages.Message("SimpleTransBinaryComplete".Translate(pawn.Named("PAWN")), 
+            Messages.Message("SimpleTransDuosexComplete".Translate(pawn.Named("PAWN")), 
                 pawn, MessageTypeDefOf.PositiveEvent);
         }
     }

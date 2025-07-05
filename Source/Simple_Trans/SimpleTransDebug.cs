@@ -47,7 +47,7 @@ internal class SimpleTransDebug
 	/// Grants the selected pawn exclusive pregnancy carrying ability
 	/// </summary>
 	/// <param name="pawn">The pawn to modify</param>
-	[DebugAction("Simple Trans", "Set Able to Carry (exclusive)", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+	[DebugAction("Simple Trans", "Set Carrying Ability (exclusive)", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 	public static void SetAbleCarry(Pawn pawn)
 	{
 		SimpleTransPregnancyUtility.SetCarry(pawn, removeSire: true);
@@ -57,7 +57,7 @@ internal class SimpleTransDebug
 	/// Grants the selected pawn exclusive pregnancy siring ability
 	/// </summary>
 	/// <param name="pawn">The pawn to modify</param>
-	[DebugAction("Simple Trans", "Set Able to Sire (exclusive)", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+	[DebugAction("Simple Trans", "Set Siring Ability (exclusive)", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 	public static void SetAbleSire(Pawn pawn)
 	{
 		SimpleTransPregnancyUtility.SetSire(pawn, removeCarry: true);
@@ -67,7 +67,7 @@ internal class SimpleTransDebug
 	/// Grants the selected pawn both reproductive abilities (carry and sire)
 	/// </summary>
 	/// <param name="pawn">The pawn to modify</param>
-	[DebugAction("Simple Trans", "Set Dual Reproductive", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+	[DebugAction("Simple Trans", "Set Dual Reproductive Abilities", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 	public static void SetDualReproductive(Pawn pawn)
 	{
 		// Ensure pawn is transgender to allow dual capabilities

@@ -9,7 +9,7 @@ namespace Simple_Trans
     {
         public override AcceptanceReport AvailableReport(Thing thing, BodyPartRecord part = null)
         {
-            if (!(thing is Pawn pawn)) return "Must be performed on a pawn";
+            if (!(thing is Pawn pawn)) return "SimpleTrans.Surgery.MustBePawn".Translate();
 
             // Try to get ingredients from the bill
             var bill = Find.Selector.SingleSelectedThing as IThingHolder;
@@ -19,22 +19,22 @@ namespace Simple_Trans
                 var ingredient = GetReproductiveIngredient(ingredients);
                 
                 if (ingredient == null) 
-                    return "No reproductive organs or prosthetics found";
+                    return "SimpleTrans.Surgery.NoOrgansFound".Translate();
 
                 var ingredientDefName = ingredient.def.defName;
                 
                 // Check if pawn already has the exact same type
                 if (HasMatchingHediff(pawn, ingredientDefName))
-                    return $"Already has {ingredient.Label.ToLower()}";
+                    return "SimpleTrans.Surgery.AlreadyHas".Translate(ingredient.Label.ToLower());
 
                 // Check basic ability requirements
                 bool isCarryIngredient = ingredientDefName.Contains("Carry");
                 bool isSireIngredient = ingredientDefName.Contains("Sire");
                 
                 if (isCarryIngredient && SimpleTransPregnancyUtility.CanCarry(pawn)) 
-                    return "Already has carry ability";
+                    return "SimpleTrans.Surgery.AlreadyHasCarry".Translate();
                 if (isSireIngredient && SimpleTransPregnancyUtility.CanSire(pawn)) 
-                    return "Already has sire ability";
+                    return "SimpleTrans.Surgery.AlreadyHasSire".Translate();
 
                 return AcceptanceReport.WasAccepted;
             }
@@ -45,12 +45,12 @@ namespace Simple_Trans
             bool isSireRecipe = recipeName.Contains("Sire");
             
             if (!isCarryRecipe && !isSireRecipe) 
-                return "Invalid recipe type";
+                return "SimpleTrans.Surgery.InvalidRecipeType".Translate();
 
             if (isCarryRecipe && SimpleTransPregnancyUtility.CanCarry(pawn)) 
-                return "Already has carry ability";
+                return "SimpleTrans.Surgery.AlreadyHasCarry".Translate();
             if (isSireRecipe && SimpleTransPregnancyUtility.CanSire(pawn)) 
-                return "Already has sire ability";
+                return "SimpleTrans.Surgery.AlreadyHasSire".Translate();
 
             return AcceptanceReport.WasAccepted;
         }

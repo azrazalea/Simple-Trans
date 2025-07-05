@@ -3,8 +3,8 @@
   <!-- Harvestable Organs -->
   <ThingDef ParentName="BodyPartNaturalBase">
     <defName>CarryingOrgans</defName>
-    <label>reproductive organs (carry)</label>
-    <description>Reproductive organs that enable carrying pregnancies. Can be surgically transplanted.</description>
+    <label>reproductive anatomy (carrying)</label>
+    <description>Reproductive anatomy that enables carrying pregnancies. Can be surgically transplanted.</description>
     <statBases>
       <MarketValue>1500</MarketValue>
       <Mass>1</Mass>
@@ -13,8 +13,8 @@
 
   <ThingDef ParentName="BodyPartNaturalBase">
     <defName>SiringOrgans</defName>
-    <label>reproductive organs (sire)</label>
-    <description>Reproductive organs that enable siring offspring. Can be surgically transplanted.</description>
+    <label>reproductive anatomy (siring)</label>
+    <description>Reproductive anatomy that enables siring offspring. Can be surgically transplanted.</description>
     <statBases>
       <MarketValue>1500</MarketValue>
       <Mass>1</Mass>
@@ -24,8 +24,8 @@
   <!-- Basic Prosthetics -->
   <ThingDef ParentName="BodyPartProstheticMakeableBase">
     <defName>BasicReproductiveProsthetic_Carry</defName>
-    <label>basic reproductive prosthetic (carry)</label>
-    <description>A basic prosthetic reproductive system that enables carrying pregnancies. Reduces carry fertility by 30% compared to natural organs but provides reliable function.</description>
+    <label>basic reproductive prosthetic (carrying)</label>
+    <description>A basic prosthetic reproductive system that enables carrying pregnancies. Reduces carrying fertility by 30% compared to natural anatomy but provides reliable function.</description>
     <techLevel>Industrial</techLevel>
     <statBases>
       <MarketValue>400</MarketValue>
@@ -49,8 +49,8 @@
 
   <ThingDef ParentName="BodyPartProstheticMakeableBase">
     <defName>BasicReproductiveProsthetic_Sire</defName>
-    <label>basic reproductive prosthetic (sire)</label>
-    <description>A basic prosthetic reproductive system that enables siring offspring. Reduces sire fertility by 30% compared to natural organs but provides reliable function.</description>
+    <label>basic reproductive prosthetic (siring)</label>
+    <description>A basic prosthetic reproductive system that enables siring offspring. Reduces siring fertility by 30% compared to natural anatomy but provides reliable function.</description>
     <techLevel>Industrial</techLevel>
     <statBases>
       <MarketValue>400</MarketValue>
@@ -75,8 +75,8 @@
   <!-- Bionic Prosthetics -->
   <ThingDef ParentName="BodyPartBionicBase">
     <defName>BionicReproductiveProsthetic_Carry</defName>
-    <label>bionic reproductive prosthetic (carry)</label>
-    <description>A bionic reproductive system that enables carrying pregnancies with perfect contraception control. Increases carry fertility by 20%, guarantees pregnancy when both partners have bionics and want children, prevents pregnancy when the bionic user wants to avoid it.</description>
+    <label>bionic reproductive prosthetic (carrying)</label>
+    <description>A bionic reproductive system that enables carrying pregnancies with perfect contraception control. Increases carrying fertility by 20%, guarantees pregnancy when both partners have bionics and want children, prevents pregnancy when the bionic user wants to avoid it.</description>
     <techLevel>Spacer</techLevel>
     <statBases>
       <MarketValue>2500</MarketValue>
@@ -101,8 +101,8 @@
 
   <ThingDef ParentName="BodyPartBionicBase">
     <defName>BionicReproductiveProsthetic_Sire</defName>
-    <label>bionic reproductive prosthetic (sire)</label>
-    <description>A bionic reproductive system that enables siring offspring with perfect contraception control. Increases sire fertility by 20%, guarantees pregnancy when both partners have bionics and want children, prevents pregnancy when the bionic user wants to avoid it.</description>
+    <label>bionic reproductive prosthetic (siring)</label>
+    <description>A bionic reproductive system that enables siring offspring with perfect contraception control. Increases siring fertility by 20%, guarantees pregnancy when both partners have bionics and want children, prevents pregnancy when the bionic user wants to avoid it.</description>
     <techLevel>Spacer</techLevel>
     <statBases>
       <MarketValue>2500</MarketValue>

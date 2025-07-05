@@ -12,7 +12,7 @@ namespace Simple_Trans
 
         public override AcceptanceReport AvailableReport(Thing thing, BodyPartRecord part = null)
         {
-            if (!(thing is Pawn pawn)) return "Must be performed on a pawn";
+            if (!(thing is Pawn pawn)) return "SimpleTrans.Surgery.MustBePawn".Translate();
 
             Log.Message($"[Simple Trans] AvailableReport called for {pawn.Name}");
 
@@ -23,7 +23,7 @@ namespace Simple_Trans
 
             // Must have at least one ability to replace
             if (!hasCarry && !hasSire) 
-                return "No reproductive abilities to replace";
+                return "SimpleTrans.Surgery.NoAbilitiesToReplace".Translate();
 
             // Use recipe name to determine ingredient type
             var recipeName = recipe?.defName ?? "";
@@ -31,13 +31,13 @@ namespace Simple_Trans
             
             var ingredientDefName = GetIngredientTypeFromRecipeName(recipeName);
             if (ingredientDefName == null)
-                return "Invalid recipe type";
+                return "SimpleTrans.Surgery.InvalidRecipeType".Translate();
                 
             Log.Message($"[Simple Trans] Mapped to ingredient: {ingredientDefName}");
 
             // Check if trying to replace with exact same type
             if (HasMatchingHediff(pawn, ingredientDefName))
-                return $"Already has {GetIngredientLabel(ingredientDefName)}";
+                return "SimpleTrans.Surgery.AlreadyHas".Translate(GetIngredientLabel(ingredientDefName));
 
             bool isCarryIngredient = ingredientDefName.Contains("Carry");
             bool isSireIngredient = ingredientDefName.Contains("Sire");
@@ -48,7 +48,7 @@ namespace Simple_Trans
             if (isCarryIngredient && hasSire) return AcceptanceReport.WasAccepted;  // Opposite type replacement
             if (isSireIngredient && hasCarry) return AcceptanceReport.WasAccepted;  // Opposite type replacement
 
-            return "Cannot replace with this type";
+            return "SimpleTrans.Surgery.CannotReplace".Translate();
         }
 
         private string GetIngredientTypeFromRecipeName(string recipeName)
@@ -77,17 +77,17 @@ namespace Simple_Trans
             switch (ingredientDefName)
             {
                 case "CarryingOrgans":
-                    return "natural carry organs";
+                    return "SimpleTrans.Items.NaturalCarryOrgans".Translate();
                 case "SiringOrgans":
-                    return "natural sire organs";
+                    return "SimpleTrans.Items.NaturalSireOrgans".Translate();
                 case "BasicReproductiveProsthetic_Carry":
-                    return "basic carry prosthetic";
+                    return "SimpleTrans.Items.BasicCarryProsthetic".Translate();
                 case "BasicReproductiveProsthetic_Sire":
-                    return "basic sire prosthetic";
+                    return "SimpleTrans.Items.BasicSireProsthetic".Translate();
                 case "BionicReproductiveProsthetic_Carry":
-                    return "bionic carry prosthetic";
+                    return "SimpleTrans.Items.BionicCarryProsthetic".Translate();
                 case "BionicReproductiveProsthetic_Sire":
-                    return "bionic sire prosthetic";
+                    return "SimpleTrans.Items.BionicSireProsthetic".Translate();
                 default:
                     return "unknown";
             }

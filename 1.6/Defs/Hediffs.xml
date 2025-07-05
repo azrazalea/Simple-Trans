@@ -32,8 +32,8 @@
 
   <HediffDef>
     <defName>PregnancyCarry</defName>
-    <label>able to carry pregnancy</label>
-    <description>This person can carry a pregnancy to term biologically.</description>
+    <label>carrying capability</label>
+    <description>This person has the biological capability to carry pregnancies.</description>
     <everCurableByItem>false</everCurableByItem>
     <isBad>false</isBad>
     <hediffClass>Hediff</hediffClass>
@@ -50,8 +50,8 @@
 
   <HediffDef>
     <defName>PregnancySire</defName>
-    <label>able to sire children</label>
-    <description>This person can biologically sire a child.</description>
+    <label>siring capability</label>
+    <description>This person has the biological capability to sire children.</description>
     <everCurableByItem>false</everCurableByItem>
     <isBad>false</isBad>
     <hediffClass>Hediff</hediffClass>
@@ -69,8 +69,8 @@
   <!-- Prosthetic Modifier Hediffs (additive to base abilities) -->
   <HediffDef>
     <defName>BasicProstheticCarry</defName>
-    <label>basic reproductive prosthetic (carry)</label>
-    <description>A basic prosthetic reproductive system that enables carrying pregnancies. Reduces carry fertility by 30% compared to natural organs. Counts as an implant for transhumanist ideology.</description>
+    <label>basic reproductive prosthetic (carrying)</label>
+    <description>A basic prosthetic reproductive system that enables carrying pregnancies. Reduces carrying fertility by 30% compared to natural anatomy. Counts as an implant for transhumanist ideology.</description>
     <everCurableByItem>false</everCurableByItem>
     <isBad>false</isBad>
     <hediffClass>Hediff</hediffClass>
@@ -85,8 +85,8 @@
 
   <HediffDef>
     <defName>BasicProstheticSire</defName>
-    <label>basic reproductive prosthetic (sire)</label>
-    <description>A basic prosthetic reproductive system that enables siring offspring. Reduces sire fertility by 30% compared to natural organs. Counts as an implant for transhumanist ideology.</description>
+    <label>basic reproductive prosthetic (siring)</label>
+    <description>A basic prosthetic reproductive system that enables siring offspring. Reduces siring fertility by 30% compared to natural anatomy. Counts as an implant for transhumanist ideology.</description>
     <everCurableByItem>false</everCurableByItem>
     <isBad>false</isBad>
     <hediffClass>Hediff</hediffClass>
@@ -101,8 +101,8 @@
 
   <HediffDef>
     <defName>BionicProstheticCarry</defName>
-    <label>bionic reproductive prosthetic (carry)</label>
-    <description>A bionic reproductive system that enables carrying pregnancies. Increases carry fertility by 20% compared to natural organs. Provides perfect contraception control - 100% pregnancy chance when both partners have bionics and want children, 0% when the bionic user wants to avoid pregnancy. Counts as an implant for transhumanist ideology.</description>
+    <label>bionic reproductive prosthetic (carrying)</label>
+    <description>A bionic reproductive system that enables carrying pregnancies. Increases carrying fertility by 20% compared to natural anatomy. Provides perfect contraception control when acting as carrier - 100% pregnancy chance when both carrier and sirer have matching bionic prosthetics and both want children, 0% when carrier with bionic wants to avoid pregnancy. Counts as an implant for transhumanist ideology.</description>
     <everCurableByItem>false</everCurableByItem>
     <isBad>false</isBad>
     <hediffClass>Hediff</hediffClass>
@@ -117,8 +117,8 @@
 
   <HediffDef>
     <defName>BionicProstheticSire</defName>
-    <label>bionic reproductive prosthetic (sire)</label>
-    <description>A bionic reproductive system that enables siring offspring. Increases sire fertility by 20% compared to natural organs. Provides perfect contraception control - 100% pregnancy chance when both partners have bionics and want children, 0% when the bionic user wants to avoid pregnancy. Counts as an implant for transhumanist ideology.</description>
+    <label>bionic reproductive prosthetic (siring)</label>
+    <description>A bionic reproductive system that enables siring offspring. Increases siring fertility by 20% compared to natural anatomy. Provides perfect contraception control when acting as sirer - 100% pregnancy chance when both carrier and sirer have matching bionic prosthetics and both want children, 0% when sirer with bionic wants to avoid pregnancy. Counts as an implant for transhumanist ideology.</description>
     <everCurableByItem>false</everCurableByItem>
     <isBad>false</isBad>
     <hediffClass>Hediff</hediffClass>
