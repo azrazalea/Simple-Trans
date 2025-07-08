@@ -1,11 +1,15 @@
 🏥 **Major Medical System Update**
-- Complete surgery system: organ transplantation, basic/bionic prosthetics, 5 biosculpter cycles
-- Capability-specific sterilization (carry vs sire) with backwards compatibility  
-- Comprehensive safety features: informed consent dialogs, pregnancy preservation warnings
+- Complete surgery system: organ transplantation, basic/bionic prosthetics, with ideology(if present) gender affirming biosculpter cycle
+- Capability-specific sterilization (carry vs sire) with backwards compatibility that tries to cover vanilla sterilization
+- Updated pawn generation to be able to generate all possiblities, and added more settings.
+- Comprehensive safety features: informed consent dialogs, pregnancy preservation/termination warnings
 - Enhanced vanilla surgery integration (vasectomy, IUD, embryo implantation now work with carry/sire system)
 - **PREGNANCY SYSTEM OVERHAUL**: All pregnancy compatibility checks now use carry/sire capabilities instead of gender
 - **COMPREHENSIVE DEBUG LOGGING**: Extensive debug mode for testing pregnancy/romance mod compatibility
-- Full gene system compatibility and improved mod integration
+- Full gene system compatibility and improved mod integration with Intimacy and Non-Binary Gender. Patches Intimacy and non-binary gender to work together.
+  - Non-binary people are just attractive to everyone in current implementation. I hope to improve this in the future.
+  - I've done basic tests on this but more extensive testing is needed.
+- See updated steam workshop page for more details
 
 ⚠️ **Important:** This update involved extensive code changes including a complete pregnancy system rewrite. The mod now overrides ALL vanilla pregnancy logic to support trans individuals and prosthetics properly.
 

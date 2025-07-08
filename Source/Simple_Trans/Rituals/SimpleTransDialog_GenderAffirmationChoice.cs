@@ -253,8 +253,8 @@ namespace Simple_Trans
             GenderIdentity currentIdentity = GetCurrentIdentity(celebrant);
             if (selectedIdentity != currentIdentity)
             {
-                // Remove current identity hediffs
-                SimpleTransPregnancyUtility.ClearGender(celebrant);
+                // Remove current identity hediffs only (not reproductive capabilities)
+                SimpleTransPregnancyUtility.ClearGender(celebrant, clearIdentity: true, clearCapabilities: false);
 
                 // Add new identity hediff
                 if (selectedIdentity == GenderIdentity.Transgender)
@@ -284,14 +284,6 @@ namespace Simple_Trans
                     {
                         changeDetails.Add($"changed their name to {celebrant.Name?.ToStringFull}");
                     }
-                }
-                if (selectedGender != celebrant.gender)
-                {
-                    // This should have been applied above
-                }
-                if (selectedIdentity != GetCurrentIdentity(celebrant))
-                {
-                    // This should have been applied above  
                 }
 
                 string message;

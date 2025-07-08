@@ -109,8 +109,11 @@ Trans rights are human rights. If you're here to complain, please leave.
 - **Non-Binary Gender**: Full integration, special spawn rates for non-binary reproductive configs. Non-binary people are always transgender.
   - Right now just everyone is attracted to non-binary gender. This will be hard but not impossible to patch, because core game only uses gender to control base attraction.
   - I will need to patch vanilla and romance mods to include the other pawn's full info for me to be able to do this in a different way.
+  - This is tested locally enough to ensure romance can happen, but I need help testing it thoroughly.
   - Open to ideas, but currently thinking we do it based on sire/carry? I don't love that because it is a bit transmedicalist but besides the current way I'm not sure how else to determine.
 - **Vanilla Framework Expanded**: Complete gene system integration
+- **HAR**: Planned to implement
+- **Way Better Romance**: Should work if you aren't using non-binary mod. I'd like to write a patch to make them work together but way better romance is a lot more complicated than Intimacy so not sure when.
 
 ---
 

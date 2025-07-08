@@ -102,8 +102,8 @@ namespace Simple_Trans
             var currentCapability = GetCurrentReproductiveCapability(pawn);
             if (selectedChoices.ReproductiveCapability != currentCapability)
             {
-                // Clear existing reproductive hediffs and prosthetics
-                SimpleTransPregnancyUtility.ClearGender(pawn);
+                // Clear existing reproductive hediffs and prosthetics, but preserve gender identity
+                SimpleTransPregnancyUtility.ClearGender(pawn, clearIdentity: false, clearCapabilities: true);
 
                 // Apply new reproductive capabilities
                 switch (selectedChoices.ReproductiveCapability)

@@ -64,6 +64,46 @@ public static class SimpleTransPregnancyUtility
 	/// </summary>
 	public static float cisBothRate;
 	
+	/// <summary>
+	/// Rate at which non-binary people have both abilities
+	/// </summary>
+	public static float nBothRate;
+	
+	/// <summary>
+	/// Rate at which non-binary people have neither ability
+	/// </summary>
+	public static float nNeitherRate;
+	
+	/// <summary>
+	/// Rate at which pawns are sterilized for carrying
+	/// </summary>
+	public static float carrySterilizationRate;
+	
+	/// <summary>
+	/// Rate at which pawns are sterilized for siring
+	/// </summary>
+	public static float sireSterilizationRate;
+	
+	/// <summary>
+	/// Rate at which sterilizations are reversible vs permanent
+	/// </summary>
+	public static float reversibleSterilizationRate;
+	
+	/// <summary>
+	/// Rate at which pawns have prosthetic carry organs instead of natural
+	/// </summary>
+	public static float prostheticCarryRate;
+	
+	/// <summary>
+	/// Rate at which pawns have prosthetic sire organs instead of natural
+	/// </summary>
+	public static float prostheticSireRate;
+	
+	/// <summary>
+	/// Rate at which prosthetics are bionic instead of basic
+	/// </summary>
+	public static float bionicUpgradeRate;
+	
 	#endregion
 
 	#region Hediff Definitions
@@ -162,61 +202,74 @@ public static class SimpleTransPregnancyUtility
 	
 	#endregion
 
-	#region Core Gender Logic
+	#region Unified Generation Logic
 	
 	/// <summary>
-	/// Main entry point for validating or setting gender identity and reproductive capabilities
+	/// Determines gender identity and reproductive capabilities for a pawn using consistent logic
+	/// Used for both new pawn generation and updating existing pawns
 	/// </summary>
-	/// <param name="pawn">The pawn to process</param>
-	public static void ValidateOrSetGender(Pawn pawn)
+	/// <param name="pawn">The pawn to evaluate</param>
+	/// <returns>Tuple of (isTransgender, canCarry, canSire)</returns>
+	public static (bool isTransgender, bool canCarry, bool canSire) DetermineGenderAndCapabilities(Pawn pawn)
 	{
-		try
+		if (pawn == null)
 		{
-			// Only process humanlike pawns - animals don't have gender identity
-			if (pawn?.RaceProps?.Humanlike != true)
+			Log.Error("[Simple Trans] DetermineGenderAndCapabilities called with null pawn");
+			return (false, false, false);
+		}
+
+		// Settings are loaded once and cached, no need to reload per pawn
+
+		bool isTransgender;
+		bool canCarry = false;
+		bool canSire = false;
+
+		// Non-binary pawns are always considered transgender
+		if (pawn.gender != Gender.Male && pawn.gender != Gender.Female)
+		{
+			isTransgender = true;
+
+			// Enhanced non-binary logic with both/neither/single options
+			float roll = Rand.Range(0f, 1f);
+			if (roll < nBothRate)
 			{
-				return;
+				// Both abilities
+				canCarry = true;
+				canSire = true;
 			}
-
-			// Ensure genes system exists for this pawn
-			if (pawn.genes?.GenesListForReading == null)
+			else if (roll < nBothRate + nNeitherRate)
 			{
-				return;
+				// Neither ability
+				canCarry = false;
+				canSire = false;
 			}
+			else
+			{
+				// Single ability - split remaining probability space using nCarryRate
+				// Calculate the boundary within the remaining probability space
+				float remainingSpace = 1.0f - nBothRate - nNeitherRate;
+				float carryThreshold = nBothRate + nNeitherRate + (remainingSpace * nCarryRate);
+				
+				if (roll < carryThreshold)
+				{
+					canCarry = true;
+					canSire = false;
+				}
+				else
+				{
+					canCarry = false;
+					canSire = true;
+				}
+			}
+		}
+		else
+		{
+			// Binary gender logic
+			isTransgender = Rand.Range(0f, 1f) > cisRate;
 
-			// Load mod settings
-			LoadSettings();
-
-			// Determine gender identity and reproductive capabilities
-			bool hasBinaryGender = pawn.gender == Gender.Male || pawn.gender == Gender.Female;
-			
-			// First determine if transgender
-			bool isTransgender = Rand.Range(0f, 1f) > cisRate;
-			
-			// Apply gender identity hediff
 			if (isTransgender)
 			{
-				SetTrans(pawn);
-			}
-			else if (hasBinaryGender)
-			{
-				SetCis(pawn);
-			}
-			
-			// Now determine reproductive abilities based on gender and trans status
-			bool canCarry = false;
-			bool canSire = false;
-			
-			// Handle non-binary pawns separately (if NBG mod adds them)
-			if (pawn.gender != Gender.Male && pawn.gender != Gender.Female)
-			{
-				// Non-binary pawn - use nCarryRate setting
-				canCarry = Rand.Range(0f, 1f) <= nCarryRate;
-				canSire = !canCarry; // Rest get sire ability
-			}
-			else if (isTransgender)
-			{
-				// Check for special cases first
+				// Transgender binary logic
 				float roll = Rand.Range(0f, 1f);
 				if (roll < transBothRate)
 				{
@@ -266,17 +319,234 @@ public static class SimpleTransPregnancyUtility
 					canSire = Rand.Range(0f, 1f) <= cisFSireRate;
 				}
 			}
-			
-			// Apply reproductive abilities
+		}
+
+		if (SimpleTrans.debugMode)
+		{
+			Log.Message($"[Simple Trans DEBUG] DetermineGenderAndCapabilities for {pawn.Name?.ToStringShort ?? "unknown"}: " +
+						$"isTransgender={isTransgender}, canCarry={canCarry}, canSire={canSire}");
+		}
+
+		return (isTransgender, canCarry, canSire);
+	}
+
+	/// <summary>
+	/// Applies reproductive capabilities to a pawn with prosthetic and sterilization generation
+	/// Universal rates apply to all pawns regardless of gender identity
+	/// </summary>
+	/// <param name="pawn">The pawn to modify</param>
+	/// <param name="canCarry">Whether the pawn should have carrying capability</param>
+	/// <param name="canSire">Whether the pawn should have siring capability</param>
+	public static void ApplyReproductiveCapabilities(Pawn pawn, bool canCarry, bool canSire)
+	{
+		if (pawn?.health?.hediffSet == null)
+		{
+			Log.Error("[Simple Trans] ApplyReproductiveCapabilities called with null pawn or missing health data");
+			return;
+		}
+
+		try
+		{
+			// Apply carry capability
 			if (canCarry)
 			{
 				SetCarry(pawn, false);
+
+				// Roll for prosthetic replacement
+				if (Rand.Range(0f, 1f) < prostheticCarryRate)
+				{
+					// Apply prosthetic modifier
+					if (Rand.Range(0f, 1f) < bionicUpgradeRate)
+					{
+						var hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail("BionicProstheticCarry");
+						if (hediffDef != null)
+						{
+							pawn.health.AddHediff(hediffDef);
+							if (SimpleTrans.debugMode)
+							{
+								Log.Message($"[Simple Trans DEBUG] Applied bionic carry prosthetic to {pawn.Name?.ToStringShort ?? "unknown"}");
+							}
+						}
+						else
+						{
+							Log.Warning("[Simple Trans] BionicProstheticCarry hediff not found - prosthetics may be disabled");
+						}
+					}
+					else
+					{
+						var hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail("BasicProstheticCarry");
+						if (hediffDef != null)
+						{
+							pawn.health.AddHediff(hediffDef);
+							if (SimpleTrans.debugMode)
+							{
+								Log.Message($"[Simple Trans DEBUG] Applied basic carry prosthetic to {pawn.Name?.ToStringShort ?? "unknown"}");
+							}
+						}
+						else
+						{
+							Log.Warning("[Simple Trans] BasicProstheticCarry hediff not found - prosthetics may be disabled");
+						}
+					}
+				}
+				else
+				{
+					// Natural organs - roll for sterilization
+					if (Rand.Range(0f, 1f) < carrySterilizationRate)
+					{
+						if (Rand.Range(0f, 1f) < reversibleSterilizationRate)
+						{
+							var hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail("ReversibleSterilizedCarry");
+							if (hediffDef != null)
+							{
+								pawn.health.AddHediff(hediffDef);
+								if (SimpleTrans.debugMode)
+								{
+									Log.Message($"[Simple Trans DEBUG] Applied reversible carry sterilization to {pawn.Name?.ToStringShort ?? "unknown"}");
+								}
+							}
+						}
+						else
+						{
+							var hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail("SterilizedCarry");
+							if (hediffDef != null)
+							{
+								pawn.health.AddHediff(hediffDef);
+								if (SimpleTrans.debugMode)
+								{
+									Log.Message($"[Simple Trans DEBUG] Applied permanent carry sterilization to {pawn.Name?.ToStringShort ?? "unknown"}");
+								}
+							}
+						}
+					}
+				}
 			}
+
+			// Apply sire capability (same pattern)
 			if (canSire)
 			{
 				SetSire(pawn, false);
+
+				// Roll for prosthetic replacement
+				if (Rand.Range(0f, 1f) < prostheticSireRate)
+				{
+					// Apply prosthetic modifier
+					if (Rand.Range(0f, 1f) < bionicUpgradeRate)
+					{
+						var hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail("BionicProstheticSire");
+						if (hediffDef != null)
+						{
+							pawn.health.AddHediff(hediffDef);
+							if (SimpleTrans.debugMode)
+							{
+								Log.Message($"[Simple Trans DEBUG] Applied bionic sire prosthetic to {pawn.Name?.ToStringShort ?? "unknown"}");
+							}
+						}
+						else
+						{
+							Log.Warning("[Simple Trans] BionicProstheticSire hediff not found - prosthetics may be disabled");
+						}
+					}
+					else
+					{
+						var hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail("BasicProstheticSire");
+						if (hediffDef != null)
+						{
+							pawn.health.AddHediff(hediffDef);
+							if (SimpleTrans.debugMode)
+							{
+								Log.Message($"[Simple Trans DEBUG] Applied basic sire prosthetic to {pawn.Name?.ToStringShort ?? "unknown"}");
+							}
+						}
+						else
+						{
+							Log.Warning("[Simple Trans] BasicProstheticSire hediff not found - prosthetics may be disabled");
+						}
+					}
+				}
+				else
+				{
+					// Natural organs - roll for sterilization
+					if (Rand.Range(0f, 1f) < sireSterilizationRate)
+					{
+						if (Rand.Range(0f, 1f) < reversibleSterilizationRate)
+						{
+							var hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail("ReversibleSterilizedSire");
+							if (hediffDef != null)
+							{
+								pawn.health.AddHediff(hediffDef);
+								if (SimpleTrans.debugMode)
+								{
+									Log.Message($"[Simple Trans DEBUG] Applied reversible sire sterilization to {pawn.Name?.ToStringShort ?? "unknown"}");
+								}
+							}
+						}
+						else
+						{
+							var hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail("SterilizedSire");
+							if (hediffDef != null)
+							{
+								pawn.health.AddHediff(hediffDef);
+								if (SimpleTrans.debugMode)
+								{
+									Log.Message($"[Simple Trans DEBUG] Applied permanent sire sterilization to {pawn.Name?.ToStringShort ?? "unknown"}");
+								}
+							}
+						}
+					}
+				}
 			}
-			
+		}
+		catch (System.Exception ex)
+		{
+			Log.Error($"[Simple Trans] Error applying reproductive capabilities for {pawn?.Name?.ToStringShort ?? "unknown"}: {ex}");
+		}
+	}
+	
+	#endregion
+
+	#region Core Gender Logic
+	
+	/// <summary>
+	/// Main entry point for validating or setting gender identity and reproductive capabilities
+	/// Uses unified logic to ensure consistency between new pawns and existing pawns
+	/// </summary>
+	/// <param name="pawn">The pawn to process</param>
+	public static void ValidateOrSetGender(Pawn pawn)
+	{
+		try
+		{
+			// Only process humanlike pawns - animals don't have gender identity
+			if (pawn?.RaceProps?.Humanlike != true)
+			{
+				return;
+			}
+
+			// Ensure genes system exists for this pawn
+			if (pawn.genes?.GenesListForReading == null)
+			{
+				return;
+			}
+
+			// Clear any existing gender and capability hediffs to start fresh
+			ClearGender(pawn, clearIdentity: true, clearCapabilities: true);
+
+			// Use unified determination logic
+			var (isTransgender, canCarry, canSire) = DetermineGenderAndCapabilities(pawn);
+
+			// Apply identity hediff
+			if (isTransgender)
+			{
+				SetTrans(pawn);
+			}
+			else
+			{
+				SetCis(pawn);
+			}
+
+			// Apply reproductive capabilities with prosthetics and sterilization
+			ApplyReproductiveCapabilities(pawn, canCarry, canSire);
+
 			// Handle backwards compatibility: convert vanilla Sterilized to capability-specific sterilization
 			ConvertVanillaSterilizedHediff(pawn, isTransgender);
 
@@ -328,6 +598,14 @@ public static class SimpleTransPregnancyUtility
 			string cisMCarryPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "cisMCarryPercent");
 			string cisFSirePercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "cisFSirePercent");
 			string cisBothPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "cisBothPercent");
+			string nBothPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "nBothPercent");
+			string nNeitherPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "nNeitherPercent");
+			string carrySterilizationPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "carrySterilizationPercent");
+			string sireSterilizationPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "sireSterilizationPercent");
+			string reversibleSterilizationPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "reversibleSterilizationPercent");
+			string prostheticCarryPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "prostheticCarryPercent");
+			string prostheticSirePercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "prostheticSirePercent");
+			string bionicUpgradePercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "bionicUpgradePercent");
 
 			// Parse settings with error handling and defaults
 			cisRate = TryParseFloat(cisPercentSetting, SimpleTransConstants.DefaultCisRate * SimpleTransConstants.PercentageToDecimal) / SimpleTransConstants.PercentageToDecimal;
@@ -342,6 +620,14 @@ public static class SimpleTransPregnancyUtility
 			cisMCarryRate = TryParseFloat(cisMCarryPercentSetting, 1f) / SimpleTransConstants.PercentageToDecimal;
 			cisFSireRate = TryParseFloat(cisFSirePercentSetting, 1f) / SimpleTransConstants.PercentageToDecimal;
 			cisBothRate = TryParseFloat(cisBothPercentSetting, 0f) / SimpleTransConstants.PercentageToDecimal;
+			nBothRate = TryParseFloat(nBothPercentSetting, 10f) / SimpleTransConstants.PercentageToDecimal;
+			nNeitherRate = TryParseFloat(nNeitherPercentSetting, 15f) / SimpleTransConstants.PercentageToDecimal;
+			carrySterilizationRate = TryParseFloat(carrySterilizationPercentSetting, 3f) / SimpleTransConstants.PercentageToDecimal;
+			sireSterilizationRate = TryParseFloat(sireSterilizationPercentSetting, 3f) / SimpleTransConstants.PercentageToDecimal;
+			reversibleSterilizationRate = TryParseFloat(reversibleSterilizationPercentSetting, 60f) / SimpleTransConstants.PercentageToDecimal;
+			prostheticCarryRate = TryParseFloat(prostheticCarryPercentSetting, 2f) / SimpleTransConstants.PercentageToDecimal;
+			prostheticSireRate = TryParseFloat(prostheticSirePercentSetting, 2f) / SimpleTransConstants.PercentageToDecimal;
+			bionicUpgradeRate = TryParseFloat(bionicUpgradePercentSetting, 20f) / SimpleTransConstants.PercentageToDecimal;
 		}
 		catch (System.Exception ex)
 		{
@@ -359,6 +645,14 @@ public static class SimpleTransPregnancyUtility
 			cisMCarryRate = 0.01f;
 			cisFSireRate = 0.01f;
 			cisBothRate = 0f;
+			nBothRate = 0.10f;
+			nNeitherRate = 0.15f;
+			carrySterilizationRate = 0.03f;
+			sireSterilizationRate = 0.03f;
+			reversibleSterilizationRate = 0.60f;
+			prostheticCarryRate = 0.02f;
+			prostheticSireRate = 0.02f;
+			bionicUpgradeRate = 0.20f;
 		}
 	}
 	
@@ -618,8 +912,8 @@ public static class SimpleTransPregnancyUtility
 				// Otherwise becomes cis female (F gender, F reproductive role)
 				pawn.gender = (Rand.Range(0f, 1f) > cisRate) ? Gender.Male : Gender.Female;
 				
-				// Clear any existing reproductive hediffs first
-				ClearGender(pawn);
+				// Clear any existing reproductive hediffs first (but preserve identity as we're about to set it)
+				ClearGender(pawn, clearIdentity: false, clearCapabilities: true);
 				
 				if (pawn.gender == Gender.Male)
 				{
@@ -661,8 +955,8 @@ public static class SimpleTransPregnancyUtility
 				// If above cis rate, assign female gender (trans female)
 				pawn.gender = (!(Rand.Range(0f, 1f) > cisRate)) ? Gender.Male : Gender.Female;
 				
-				// Clear any existing reproductive hediffs first
-				ClearGender(pawn);
+				// Clear any existing reproductive hediffs first (but preserve identity as we're about to set it)
+				ClearGender(pawn, clearIdentity: false, clearCapabilities: true);
 				
 				if (pawn.gender == Gender.Female)
 				{
@@ -755,10 +1049,12 @@ public static class SimpleTransPregnancyUtility
 	#region Utility Methods
 	
 	/// <summary>
-	/// Removes all gender-related and reproductive hediffs from a pawn
+	/// Removes gender-related and/or reproductive hediffs from a pawn
 	/// </summary>
 	/// <param name="pawn">The pawn to clear</param>
-	public static void ClearGender(Pawn pawn)
+	/// <param name="clearIdentity">Whether to clear identity hediffs (cis/trans)</param>
+	/// <param name="clearCapabilities">Whether to clear reproductive capability hediffs (carry/sire)</param>
+	public static void ClearGender(Pawn pawn, bool clearIdentity = true, bool clearCapabilities = true)
 	{
 		if (pawn?.health?.hediffSet == null)
 		{
@@ -768,39 +1064,50 @@ public static class SimpleTransPregnancyUtility
 		
 		try
 		{
-			// Remove all gender-related hediffs
-			if (pawn.health.hediffSet.HasHediff(cisDef, false))
+			// Remove identity hediffs if requested
+			if (clearIdentity)
 			{
-				pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(cisDef));
-			}
-			if (pawn.health.hediffSet.HasHediff(transDef, false))
-			{
-				pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(transDef));
-			}
-			if (pawn.health.hediffSet.HasHediff(canCarryDef, false))
-			{
-				pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(canCarryDef));
-			}
-			if (pawn.health.hediffSet.HasHediff(canSireDef, false))
-			{
-				pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(canSireDef));
+				if (pawn.health.hediffSet.HasHediff(cisDef, false))
+				{
+					pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(cisDef));
+				}
+				if (pawn.health.hediffSet.HasHediff(transDef, false))
+				{
+					pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(transDef));
+				}
 			}
 			
-			// Also remove all prosthetic and sterilization hediffs
-			var hediffsToRemove = pawn.health.hediffSet.hediffs.Where(h => 
-				h.def.defName == "BasicProstheticCarry" || 
-				h.def.defName == "BasicProstheticSire" || 
-				h.def.defName == "BionicProstheticCarry" || 
-				h.def.defName == "BionicProstheticSire" ||
-				h.def.defName == "SterilizedCarry" ||
-				h.def.defName == "SterilizedSire" ||
-				h.def.defName == "ReversibleSterilizedCarry" ||
-				h.def.defName == "ReversibleSterilizedSire" ||
-				h.def.defName == "Sterilized").ToList();
-			
-			foreach (var hediff in hediffsToRemove)
+			// Remove reproductive capability hediffs if requested
+			if (clearCapabilities)
 			{
-				pawn.health.RemoveHediff(hediff);
+				if (pawn.health.hediffSet.HasHediff(canCarryDef, false))
+				{
+					pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(canCarryDef));
+				}
+				if (pawn.health.hediffSet.HasHediff(canSireDef, false))
+				{
+					pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(canSireDef));
+				}
+			}
+			
+			// Also remove prosthetic and sterilization hediffs if clearing capabilities
+			if (clearCapabilities)
+			{
+				var hediffsToRemove = pawn.health.hediffSet.hediffs.Where(h => 
+					h.def.defName == "BasicProstheticCarry" || 
+					h.def.defName == "BasicProstheticSire" || 
+					h.def.defName == "BionicProstheticCarry" || 
+					h.def.defName == "BionicProstheticSire" ||
+					h.def.defName == "SterilizedCarry" ||
+					h.def.defName == "SterilizedSire" ||
+					h.def.defName == "ReversibleSterilizedCarry" ||
+					h.def.defName == "ReversibleSterilizedSire" ||
+					h.def.defName == "Sterilized").ToList();
+				
+				foreach (var hediff in hediffsToRemove)
+				{
+					pawn.health.RemoveHediff(hediff);
+				}
 			}
 		}
 		catch (System.Exception ex)

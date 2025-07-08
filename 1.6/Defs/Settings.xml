@@ -168,6 +168,154 @@
       </li>
       <li Class="XmlExtensions.Setting.GapLine" />
       <li Class="XmlExtensions.Setting.Text">
+        <text>Non-Binary Reproduction</text>
+        <anchor>Middle</anchor>
+        <font>Medium</font>
+      </li>
+      <li Class="XmlExtensions.Setting.SplitColumn">
+        <leftCol>
+          <li Class="XmlExtensions.Setting.Text">
+            <text>Percent of non-binary people with both abilities: {nBothPercent}%</text>
+            <keys>
+              <li>nBothPercent</li>
+            </keys>
+            <tooltip>Non-binary pawns who can both carry and sire children.</tooltip>
+          </li>
+          <li Class="XmlExtensions.Setting.Text">
+            <text>Percent of non-binary people with no abilities: {nNeitherPercent}%</text>
+            <keys>
+              <li>nNeitherPercent</li>
+            </keys>
+            <tooltip>Non-binary pawns who cannot carry or sire children.</tooltip>
+          </li>
+        </leftCol>
+        <rightCol>
+          <li Class="XmlExtensions.Setting.Slider">
+            <key>nBothPercent</key>
+            <defaultValue>10</defaultValue>
+            <min>0</min>
+            <max>100</max>
+            <decimals>0</decimals>
+          </li>
+          <li Class="XmlExtensions.Setting.Slider">
+            <key>nNeitherPercent</key>
+            <defaultValue>15</defaultValue>
+            <min>0</min>
+            <max>100</max>
+            <decimals>0</decimals>
+          </li>
+        </rightCol>
+      </li>
+      <li Class="XmlExtensions.Setting.GapLine" />
+      <li Class="XmlExtensions.Setting.Text">
+        <text>Sterilization Rates</text>
+        <anchor>Middle</anchor>
+        <font>Medium</font>
+      </li>
+      <li Class="XmlExtensions.Setting.SplitColumn">
+        <leftCol>
+          <li Class="XmlExtensions.Setting.Text">
+            <text>Percent chance of carry sterilization: {carrySterilizationPercent}%</text>
+            <keys>
+              <li>carrySterilizationPercent</li>
+            </keys>
+            <tooltip>Chance for any pawn to be sterilized for carrying pregnancies.</tooltip>
+          </li>
+          <li Class="XmlExtensions.Setting.Text">
+            <text>Percent chance of sire sterilization: {sireSterilizationPercent}%</text>
+            <keys>
+              <li>sireSterilizationPercent</li>
+            </keys>
+            <tooltip>Chance for any pawn to be sterilized for siring children.</tooltip>
+          </li>
+          <li Class="XmlExtensions.Setting.Text">
+            <text>Percent of sterilizations that are reversible: {reversibleSterilizationPercent}%</text>
+            <keys>
+              <li>reversibleSterilizationPercent</li>
+            </keys>
+            <tooltip>Chance for sterilization to be reversible vs permanent.</tooltip>
+          </li>
+        </leftCol>
+        <rightCol>
+          <li Class="XmlExtensions.Setting.Slider">
+            <key>carrySterilizationPercent</key>
+            <defaultValue>3</defaultValue>
+            <min>0</min>
+            <max>25</max>
+            <decimals>0</decimals>
+          </li>
+          <li Class="XmlExtensions.Setting.Slider">
+            <key>sireSterilizationPercent</key>
+            <defaultValue>3</defaultValue>
+            <min>0</min>
+            <max>25</max>
+            <decimals>0</decimals>
+          </li>
+          <li Class="XmlExtensions.Setting.Slider">
+            <key>reversibleSterilizationPercent</key>
+            <defaultValue>60</defaultValue>
+            <min>0</min>
+            <max>100</max>
+            <decimals>0</decimals>
+          </li>
+        </rightCol>
+      </li>
+      <li Class="XmlExtensions.Setting.GapLine" />
+      <li Class="XmlExtensions.Setting.Text">
+        <text>Prosthetic Rates</text>
+        <anchor>Middle</anchor>
+        <font>Medium</font>
+      </li>
+      <li Class="XmlExtensions.Setting.SplitColumn">
+        <leftCol>
+          <li Class="XmlExtensions.Setting.Text">
+            <text>Percent chance of prosthetic carry organs: {prostheticCarryPercent}%</text>
+            <keys>
+              <li>prostheticCarryPercent</li>
+            </keys>
+            <tooltip>Chance for any pawn to have prosthetic carry organs instead of natural.</tooltip>
+          </li>
+          <li Class="XmlExtensions.Setting.Text">
+            <text>Percent chance of prosthetic sire organs: {prostheticSirePercent}%</text>
+            <keys>
+              <li>prostheticSirePercent</li>
+            </keys>
+            <tooltip>Chance for any pawn to have prosthetic sire organs instead of natural.</tooltip>
+          </li>
+          <li Class="XmlExtensions.Setting.Text">
+            <text>Percent chance prosthetics are bionic: {bionicUpgradePercent}%</text>
+            <keys>
+              <li>bionicUpgradePercent</li>
+            </keys>
+            <tooltip>Chance for prosthetics to be bionic instead of basic.</tooltip>
+          </li>
+        </leftCol>
+        <rightCol>
+          <li Class="XmlExtensions.Setting.Slider">
+            <key>prostheticCarryPercent</key>
+            <defaultValue>2</defaultValue>
+            <min>0</min>
+            <max>25</max>
+            <decimals>0</decimals>
+          </li>
+          <li Class="XmlExtensions.Setting.Slider">
+            <key>prostheticSirePercent</key>
+            <defaultValue>2</defaultValue>
+            <min>0</min>
+            <max>25</max>
+            <decimals>0</decimals>
+          </li>
+          <li Class="XmlExtensions.Setting.Slider">
+            <key>bionicUpgradePercent</key>
+            <defaultValue>20</defaultValue>
+            <min>0</min>
+            <max>100</max>
+            <decimals>0</decimals>
+          </li>
+        </rightCol>
+      </li>
+      <li Class="XmlExtensions.Setting.GapLine" />
+      <li Class="XmlExtensions.Setting.Text">
         <text>Surgery System Options</text>
         <anchor>Middle</anchor>
         <font>Medium</font>
