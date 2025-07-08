@@ -45,13 +45,16 @@ namespace Simple_Trans
                     }
                 }
                 
-                // Remove all carry-related hediffs (base + any prosthetic modifiers)
+                // Remove all carry-related hediffs (base + any prosthetic modifiers + sterilization)
                 var hediffsToRemove = new List<Hediff>();
                 foreach (var hediff in pawn.health.hediffSet.hediffs)
                 {
                     if (hediff.def.defName == "PregnancyCarry" ||
                         hediff.def.defName == "BasicProstheticCarry" ||
-                        hediff.def.defName == "BionicProstheticCarry")
+                        hediff.def.defName == "BionicProstheticCarry" ||
+                        hediff.def.defName == "SterilizedCarry" ||
+                        hediff.def.defName == "ReversibleSterilizedCarry" ||
+                        hediff.def.defName == "Sterilized")
                     {
                         hediffsToRemove.Add(hediff);
                     }

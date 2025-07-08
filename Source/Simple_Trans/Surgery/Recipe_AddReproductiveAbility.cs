@@ -87,8 +87,6 @@ namespace Simple_Trans
             
             return false;
         }
-        private enum AbilityType { Carry, Sire }
-
         public override void ApplyOnPawn(Pawn pawn, BodyPartRecord part, Pawn billDoer, List<Thing> ingredients, Bill bill)
         {
             Log.Message($"[Simple Trans] AddReproductiveAbility.ApplyOnPawn called for {pawn.Name}");
@@ -106,6 +104,9 @@ namespace Simple_Trans
                 
                 Log.Message($"[Simple Trans] Ingredient: {ingredient.Label}, Ability: {ingredientAbility}");
 
+                // Handle vanilla Sterilized hediff conversion before adding new abilities
+                ConvertVanillaSterilizedForAdd(pawn, ingredientAbility);
+                
                 // Add the appropriate hediffs based on ingredient type
                 var hediffsToAdd = GetHediffsForIngredient(ingredient);
                 if (hediffsToAdd != null && hediffsToAdd.Count > 0)
@@ -143,13 +144,13 @@ namespace Simple_Trans
                 x.def.defName.Contains("ReproductiveProsthetic"));
         }
 
-        private AbilityType? GetIngredientAbilityType(List<Thing> ingredients)
+        private SimpleTransPregnancyUtility.AbilityType? GetIngredientAbilityType(List<Thing> ingredients)
         {
             var ingredient = GetReproductiveIngredient(ingredients);
             if (ingredient == null) return null;
 
-            if (ingredient.def.defName.Contains("Carry")) return AbilityType.Carry;
-            if (ingredient.def.defName.Contains("Sire")) return AbilityType.Sire;
+            if (ingredient.def.defName.Contains("Carry")) return SimpleTransPregnancyUtility.AbilityType.Carry;
+            if (ingredient.def.defName.Contains("Sire")) return SimpleTransPregnancyUtility.AbilityType.Sire;
             
             return null;
         }
@@ -171,6 +172,18 @@ namespace Simple_Trans
             if (defName == "BionicReproductiveProsthetic_Sire") return new List<string> { "PregnancySire", "BionicProstheticSire" };
             
             return null;
+        }
+        
+        /// <summary>
+        /// Converts vanilla Sterilized hediff to capability-specific sterilization when adding new abilities
+        /// Uses opposite capability logic - if adding carry, sterilize siring (and vice versa)
+        /// </summary>
+        /// <param name="pawn">The pawn being operated on</param>
+        /// <param name="newAbility">The ability being added</param>
+        private void ConvertVanillaSterilizedForAdd(Pawn pawn, SimpleTransPregnancyUtility.AbilityType? newAbility)
+        {
+            // Use the core conversion function with opposite capability logic
+            SimpleTransPregnancyUtility.ConvertVanillaSterilizedHediffCore(pawn, useOppositeCapabilityLogic: true, targetAbility: newAbility);
         }
     }
 }

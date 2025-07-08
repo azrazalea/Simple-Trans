@@ -334,7 +334,10 @@ namespace Simple_Trans
             {
                 if (hediff.def.defName == "PregnancyCarry" ||
                     hediff.def.defName == "BasicProstheticCarry" ||
-                    hediff.def.defName == "BionicProstheticCarry")
+                    hediff.def.defName == "BionicProstheticCarry" ||
+                    hediff.def.defName == "SterilizedCarry" ||
+                    hediff.def.defName == "ReversibleSterilizedCarry" ||
+                    hediff.def.defName == "Sterilized")
                 {
                     hediffsToRemove.Add(hediff);
                 }
@@ -353,7 +356,10 @@ namespace Simple_Trans
             {
                 if (hediff.def.defName == "PregnancySire" ||
                     hediff.def.defName == "BasicProstheticSire" ||
-                    hediff.def.defName == "BionicProstheticSire")
+                    hediff.def.defName == "BionicProstheticSire" ||
+                    hediff.def.defName == "SterilizedSire" ||
+                    hediff.def.defName == "ReversibleSterilizedSire" ||
+                    hediff.def.defName == "Sterilized")
                 {
                     hediffsToRemove.Add(hediff);
                 }

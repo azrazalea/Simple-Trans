@@ -28,13 +28,16 @@ namespace Simple_Trans
                 var itemToSpawn = GetItemForCurrentSireType(pawn);
                 Thing extractedItem = ThingMaker.MakeThing(ThingDef.Named(itemToSpawn));
                 
-                // Remove all sire-related hediffs (base + any prosthetic modifiers)
+                // Remove all sire-related hediffs (base + any prosthetic modifiers + sterilization)
                 var hediffsToRemove = new List<Hediff>();
                 foreach (var hediff in pawn.health.hediffSet.hediffs)
                 {
                     if (hediff.def.defName == "PregnancySire" ||
                         hediff.def.defName == "BasicProstheticSire" ||
-                        hediff.def.defName == "BionicProstheticSire")
+                        hediff.def.defName == "BionicProstheticSire" ||
+                        hediff.def.defName == "SterilizedSire" ||
+                        hediff.def.defName == "ReversibleSterilizedSire" ||
+                        hediff.def.defName == "Sterilized")
                     {
                         hediffsToRemove.Add(hediff);
                     }

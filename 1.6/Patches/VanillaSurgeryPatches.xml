@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+  <!-- Remove gender prerequisites from surgeries that should be based on capabilities instead -->
+  <!-- We handle all capability checks in our code now -->
+  
+  <!-- ExtractOvum - remove gender and fertility requirements since we handle it in code -->
+  <Operation Class="XmlExtensions.PatchOperationRemove">
+    <xpath>Defs/RecipeDef[defName="ExtractOvum"]/genderPrerequisite</xpath>
+  </Operation>
+  <Operation Class="XmlExtensions.PatchOperationRemove">
+    <xpath>Defs/RecipeDef[defName="ExtractOvum"]/mustBeFertile</xpath>
+  </Operation>
+  
+  <!-- Terminate Pregnancy - should be available to anyone who can carry -->
+  <Operation Class="XmlExtensions.PatchOperationRemove">
+    <xpath>Defs/RecipeDef[defName="TerminatePregnancy"]/genderPrerequisite</xpath>
+  </Operation>
+  
+  <!-- Tubal Ligation - should be available to anyone who can carry -->
+  <Operation Class="XmlExtensions.PatchOperationRemove">
+    <xpath>Defs/RecipeDef[defName="TubalLigation"]/genderPrerequisite</xpath>
+  </Operation>
+  
+  <!-- Vasectomy - should be available to anyone who can sire -->
+  <Operation Class="XmlExtensions.PatchOperationRemove">
+    <xpath>Defs/RecipeDef[defName="Vasectomy"]/genderPrerequisite</xpath>
+  </Operation>
+  
+  <!-- Implant IUD - should be available to anyone who can carry -->
+  <Operation Class="XmlExtensions.PatchOperationRemove">
+    <xpath>Defs/RecipeDef[defName="ImplantIUD"]/genderPrerequisite</xpath>
+  </Operation>
+  
+  <!-- Remove IUD - no gender prerequisite to remove (correctly checks for IUD hediff only) -->
+  
+  <!-- Reverse Vasectomy - should be available to anyone who can sire (and has vasectomy) -->
+  <!-- Note: ReverseVasectomy doesn't have a gender prerequisite, it checks for Vasectomy hediff -->
+  
+  <!-- ImplantEmbryo - update description to be more inclusive -->
+  <Operation Class="XmlExtensions.PatchOperationReplace">
+    <xpath>Defs/RecipeDef[defName="ImplantEmbryo"]/description</xpath>
+    <value>
+      <description>Implant an embryo in a carrier to begin a pregnancy.</description>
+    </value>
+  </Operation>
+  
+  <!-- Update HumanEmbryo description to be more inclusive -->
+  <Operation Class="XmlExtensions.PatchOperationReplace">
+    <xpath>Defs/ThingDef[defName="HumanEmbryo"]/description</xpath>
+    <value>
+      <description>A human embryo which can be implanted in a carrier to create a pregnancy.</description>
+    </value>
+  </Operation>
+  
+  <!-- Replace vanilla hediffs with our capability-specific ones -->
+  <!-- TubalLigation = permanent, Vasectomy = reversible, IUD = reversible -->
+  
+  <!-- TubalLigation - use our permanent carry sterilization (surgery doesn't fail, it's permanent) -->
+  <Operation Class="XmlExtensions.PatchOperationReplace">
+    <xpath>Defs/RecipeDef[defName="TubalLigation"]/addsHediff</xpath>
+    <value>
+      <addsHediff>SterilizedCarry</addsHediff>
+    </value>
+  </Operation>
+  
+  <!-- Vasectomy - use our reversible sire sterilization and carry sterilization on failure -->
+  <Operation Class="XmlExtensions.PatchOperationReplace">
+    <xpath>Defs/RecipeDef[defName="Vasectomy"]/addsHediff</xpath>
+    <value>
+      <addsHediff>ReversibleSterilizedSire</addsHediff>
+    </value>
+  </Operation>
+  <Operation Class="XmlExtensions.PatchOperationReplace">
+    <xpath>Defs/RecipeDef[defName="Vasectomy"]/addsHediffOnFailure</xpath>
+    <value>
+      <addsHediffOnFailure>SterilizedSire</addsHediffOnFailure>
+    </value>
+  </Operation>
+  
+  <!-- ReverseVasectomy - use carry sterilization on failure -->
+  <Operation Class="XmlExtensions.PatchOperationReplace">
+    <xpath>Defs/RecipeDef[defName="ReverseVasectomy"]/addsHediffOnFailure</xpath>
+    <value>
+      <addsHediffOnFailure>SterilizedSire</addsHediffOnFailure>
+    </value>
+  </Operation>
+  <Operation Class="XmlExtensions.PatchOperationReplace">
+    <xpath>Defs/RecipeDef[defName="ReverseVasectomy"]/removesHediff</xpath>
+    <value>
+      <removesHediff>ReversibleSterilizedSire</removesHediff>
+    </value>
+  </Operation>
+  
+  <!-- ImplantIUD - use our reversible carry sterilization -->
+  <Operation Class="XmlExtensions.PatchOperationReplace">
+    <xpath>Defs/RecipeDef[defName="ImplantIUD"]/addsHediff</xpath>
+    <value>
+      <addsHediff>ReversibleSterilizedCarry</addsHediff>
+    </value>
+  </Operation>
+  <Operation Class="XmlExtensions.PatchOperationReplace">
+    <xpath>Defs/RecipeDef[defName="ImplantIUD"]/addsHediffOnFailure</xpath>
+    <value>
+      <addsHediffOnFailure>SterilizedCarry</addsHediffOnFailure>
+    </value>
+  </Operation>
+  
+  <!-- RemoveIUD - use carry sterilization on failure -->
+  <Operation Class="XmlExtensions.PatchOperationReplace">
+    <xpath>Defs/RecipeDef[defName="RemoveIUD"]/addsHediffOnFailure</xpath>
+    <value>
+      <addsHediffOnFailure>SterilizedCarry</addsHediffOnFailure>
+    </value>
+  </Operation>
+  <Operation Class="XmlExtensions.PatchOperationReplace">
+    <xpath>Defs/RecipeDef[defName="RemoveIUD"]/removesHediff</xpath>
+    <value>
+      <removesHediff>ReversibleSterilizedCarry</removesHediff>
+    </value>
+  </Operation>
+</Patch>

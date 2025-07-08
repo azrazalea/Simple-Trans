@@ -65,7 +65,7 @@ Trans rights are human rights. If you're here to complain, please leave.
 - Gene-gender conflicts handled intelligently
 
 **Mod Compatibility**
-- **SameSex IVF**: Handles ovum extraction, embryo implantation works with carry capability
+- **SameSex IVF**: Compatible, but Simple Trans handles IVF procedures independently using carry/sire capabilities
 - **Non-Binary Gender**: Full integration, special spawn rates for non-binary reproductive configs
 - **Biotech**: Complete pregnancy system override - all pregnancy checks use carry/sire capabilities
 - **Romance Mods**: Full compatibility testing with comprehensive debug logging system
@@ -92,10 +92,10 @@ Comprehensive debug system:
 
 **Load Order:** Must load AFTER Vanilla Social Interactions Expanded
 
-**Recommended:** 
-- SameSex IVF - Enhanced reproductive options
+**Compatible/Recommended:** 
 - Non-Binary Gender - Adds non-binary gender options
 - Way Better Romance - Enhanced romance mechanics
+- SameSex IVF - Compatible, Simple Trans handles IVF independently
 - Intimacy - Currently testing compatibility
 
 ⚠️ **Compatibility Notes:** 

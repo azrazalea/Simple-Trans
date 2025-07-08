@@ -130,26 +130,104 @@
       </li>
     </stages>
   </HediffDef>
-  <!--
-    <HediffDef>
-        <defName>PregnancyInfertile</defName>
-        <label>unable to have children</label>
-        <description>This person cannot have biological children.</description>
-        <hediffClass>Hediff</hediffClass>
-        <defaultLabelColor>(0.9, 1.0, 0.35)</defaultLabelColor>
-        <stages>
-            <li>
-                <becomeVisible>false</becomeVisible>
-            </li>
-            <li>
-                <capMods>
-                    <li>
-                        <capacity>Fertility</capacity>
-                        <setMax>0.0</setMax>
-                    </li>
-                </capMods>
-            </li>
-        </stages>
-    </HediffDef>
-    -->
+  
+  <!-- Capability-specific sterilization hediffs -->
+  <HediffDef>
+    <defName>SterilizedCarry</defName>
+    <label>sterilized (carrying)</label>
+    <description>This person has been surgically sterilized and cannot carry pregnancies.</description>
+    <everCurableByItem>false</everCurableByItem>
+    <isBad>false</isBad>
+    <hediffClass>Hediff</hediffClass>
+    <defaultLabelColor>(0.9, 1.0, 0.35)</defaultLabelColor>
+    <initialSeverity>1</initialSeverity>
+    <deprioritizeHealing>true</deprioritizeHealing>
+    <tags>
+      <li>Sterilized</li>
+      <li>SterilizedCarry</li>
+    </tags>
+    <removeWithTags>
+      <li>ReversibleSterilizedCarry</li>
+    </removeWithTags>
+    <stages>
+      <li>
+        <becomeVisible>true</becomeVisible>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>SterilizedSire</defName>
+    <label>sterilized (siring)</label>
+    <description>This person has been surgically sterilized and cannot sire children.</description>
+    <everCurableByItem>false</everCurableByItem>
+    <isBad>false</isBad>
+    <hediffClass>Hediff</hediffClass>
+    <defaultLabelColor>(0.9, 1.0, 0.35)</defaultLabelColor>
+    <initialSeverity>1</initialSeverity>
+    <deprioritizeHealing>true</deprioritizeHealing>
+    <tags>
+      <li>Sterilized</li>
+      <li>SterilizedSire</li>
+    </tags>
+    <removeWithTags>
+      <li>ReversibleSterilizedSire</li>
+    </removeWithTags>
+    <stages>
+      <li>
+        <becomeVisible>true</becomeVisible>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <!-- Reversible sterilization hediffs (for temporary methods like IUD, vasectomy) -->
+  <HediffDef>
+    <defName>ReversibleSterilizedCarry</defName>
+    <label>reversible sterilization (carrying)</label>
+    <description>This person has a reversible form of sterilization that prevents carrying pregnancies. This can be reversed with appropriate medical procedures.</description>
+    <everCurableByItem>false</everCurableByItem>
+    <isBad>false</isBad>
+    <hediffClass>Hediff</hediffClass>
+    <defaultLabelColor>(0.8, 0.9, 0.4)</defaultLabelColor>
+    <initialSeverity>1</initialSeverity>
+    <deprioritizeHealing>true</deprioritizeHealing>
+    <tags>
+      <li>Sterilized</li>
+      <li>SterilizedCarry</li>
+      <li>ReversibleSterilizedCarry</li>
+    </tags>
+    <removeWithTags>
+      <li>SterilizedCarry</li>
+    </removeWithTags>
+    <stages>
+      <li>
+        <becomeVisible>true</becomeVisible>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>ReversibleSterilizedSire</defName>
+    <label>reversible sterilization (siring)</label>
+    <description>This person has a reversible form of sterilization that prevents siring children. This can be reversed with appropriate medical procedures.</description>
+    <everCurableByItem>false</everCurableByItem>
+    <isBad>false</isBad>
+    <hediffClass>Hediff</hediffClass>
+    <defaultLabelColor>(0.8, 0.9, 0.4)</defaultLabelColor>
+    <initialSeverity>1</initialSeverity>
+    <deprioritizeHealing>true</deprioritizeHealing>
+    <tags>
+      <li>Sterilized</li>
+      <li>SterilizedSire</li>
+      <li>ReversibleSterilizedSire</li>
+    </tags>
+    <removeWithTags>
+      <li>SterilizedSire</li>
+    </removeWithTags>
+    <stages>
+      <li>
+        <becomeVisible>true</becomeVisible>
+      </li>
+    </stages>
+  </HediffDef>
 </Defs>

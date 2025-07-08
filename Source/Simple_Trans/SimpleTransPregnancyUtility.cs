@@ -780,14 +780,19 @@ public static class SimpleTransPregnancyUtility
 				pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(canSireDef));
 			}
 			
-			// Also remove all prosthetic hediffs
-			var prostheticHediffs = pawn.health.hediffSet.hediffs.Where(h => 
+			// Also remove all prosthetic and sterilization hediffs
+			var hediffsToRemove = pawn.health.hediffSet.hediffs.Where(h => 
 				h.def.defName == "BasicProstheticCarry" || 
 				h.def.defName == "BasicProstheticSire" || 
 				h.def.defName == "BionicProstheticCarry" || 
-				h.def.defName == "BionicProstheticSire").ToList();
+				h.def.defName == "BionicProstheticSire" ||
+				h.def.defName == "SterilizedCarry" ||
+				h.def.defName == "SterilizedSire" ||
+				h.def.defName == "ReversibleSterilizedCarry" ||
+				h.def.defName == "ReversibleSterilizedSire" ||
+				h.def.defName == "Sterilized").ToList();
 			
-			foreach (var hediff in prostheticHediffs)
+			foreach (var hediff in hediffsToRemove)
 			{
 				pawn.health.RemoveHediff(hediff);
 			}
@@ -799,53 +804,84 @@ public static class SimpleTransPregnancyUtility
 	}
 	
 	/// <summary>
-	/// Converts vanilla Sterilized hediffs to capability-specific sterilization for backwards compatibility
+	/// Core conversion logic for vanilla Sterilized hediff to capability-specific sterilization
 	/// </summary>
-	/// <param name="pawn">The pawn to check and convert</param>
-	/// <param name="isTransgender">Whether the pawn is transgender</param>
-	private static void ConvertVanillaSterilizedHediff(Pawn pawn, bool isTransgender)
+	/// <param name="pawn">The pawn to convert</param>
+	/// <param name="forceCarryingSterilization">If true, force carrying sterilization regardless of logic</param>
+	/// <param name="forceSiringSterilization">If true, force siring sterilization regardless of logic</param>
+	/// <param name="useOppositeCapabilityLogic">If true, use opposite capability logic (for adding abilities)</param>
+	/// <param name="targetAbility">The ability being added (only used with opposite capability logic)</param>
+	/// <returns>True if conversion was performed, false if no vanilla sterilized hediff was found</returns>
+	public static bool ConvertVanillaSterilizedHediffCore(Pawn pawn, bool forceCarryingSterilization = false, bool forceSiringSterilization = false, bool useOppositeCapabilityLogic = false, AbilityType? targetAbility = null)
 	{
-		if (pawn?.health?.hediffSet == null) return;
+		if (pawn?.health?.hediffSet == null) return false;
 		
 		try
 		{
 			// Check if pawn has vanilla Sterilized hediff
 			var vanillaSterilized = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Sterilized);
-			if (vanillaSterilized == null) return;
+			if (vanillaSterilized == null) return false;
 			
 			// Remove vanilla sterilized hediff
 			pawn.health.RemoveHediff(vanillaSterilized);
 			
-			// Determine which capability was sterilized based on AGAB (Assigned Gender at Birth)
-			bool shouldSterilizeCarry = false;
-			bool shouldSterilizeSire = false;
+			// Determine which capability should be sterilized
+			bool shouldSterilizeCarry = forceCarryingSterilization;
+			bool shouldSterilizeSire = forceSiringSterilization;
 			
-			if (isTransgender)
+			if (!forceCarryingSterilization && !forceSiringSterilization)
 			{
-				// For trans pawns, sterilization affects their birth-assigned capability
-				if (pawn.gender == Gender.Male)
+				if (useOppositeCapabilityLogic && targetAbility.HasValue)
 				{
-					// Trans male (AFAB) - sterilization would have been tubal ligation
-					shouldSterilizeCarry = true;
+					// Opposite capability logic: if adding carry ability, sterilize siring (and vice versa)
+					if (targetAbility == AbilityType.Carry)
+					{
+						shouldSterilizeSire = true;
+					}
+					else if (targetAbility == AbilityType.Sire)
+					{
+						shouldSterilizeCarry = true;
+					}
+					else
+					{
+						// Fall back to AGAB logic for unknown ability types
+						useOppositeCapabilityLogic = false;
+					}
 				}
-				else if (pawn.gender == Gender.Female)
+				
+				if (!useOppositeCapabilityLogic)
 				{
-					// Trans female (AMAB) - sterilization would have been vasectomy
-					shouldSterilizeSire = true;
-				}
-			}
-			else
-			{
-				// For cis pawns, sterilization affects their current gender's capability
-				if (pawn.gender == Gender.Male)
-				{
-					// Cis male - sterilization would have been vasectomy
-					shouldSterilizeSire = true;
-				}
-				else if (pawn.gender == Gender.Female)
-				{
-					// Cis female - sterilization would have been tubal ligation
-					shouldSterilizeCarry = true;
+					// AGAB-based logic
+					bool isTransgender = pawn.health.hediffSet.HasHediff(transDef);
+					
+					if (isTransgender)
+					{
+						// For trans pawns, sterilization affects their birth-assigned capability
+						if (pawn.gender == Gender.Male)
+						{
+							// Trans male (AFAB) - sterilization would have been tubal ligation
+							shouldSterilizeCarry = true;
+						}
+						else if (pawn.gender == Gender.Female)
+						{
+							// Trans female (AMAB) - sterilization would have been vasectomy
+							shouldSterilizeSire = true;
+						}
+					}
+					else
+					{
+						// For cis pawns, sterilization affects their current gender's capability
+						if (pawn.gender == Gender.Male)
+						{
+							// Cis male - sterilization would have been vasectomy
+							shouldSterilizeSire = true;
+						}
+						else if (pawn.gender == Gender.Female)
+						{
+							// Cis female - sterilization would have been tubal ligation
+							shouldSterilizeCarry = true;
+						}
+					}
 				}
 			}
 			
@@ -871,11 +907,35 @@ public static class SimpleTransPregnancyUtility
 					SimpleTransDebug.Log($"Converted vanilla Sterilized to SterilizedSire for {pawn.Name}", 2);
 				}
 			}
+			
+			return true;
 		}
 		catch (System.Exception ex)
 		{
 			Log.Error($"[Simple Trans] Error converting vanilla sterilized hediff for {pawn?.Name?.ToStringShort ?? "unknown"}: {ex}");
+			return false;
 		}
+	}
+
+	/// <summary>
+	/// Ability types for sterilization conversion
+	/// </summary>
+	public enum AbilityType
+	{
+		Carry,
+		Sire
+	}
+
+	/// <summary>
+	/// Converts vanilla Sterilized hediffs to capability-specific sterilization for backwards compatibility
+	/// Uses AGAB-based logic for determining which capability to sterilize
+	/// </summary>
+	/// <param name="pawn">The pawn to check and convert</param>
+	/// <param name="isTransgender">Whether the pawn is transgender</param>
+	private static void ConvertVanillaSterilizedHediff(Pawn pawn, bool isTransgender)
+	{
+		// Use the core conversion function with AGAB-based logic
+		ConvertVanillaSterilizedHediffCore(pawn, useOppositeCapabilityLogic: false);
 	}
 	
 	#endregion

@@ -47,10 +47,10 @@ Extensive dev mode options for testing and troubleshooting:
 - **XML Extensions** (imranfish.xmlextensions) 
 - **Vanilla Expanded Framework** (OskarPotocki.VanillaFactionsExpanded.Core)
 
-### Recommended Mods
-- **Samesex IVF** - For additional reproductive options
+### Compatible Mods
 - **Way Better Romance** - Enhanced romance mechanics (compatible)
 - **Non-Binary Gender** - Adds non-binary gender options
+- **Samesex IVF** - Compatible, but Simple Trans handles IVF procedures independently
 
 ### Load Order
 Must be loaded **after** Vanilla Social Interactions Expanded to ensure proper pregnancy functionality.
