@@ -18,6 +18,11 @@
         <tooltip>If this is checked, more messages will be published to the log.</tooltip>
       </li>
       <li Class="XmlExtensions.Setting.GapLine" />
+      <li Class="XmlExtensions.Setting.Text">
+        <text>Transgender variations</text>
+        <anchor>Middle</anchor>
+        <font>Medium</font>
+      </li>
       <li Class="XmlExtensions.Setting.SplitColumn">
         <leftCol>
           <li Class="XmlExtensions.Setting.Text">
@@ -136,38 +141,6 @@
       </li>
       <li Class="XmlExtensions.Setting.GapLine" />
       <li Class="XmlExtensions.Setting.Text">
-        <text>Mod Interactions</text>
-        <anchor>Middle</anchor>
-        <font>Medium</font>
-      </li>
-      <li Class="XmlExtensions.Setting.Checkbox">
-        <key>genesAreAgab</key>
-        <label>Modded gender-only genes (for example, Vanilla Expanded Phytokin) are AGAB</label>
-        <defaultValue>true</defaultValue>
-        <tooltip>If this is checked, forced-gender genes will be considered sex, not gender. By default they are considered sex.</tooltip>
-      </li>
-      <li Class="XmlExtensions.Setting.SplitColumn">
-        <leftCol>
-          <li Class="XmlExtensions.Setting.Text">
-            <text>Percent of nonbinary people who can carry: {nCarryPercent}%</text>
-            <keys>
-              <li>nCarryPercent</li>
-            </keys>
-            <tooltip>The rest will be able to sire. This has no effect if you don't have nonbinary people in your game.</tooltip>
-          </li>
-        </leftCol>
-        <rightCol>
-          <li Class="XmlExtensions.Setting.Slider">
-            <key>nCarryPercent</key>
-            <defaultValue>50</defaultValue>
-            <min>0</min>
-            <max>100</max>
-            <decimals>0</decimals>
-          </li>
-        </rightCol>
-      </li>
-      <li Class="XmlExtensions.Setting.GapLine" />
-      <li Class="XmlExtensions.Setting.Text">
         <text>Non-Binary Reproduction</text>
         <anchor>Middle</anchor>
         <font>Medium</font>
@@ -188,6 +161,13 @@
             </keys>
             <tooltip>Non-binary pawns who cannot carry or sire children.</tooltip>
           </li>
+          <li Class="XmlExtensions.Setting.Text">
+            <text>Percent of nonbinary people who can carry: {nCarryPercent}%</text>
+            <keys>
+              <li>nCarryPercent</li>
+            </keys>
+            <tooltip>For single-ability non-binary pawns, the rest will be able to sire.</tooltip>
+          </li>
         </leftCol>
         <rightCol>
           <li Class="XmlExtensions.Setting.Slider">
@@ -200,6 +180,13 @@
           <li Class="XmlExtensions.Setting.Slider">
             <key>nNeitherPercent</key>
             <defaultValue>15</defaultValue>
+            <min>0</min>
+            <max>100</max>
+            <decimals>0</decimals>
+          </li>
+          <li Class="XmlExtensions.Setting.Slider">
+            <key>nCarryPercent</key>
+            <defaultValue>50</defaultValue>
             <min>0</min>
             <max>100</max>
             <decimals>0</decimals>
@@ -283,7 +270,7 @@
             <tooltip>Chance for any pawn to have prosthetic sire organs instead of natural.</tooltip>
           </li>
           <li Class="XmlExtensions.Setting.Text">
-            <text>Percent chance prosthetics are bionic: {bionicUpgradePercent}%</text>
+            <text>Percent chance that prosthetics are bionic: {bionicUpgradePercent}%</text>
             <keys>
               <li>bionicUpgradePercent</li>
             </keys>
@@ -331,6 +318,18 @@
         <label>Enable reproductive prosthetics</label>
         <defaultValue>true</defaultValue>
         <tooltip>Allows crafting and installation of basic and advanced reproductive prosthetics.</tooltip>
+      </li>
+      <li Class="XmlExtensions.Setting.GapLine" />
+      <li Class="XmlExtensions.Setting.Text">
+        <text>Mod Interactions</text>
+        <anchor>Middle</anchor>
+        <font>Medium</font>
+      </li>
+      <li Class="XmlExtensions.Setting.Checkbox">
+        <key>genesAreAgab</key>
+        <label>Modded gender-only genes (for example, Vanilla Expanded Phytokin) are AGAB</label>
+        <defaultValue>true</defaultValue>
+        <tooltip>If this is checked, forced-gender genes will be considered sex, not gender. By default they are considered sex.</tooltip>
       </li>
       <li Class="XmlExtensions.Setting.ResetSettings" />
     </settings>

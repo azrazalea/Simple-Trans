@@ -352,8 +352,8 @@ public static class SimpleTransPregnancyUtility
 			{
 				SetCarry(pawn, false);
 
-				// Roll for prosthetic replacement
-				if (Rand.Range(0f, 1f) < prostheticCarryRate)
+				// Roll for prosthetic replacement (only if prosthetics are enabled)
+				if (enableProsthetics && Rand.Range(0f, 1f) < prostheticCarryRate)
 				{
 					// Apply prosthetic modifier
 					if (Rand.Range(0f, 1f) < bionicUpgradeRate)
@@ -427,8 +427,8 @@ public static class SimpleTransPregnancyUtility
 			{
 				SetSire(pawn, false);
 
-				// Roll for prosthetic replacement
-				if (Rand.Range(0f, 1f) < prostheticSireRate)
+				// Roll for prosthetic replacement (only if prosthetics are enabled)
+				if (enableProsthetics && Rand.Range(0f, 1f) < prostheticSireRate)
 				{
 					// Apply prosthetic modifier
 					if (Rand.Range(0f, 1f) < bionicUpgradeRate)
