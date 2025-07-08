@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <RitualBehaviorDef>
+    <defName>SimpleTrans_GenderAffirmParty_Behavior</defName>
+    <workerClass>Simple_Trans.RitualBehaviorWorker_GenderAffirmParty</workerClass>
+    <durationTicks>2500</durationTicks>
+    <letterTitle>Gender affirm party underway</letterTitle>
+    <letterText>{ORGANIZER_labelShort} is leading a gender affirm party for themself.</letterText>
+    <roles>
+      <li Class="RitualRoleColonist">
+        <label>Celebrant</label>
+        <id>Celebrant</id>
+        <maxCount>1</maxCount>
+        <required>True</required>
+        <countsAsParticipant>False</countsAsParticipant>
+        <mustBeAbleToReachTarget>True</mustBeAbleToReachTarget>
+      </li>
+    </roles>
+    <stages>
+      <li>
+        <defaultDuty>Spectate</defaultDuty>
+        <spectatorsRequired>true</spectatorsRequired>
+        <allowedSpectateSidesOverride>All</allowedSpectateSidesOverride>
+        <spectateDistanceOverride>3~4</spectateDistanceOverride>
+        <endTriggers>
+          <li Class="StageEndTrigger_DurationPercentage">
+            <percentage>1.0</percentage>
+          </li>
+        </endTriggers>
+        <roleBehaviors>
+          <li>
+            <roleId>Celebrant</roleId>
+            <dutyDef>SpeakOnCellFacingSpectators</dutyDef>
+            <speakerInteraction>GenderAffirmSpeech</speakerInteraction>
+            <customPositions>
+              <li Class="RitualPosition_InFrontThingCenter" />
+            </customPositions>
+          </li>
+        </roleBehaviors>
+      </li>
+    </stages>
+  </RitualBehaviorDef>
+</Defs>

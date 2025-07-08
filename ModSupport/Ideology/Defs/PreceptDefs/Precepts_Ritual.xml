@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <PreceptDef Name="SimpleTrans_RitualBase" Abstract="True">
+    <issue>Ritual</issue>
+    <preceptClass>Precept_Ritual</preceptClass>
+    <visible>false</visible>
+    <classic>true</classic>
+    <showRitualFloatMenuOption>true</showRitualFloatMenuOption>
+    <useRepeatPenalty>false</useRepeatPenalty>
+    <usesIdeoVisualEffects>true</usesIdeoVisualEffects>
+    <mergeRitualGizmosFromAllIdeos>true</mergeRitualGizmosFromAllIdeos>
+    <countsTowardsPreceptLimit>false</countsTowardsPreceptLimit>
+    <selectionWeight>1.0</selectionWeight>
+    <notifyPlayerOnOpportunity>false</notifyPlayerOnOpportunity>
+  </PreceptDef>
+
+  <PreceptDef ParentName="SimpleTrans_RitualBase">
+    <defName>SimpleTrans_GenderAffirmParty</defName>
+    <label>Gender Affirm Party</label>
+    <iconPath>UI/Icons/Rituals/RoleChange</iconPath>
+    <ritualPatternBase>SimpleTrans_GenderAffirmParty_Pattern</ritualPatternBase>
+  </PreceptDef>
+</Defs>

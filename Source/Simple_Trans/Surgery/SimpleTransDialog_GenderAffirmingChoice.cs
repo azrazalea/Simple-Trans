@@ -23,7 +23,7 @@ namespace Simple_Trans
         // UI state
         private Vector2 scrollPosition = Vector2.zero;
         private int currentTab = 0;
-        private readonly string[] tabLabels = { "BodyType", "Gender", "Identity", "Reproduction" };
+        private readonly string[] tabLabels = { "BodyType", "Reproduction" };
 
         public override Vector2 InitialSize => new Vector2(600f, 500f);
 
@@ -48,8 +48,6 @@ namespace Simple_Trans
             choices = new GenderAffirmingChoices
             {
                 BodyType = pawn.story?.bodyType ?? BodyTypeDefOf.Male,
-                Gender = pawn.gender,
-                Identity = GetCurrentIdentity(pawn),
                 ReproductiveCapability = GetCurrentReproductiveCapability(pawn)
             };
 
@@ -130,12 +128,6 @@ namespace Simple_Trans
                     DrawBodyTypeTab(rect);
                     break;
                 case 1:
-                    DrawGenderTab(rect);
-                    break;
-                case 2:
-                    DrawIdentityTab(rect);
-                    break;
-                case 3:
                     DrawReproductionTab(rect);
                     break;
             }
@@ -172,63 +164,6 @@ namespace Simple_Trans
             }
         }
 
-        private void DrawGenderTab(Rect rect)
-        {
-            float y = rect.y + 10f;
-            var genders = new List<Gender> { Gender.Male, Gender.Female };
-
-            // Check for Non-Binary Gender mod
-            bool hasNBGMod = ModsConfig.IsActive("Coraizon.NonBinaryGenderMod") || ModsConfig.IsActive("Coraizon.NBGM");
-            if (hasNBGMod)
-            {
-                // Add non-binary option (gender value 3)
-                genders.Add((Gender)3);
-            }
-
-            Text.Font = GameFont.Small;
-            Widgets.Label(new Rect(rect.x, y, rect.width, 25f), "SimpleTrans.GenderAffirmingChoice.CurrentGender".Translate(pawn.gender.GetLabel().CapitalizeFirst()).Resolve());
-            y += 30f;
-
-            foreach (var gender in genders)
-            {
-                Rect optionRect = new Rect(rect.x + 20f, y, rect.width - 40f, 25f);
-                bool isSelected = choices.Gender == gender;
-                string genderLabel = gender == (Gender)3 ? "SimpleTrans.Gender.NonBinary".Translate().Resolve() : gender.GetLabel().CapitalizeFirst();
-
-                if (DrawRadioOption(optionRect, genderLabel, isSelected))
-                {
-                    choices.Gender = gender;
-                    SoundDefOf.Tick_Tiny.PlayOneShotOnCamera();
-                }
-
-                y += 30f;
-            }
-        }
-
-        private void DrawIdentityTab(Rect rect)
-        {
-            float y = rect.y + 10f;
-            var identities = new List<GenderIdentity> { GenderIdentity.Cisgender, GenderIdentity.Transgender };
-
-            Text.Font = GameFont.Small;
-            var currentIdentity = GetCurrentIdentity(pawn);
-            Widgets.Label(new Rect(rect.x, y, rect.width, 25f), "SimpleTrans.GenderAffirmingChoice.CurrentIdentity".Translate(GetIdentityLabel(currentIdentity)).Resolve());
-            y += 30f;
-
-            foreach (var identity in identities)
-            {
-                Rect optionRect = new Rect(rect.x + 20f, y, rect.width - 40f, 25f);
-                bool isSelected = choices.Identity == identity;
-
-                if (DrawRadioOption(optionRect, GetIdentityLabel(identity), isSelected))
-                {
-                    choices.Identity = identity;
-                    SoundDefOf.Tick_Tiny.PlayOneShotOnCamera();
-                }
-
-                y += 30f;
-            }
-        }
 
         private void DrawReproductionTab(Rect rect)
         {
@@ -274,15 +209,6 @@ namespace Simple_Trans
             return clicked && !selected;
         }
 
-        private GenderIdentity GetCurrentIdentity(Pawn pawn)
-        {
-            if (pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.transDef))
-                return GenderIdentity.Transgender;
-            else if (pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.cisDef))
-                return GenderIdentity.Cisgender;
-            else
-                return GenderIdentity.Cisgender; // Default
-        }
 
         private ReproductiveCapability GetCurrentReproductiveCapability(Pawn pawn)
         {
@@ -299,15 +225,6 @@ namespace Simple_Trans
                 return ReproductiveCapability.None;
         }
 
-        private string GetIdentityLabel(GenderIdentity identity)
-        {
-            return identity switch
-            {
-                GenderIdentity.Cisgender => "SimpleTrans.Identity.Cisgender".Translate().Resolve(),
-                GenderIdentity.Transgender => "SimpleTrans.Identity.Transgender".Translate().Resolve(),
-                _ => "Unknown"
-            };
-        }
 
         private string GetCapabilityLabel(ReproductiveCapability capability)
         {
@@ -328,16 +245,9 @@ namespace Simple_Trans
     public class GenderAffirmingChoices
     {
         public BodyTypeDef BodyType;
-        public Gender Gender;
-        public GenderIdentity Identity;
         public ReproductiveCapability ReproductiveCapability;
     }
 
-    public enum GenderIdentity
-    {
-        Cisgender,
-        Transgender
-    }
 
     public enum ReproductiveCapability
     {

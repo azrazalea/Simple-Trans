@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <RitualOutcomeEffectDef>
+    <defName>SimpleTrans_GenderAffirmParty_Outcome</defName>
+    <description>A gender affirm party was held.</description>
+    <workerClass>Simple_Trans.RitualOutcomeEffectWorker_GenderAffirmParty</workerClass>
+    <comps>
+      <li Class="RitualOutcomeComp_ParticipantCount">
+        <label>participant count</label>
+        <curve>
+          <points>
+            <li>(1,  0.1)</li>
+            <li>(5,  0.2)</li>
+            <li>(10, 0.4)</li>
+          </points>
+        </curve>
+      </li>
+      <li Class="RitualOutcomeComp_RoomStat">
+        <label>room impressiveness</label>
+        <statDef>Impressiveness</statDef>
+        <curve>
+          <points>
+            <li>0,  0.1</li>
+            <li>50,  0.2</li>
+            <li>120, 0.3</li>
+          </points>
+        </curve>
+      </li>
+      <li Class="RitualOutcomeComp_PawnStatScaled">
+        <label>Celebrant's social impact</label>
+        <statDef>SocialImpact</statDef>
+        <roleId>Celebrant</roleId>
+        <curve>
+          <points>
+            <li>(0.2, 0.0)</li>
+            <li>(0.4, 0.1)</li>
+            <li>(0.6, 0.2)</li>
+            <li>(1.0, 0.3)</li>
+          </points>
+        </curve>
+      </li>
+    </comps>
+    <outcomeChances>
+      <li>
+        <label>Terrible</label>
+        <chance>0.00</chance>
+        <memory>SimpleTrans_AttendedGenderAffirmParty</memory>
+        <positivityIndex>-2</positivityIndex>
+        <description>The party was awkward and uncomfortable. People seemed confused or unsupportive.</description>
+      </li>
+      <li>
+        <label>Disappointing</label>
+        <chance>0.10</chance>
+        <memory>SimpleTrans_AttendedGenderAffirmParty</memory>
+        <positivityIndex>-1</positivityIndex>
+        <description>The party didn't go very well. Some people seemed uncomfortable.</description>
+      </li>
+      <li>
+        <label>Satisfying</label>
+        <chance>0.60</chance>
+        <memory>SimpleTrans_AttendedGenderAffirmParty</memory>
+        <positivityIndex>1</positivityIndex>
+        <description>The party was warm and supportive. The community came together nicely.</description>
+      </li>
+      <li>
+        <label>Inspiring</label>
+        <chance>0.30</chance>
+        <memory>SimpleTrans_AttendedGenderAffirmParty</memory>
+        <positivityIndex>2</positivityIndex>
+        <description>The party was deeply moving. Everyone felt the joy and authenticity of the moment.</description>
+      </li>
+    </outcomeChances>
+  </RitualOutcomeEffectDef>
+</Defs>

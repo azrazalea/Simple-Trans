@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <RitualPatternDef>
+    <defName>SimpleTrans_GenderAffirmParty_Pattern</defName>
+    <descOverride>A celebration where someone can affirm their gender identity and chosen name. The community gathers to witness and support their authentic self. The person being celebrated leads the ritual.</descOverride>
+    <ritualOnlyForIdeoMembers>false</ritualOnlyForIdeoMembers>
+    <ritualObligationTargetFilter>GatheringSpotOrAltar</ritualObligationTargetFilter>
+    <ritualBehavior>SimpleTrans_GenderAffirmParty_Behavior</ritualBehavior>
+    <ritualOutcomeEffect>SimpleTrans_GenderAffirmParty_Outcome</ritualOutcomeEffect>
+    <alwaysStartAnytime>true</alwaysStartAnytime>
+    <playsIdeoMusic>true</playsIdeoMusic>
+    <canStartAnytime>true</canStartAnytime>
+  </RitualPatternDef>
+</Defs>

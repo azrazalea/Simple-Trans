@@ -276,15 +276,6 @@ namespace Simple_Trans
                 return;
             }
 
-            // Gender changes
-            if (choices.Gender != pawn.gender)
-            {
-                string genderLabel = choices.Gender == (Gender)3 ?
-                    "SimpleTrans.Gender.NonBinary".Translate().Resolve() :
-                    choices.Gender.GetLabel().CapitalizeFirst();
-                changes.Add(new TransformationChange(TransformationChangeType.Modification,
-                    "SimpleTrans.Change.SetGender".Translate(genderLabel).Resolve()));
-            }
 
             // Body type changes
             if (choices.BodyType != pawn.story?.bodyType)
@@ -293,16 +284,6 @@ namespace Simple_Trans
                     "SimpleTrans.Change.SetBodyType".Translate(choices.BodyType.defName.CapitalizeFirst()).Resolve()));
             }
 
-            // Identity changes
-            var currentIdentity = GetCurrentIdentity(pawn);
-            if (choices.Identity != currentIdentity)
-            {
-                string identityLabel = choices.Identity == GenderIdentity.Transgender ?
-                    "SimpleTrans.Identity.Transgender".Translate().Resolve() :
-                    "SimpleTrans.Identity.Cisgender".Translate().Resolve();
-                changes.Add(new TransformationChange(TransformationChangeType.Modification,
-                    "SimpleTrans.Change.SetIdentity".Translate(identityLabel).Resolve()));
-            }
 
             // Reproductive capability changes
             var currentCapability = GetCurrentReproductiveCapability(pawn);

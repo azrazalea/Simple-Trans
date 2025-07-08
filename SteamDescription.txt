@@ -1,6 +1,27 @@
-🏳️‍⚧️ **Simple Trans - Gender Identity & Reproductive Biology System**
+🏳️‍⚧️ **Simple Trans (Expanded) - Gender Identity & Reproductive Biology System**
 
 *Continued from Runaway's original mod, completely rebuilt for RimWorld 1.6*
+
+** I CHANGED NEARLY ALL OF THE CODE, PLEASE EXPECT BUGS AND REPORT THEM WITH LOGS AND/OR SAVE FILES **
+
+---
+
+**REQUIREMENTS - READ FIRST**
+
+**REQUIRED:**
+- **Biotech DLC**
+- Harmony (brrainz.harmony)
+- XML Extensions (imranfish.xmlextensions) 
+- Vanilla Expanded Framework (OskarPotocki.VanillaFactionsExpanded.Core)
+
+**LOAD ORDER:** Must load AFTER Vanilla Social Interactions Expanded
+
+**COMPATIBLE:**
+- ✅ **Intimacy** - Full compatibility 
+- ✅ **Non-Binary Gender** - Full integration. For now everyone thinks non-binary people are attractive. Reproduction handled as well.
+- ✅ **Intimacy + Non Binary Gender** - Full compatibility (these work together with Simple Trans thanks to a small patch to Intimacy mod)
+- ✅ **Vanilla Framework Expanded** - Full integration with gene systems
+- ❌ **Same Sex IVF** - No longer recommended (Simple Trans handles IVF independently via carry/sire system)
 
 ---
 
@@ -16,8 +37,10 @@ Trans rights are human rights. If you're here to complain, please leave.
 
 **Gender Identity Hediffs**
 - Pawns spawn with "Cisgender" or "Transgender" hediffs (configurable spawn rates)
+  - They can spawn with all variations possible in the mod
+  - Config sliders available to control spawn percentages
 - Separate "Carrying Capability" and "Siring Capability" hediffs control reproduction
-- Pregnancy systems check these hediffs instead of gender
+- Updated fertility + IVF surgeries work based on reproductive capabilities, not gender
 - All percentages configurable in mod settings
 
 **Medical Systems**
@@ -26,7 +49,9 @@ Trans rights are human rights. If you're here to complain, please leave.
 - Extract reproductive organs from one pawn, transplant to another
 - Extracted organs maintain their type (natural carrying/siring anatomy)
 - Surgery can fail, potentially causing capability-specific sterilization
-- Pregnancy is safely terminated if carry organs are removed
+- Pregnancy is safely terminated if carry organs are removed, there is a warning presented first
+- Children genetically born from transplanted reproductive organs are considered the genetic child of the person currently possessing the organs
+  - There might be an optional system for making this be the original organ genetics in the future
 
 🦾 **Prosthetic Systems** 
 - **Basic Prosthetics**: 70% fertility rate compared to natural anatomy
@@ -35,18 +60,30 @@ Trans rights are human rights. If you're here to complain, please leave.
 - When either partner with bionics wants to avoid pregnancy: 0% chance
 - Prosthetics are additional hediffs that work alongside base capabilities
 
-🧬 **Biosculpter Cycles** (5 specialized procedures)
-- **Masculinizing Treatments**: Male gender + body type + sire capability + cisgender identity
-- **Feminizing Treatments**: Female gender + body type + carry capability + cisgender identity  
-- **Fertility Restoration**: Removes all sterilization, restores natural reproductive abilities
-- **Androgynizing**: Non-binary gender + thin body + removes all reproductive capabilities
-- **Duosex Transformation**: Grants both carry AND sire capabilities simultaneously
+---
+
+**Ideology DLC Features (optional, mod does not require ideology)**
+
+**🎉 Gender Affirmation Party Ritual** (Ideology DLC only)
+- Ritual for changing Name and Gender identity
+- Community celebration of gender transition
+- Provides mood bonuses and social recognition
+
+**🧬 Biosculpter Gender Affirming Cycle** (Ideology DLC only)
+- **Body type transformation**: Changes physical appearance
+  - Currently only the vanilla body types but I want to work on adding modded ones as well in the future
+- **Reproductive organ modification**: Alters reproductive capabilities
+  - This will remove prosthetics if present to replace with natural
+  - Cures all sterilizations
+
+---
 
 **Safety & Consent System**
+
 - Comprehensive informed consent dialogs for irreversible procedures
 - Pregnancy preservation warnings with detailed change summaries
 - Color-coded UI showing exactly what will happen
-- Most changes can be undone through additional medical procedures
+- Changes can be undone through additional medical or social procedures
 
 ---
 
@@ -55,21 +92,25 @@ Trans rights are human rights. If you're here to complain, please leave.
 **Sterilization System**
 - Capability-specific sterilization: "SterilizedCarry" vs "SterilizedSire" hediffs
 - Failed surgeries apply appropriate sterilization type (tubal ligation → carry sterility)
-- Backwards compatibility converts vanilla "Sterilized" based on gender identity
-- Fertility restoration removes all sterilization types
+- Backwards compatibility converts vanilla "Sterilized" to correct guess based on gender identity
 
 **Gene Integration** 
 - Vanilla Expanded Framework genes can force gender identity
 - Configurable: genes represent assigned gender at birth OR current identity
 - Body type changes respect cisgender status (won't alter cis pawns' appearance)
 - Gene-gender conflicts handled intelligently
+- HAR support in the future
 
 **Mod Compatibility**
-- **SameSex IVF**: Compatible, but Simple Trans handles IVF procedures independently using carry/sire capabilities
-- **Non-Binary Gender**: Full integration, special spawn rates for non-binary reproductive configs
 - **Biotech**: Complete pregnancy system override - all pregnancy checks use carry/sire capabilities
-- **Romance Mods**: Full compatibility testing with comprehensive debug logging system
-- Harmony patches completely override vanilla gender-based pregnancy logic
+  - This is done through transpilation and harmony postfix patches so should work with most other mods
+- **Intimacy**: Full compatibility testing with comprehensive debug logging system to ensure pregnancies are working properly
+  - Just turn on the debug option in mod settings to get detailed reports on pregnancy chances and results
+- **Non-Binary Gender**: Full integration, special spawn rates for non-binary reproductive configs. Non-binary people are always transgender.
+  - Right now just everyone is attracted to non-binary gender. This will be hard but not impossible to patch, because core game only uses gender to control base attraction.
+  - I will need to patch vanilla and romance mods to include the other pawn's full info for me to be able to do this in a different way.
+  - Open to ideas, but currently thinking we do it based on sire/carry? I don't love that because it is a bit transmedicalist but besides the current way I'm not sure how else to determine.
+- **Vanilla Framework Expanded**: Complete gene system integration
 
 ---
 
@@ -79,28 +120,7 @@ Comprehensive debug system:
 - **Debug Mode Toggle**: Enable extensive logging for pregnancy/romance mechanics (perfect for testing mod compatibility)
 - **Dev Mode Actions**: Validate gender assignments, set identities, modify capabilities
 - **Compatibility Testing**: Detailed logs show exactly how pregnancy decisions are made
-- **Mod Integration**: Debug logs help diagnose conflicts with romance/pregnancy mods like Intimacy
-
----
-
-**Requirements & Load Order**
-
-**Required:**
-- Harmony (brrainz.harmony)
-- XML Extensions (imranfish.xmlextensions) 
-- Vanilla Expanded Framework (OskarPotocki.VanillaFactionsExpanded.Core)
-
-**Load Order:** Must load AFTER Vanilla Social Interactions Expanded
-
-**Compatible/Recommended:** 
-- Non-Binary Gender - Adds non-binary gender options
-- Way Better Romance - Enhanced romance mechanics
-- SameSex IVF - Compatible, Simple Trans handles IVF independently
-- Intimacy - Currently testing compatibility
-
-⚠️ **Compatibility Notes:** 
-- Don't use Way Better Romance + Non-Binary Gender together (known incompatibility between those mods)
-- Don't use Intimacy + Non-Binary Gender together (known incompatibility between those mods)
+- **Mod Integration**: Debug logs help diagnose conflicts with romance/pregnancy mods
 
 ---
 

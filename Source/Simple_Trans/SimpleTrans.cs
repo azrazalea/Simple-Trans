@@ -66,6 +66,7 @@ public static class SimpleTrans
 			if (IdeologyActive)
 			{
 				TryPatchBiosculpter(harmony);
+				TryInitializeRitualSystem();
 			}
 			
 			// Apply pregnancy system patches for all compatible mods
@@ -164,6 +165,28 @@ public static class SimpleTrans
 		catch (System.Exception ex)
 		{
 			Log.Error($"[Simple Trans] Error patching biosculpter system: {ex}");
+		}
+	}
+	
+	/// <summary>
+	/// Conditionally initializes ritual system when Ideology DLC is active
+	/// </summary>
+	private static void TryInitializeRitualSystem()
+	{
+		try
+		{
+			// The ritual system classes (RitualBehaviorWorker_GenderAffirmParty, RitualOutcomeEffectWorker_GenderAffirmParty)
+			// are automatically registered when the mod loads, and the XML definitions are conditionally loaded
+			// via PatchOperationFindMod. No additional initialization is required.
+			
+			if (debugMode)
+			{
+				Log.Message("[Simple Trans] Ritual system initialized successfully");
+			}
+		}
+		catch (System.Exception ex)
+		{
+			Log.Error($"[Simple Trans] Error initializing ritual system: {ex}");
 		}
 	}
 	

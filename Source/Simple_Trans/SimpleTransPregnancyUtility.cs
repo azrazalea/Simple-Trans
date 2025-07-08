@@ -556,6 +556,12 @@ public static class SimpleTransPregnancyUtility
 			canCarry = true;
 			canSire = false;
 		}
+		else if (pawn.gender != Gender.Male && pawn.gender != Gender.Female)
+		{
+			// Non-binary pawn - use nCarryRate setting
+			canCarry = Rand.Range(0f, 1f) <= nCarryRate;
+			canSire = !canCarry;
+		}
 		
 		SimpleTransDebug.Log("carry = " + canCarry + " sire = " + canSire, 3);
 		

@@ -36,17 +36,6 @@ namespace Simple_Trans
                 if (selectedChoices.BodyType != tunedFor.story?.bodyType)
                     baseDesc += "\n• " + "SimpleTrans.GenderAffirmingChoice.WillChangeBodyType".Translate(selectedChoices.BodyType.label.CapitalizeFirst()).Resolve();
 
-                if (selectedChoices.Gender != tunedFor.gender)
-                {
-                    string genderLabel = selectedChoices.Gender == (Gender)3 ?
-                        "SimpleTrans.Gender.NonBinary".Translate().Resolve() :
-                        selectedChoices.Gender.GetLabel().CapitalizeFirst();
-                    baseDesc += "\n• " + "SimpleTrans.GenderAffirmingChoice.WillChangeGender".Translate(genderLabel).Resolve();
-                }
-
-                var currentIdentity = GetCurrentIdentity(tunedFor);
-                if (selectedChoices.Identity != currentIdentity)
-                    baseDesc += "\n• " + "SimpleTrans.GenderAffirmingChoice.WillChangeIdentity".Translate(GetIdentityLabel(selectedChoices.Identity)).Resolve();
 
                 var currentReproduction = GetCurrentReproductiveCapability(tunedFor);
                 if (selectedChoices.ReproductiveCapability != currentReproduction)
@@ -82,10 +71,8 @@ namespace Simple_Trans
             }
 
             // Apply transformations
-            ApplyGenderTransformation(pawn);
             ApplyBodyTypeTransformation(pawn);
             ApplyReproductiveTransformation(pawn);
-            ApplyIdentityTransformation(pawn);
 
             // Refresh graphics
             pawn.Drawer.renderer.SetAllGraphicsDirty();
@@ -95,18 +82,6 @@ namespace Simple_Trans
                 pawn, MessageTypeDefOf.PositiveEvent);
         }
 
-        private void ApplyGenderTransformation(Pawn pawn)
-        {
-            if (selectedChoices.Gender != pawn.gender)
-            {
-                pawn.gender = selectedChoices.Gender;
-
-                if (SimpleTrans.debugMode)
-                {
-                    Log.Message($"[Simple Trans DEBUG] Changed {pawn.Name?.ToStringShort ?? "unknown"}'s gender to {selectedChoices.Gender}");
-                }
-            }
-        }
 
         private void ApplyBodyTypeTransformation(Pawn pawn)
         {
@@ -121,29 +96,6 @@ namespace Simple_Trans
             }
         }
 
-        private void ApplyIdentityTransformation(Pawn pawn)
-        {
-            var currentIdentity = GetCurrentIdentity(pawn);
-            if (selectedChoices.Identity != currentIdentity)
-            {
-                // Clear existing identity
-                if (pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.transDef))
-                    pawn.health.RemoveHediff(pawn.health.hediffSet.GetFirstHediffOfDef(SimpleTransPregnancyUtility.transDef));
-                if (pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.cisDef))
-                    pawn.health.RemoveHediff(pawn.health.hediffSet.GetFirstHediffOfDef(SimpleTransPregnancyUtility.cisDef));
-
-                // Apply new identity
-                if (selectedChoices.Identity == GenderIdentity.Transgender)
-                    SimpleTransPregnancyUtility.SetTrans(pawn);
-                else
-                    SimpleTransPregnancyUtility.SetCis(pawn);
-
-                if (SimpleTrans.debugMode)
-                {
-                    Log.Message($"[Simple Trans DEBUG] Changed {pawn.Name?.ToStringShort ?? "unknown"}'s identity to {selectedChoices.Identity}");
-                }
-            }
-        }
 
         private void ApplyReproductiveTransformation(Pawn pawn)
         {
@@ -234,8 +186,6 @@ namespace Simple_Trans
                 selectedChoices = new GenderAffirmingChoices();
 
             Scribe_Values.Look(ref selectedChoices.BodyType, "selectedBodyType", BodyTypeDefOf.Male);
-            Scribe_Values.Look(ref selectedChoices.Gender, "selectedGender", Gender.Male);
-            Scribe_Values.Look(ref selectedChoices.Identity, "selectedIdentity", GenderIdentity.Cisgender);
             Scribe_Values.Look(ref selectedChoices.ReproductiveCapability, "selectedReproductiveCapability", ReproductiveCapability.None);
         }
     }

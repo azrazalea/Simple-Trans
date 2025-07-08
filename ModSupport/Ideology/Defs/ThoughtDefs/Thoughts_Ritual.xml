@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <ThoughtDef>
+    <defName>SimpleTrans_AttendedGenderAffirmParty</defName>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <durationDays>6</durationDays>
+    <stackLimit>3</stackLimit>
+    <stackLimitForSameOtherPawn>1</stackLimitForSameOtherPawn>
+    <stages>
+      <li>
+        <label>awful gender affirm party</label>
+        <description>The gender affirm party was terrible. It was so awkward and uncomfortable.</description>
+        <baseMoodEffect>-4</baseMoodEffect>
+      </li>
+      <li>
+        <label>disappointing gender affirm party</label>
+        <description>The gender affirm party didn't go well. Some people seemed uncomfortable.</description>
+        <baseMoodEffect>-2</baseMoodEffect>
+      </li>
+      <li>
+        <label>satisfying gender affirm party</label>
+        <description>I attended a nice gender affirm party. The community came together to support someone.</description>
+        <baseMoodEffect>3</baseMoodEffect>
+      </li>
+      <li>
+        <label>inspiring gender affirm party</label>
+        <description>I attended an amazing gender affirm party. It was deeply moving to witness someone's authentic joy.</description>
+        <baseMoodEffect>6</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <ThoughtDef>
+    <defName>SimpleTrans_CelebrantGenderAffirmParty</defName>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <durationDays>12</durationDays>
+    <stackLimit>1</stackLimit>
+    <stages>
+      <li>
+        <label>awful gender affirm party (celebrant)</label>
+        <description>My gender affirm party was terrible. People seemed unsupportive of who I really am.</description>
+        <baseMoodEffect>-8</baseMoodEffect>
+      </li>
+      <li>
+        <label>disappointing gender affirm party (celebrant)</label>
+        <description>My gender affirm party didn't go well. Some people seemed uncomfortable with my identity.</description>
+        <baseMoodEffect>-4</baseMoodEffect>
+      </li>
+      <li>
+        <label>satisfying gender affirm party (celebrant)</label>
+        <description>I had a nice gender affirm party. The community supported me being my authentic self.</description>
+        <baseMoodEffect>8</baseMoodEffect>
+      </li>
+      <li>
+        <label>inspiring gender affirm party (celebrant)</label>
+        <description>I had an amazing gender affirm party. I feel deeply accepted and celebrated for who I truly am.</description>
+        <baseMoodEffect>15</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+</Defs>

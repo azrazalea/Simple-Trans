@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <InteractionDef>
+    <defName>GenderAffirmSpeech</defName>
+    <label>gender affirmation speech</label>
+    <workerClass>InteractionWorker_RecruitAttempt</workerClass>
+    <symbol>Things/Mote/SpeechSymbols/Speech</symbol>
+    <logRulesInitiator>
+      <rulesStrings>
+        <li>logentry->[INITIATOR_nameDef] shared [INITIATOR_possessive] authentic self with the community.</li>
+        <li>logentry->[INITIATOR_nameDef] spoke about [INITIATOR_possessive] gender identity.</li>
+        <li>logentry->[INITIATOR_nameDef] celebrated [INITIATOR_possessive] true name and identity.</li>
+      </rulesStrings>
+    </logRulesInitiator>
+  </InteractionDef>
+</Defs>
