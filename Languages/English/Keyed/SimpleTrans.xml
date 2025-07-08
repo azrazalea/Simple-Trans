@@ -2,46 +2,12 @@
 <LanguageData>
   <SimpleTrans.PawnsCannotCarryChild>Neither {PAWN1_nameDef} nor {PAWN2_nameDef} can carry children.</SimpleTrans.PawnsCannotCarryChild>
   <SimpleTrans.PawnsCannotSireChild>Neither {PAWN1_nameDef} nor {PAWN2_nameDef} can sire children.</SimpleTrans.PawnsCannotSireChild>
-  <SimpleTrans.SameGender>same gender</SimpleTrans.SameGender>
   
   <!-- Surgery System -->
   <SimpleTransOrganExtracted>{PAWN_nameDef}'s {1} have been successfully extracted.</SimpleTransOrganExtracted>
-  <SimpleTransNoOrganToExtract>{PAWN_nameDef} does not have the required reproductive organs to extract.</SimpleTransNoOrganToExtract>
   <SimpleTransOrganTransplanted>{PAWN_nameDef} has successfully received {1}.</SimpleTransOrganTransplanted>
   <SimpleTransProstheticInstalled>{PAWN_nameDef} has successfully received {1}.</SimpleTransProstheticInstalled>
   
-  <!-- Biosculpter System -->
-  <SimpleTransBiosculpterComplete>{PAWN_nameDef} has completed reproductive reconstruction.</SimpleTransBiosculpterComplete>
-  <SimpleTransFertilityRestored>{PAWN_nameDef}'s natural fertility has been restored.</SimpleTransFertilityRestored>
-  
-  <!-- Masculinizing Cycle Messages -->
-  <SimpleTransMasculinizingNoEffect>{PAWN_nameDef} already had sire ability - masculinizing cycle had no effect.</SimpleTransMasculinizingNoEffect>
-  <SimpleTransMasculinizingRemovedCarry>{PAWN_nameDef}'s carry ability was removed, retaining sire ability.</SimpleTransMasculinizingRemovedCarry>
-  <SimpleTransMasculinizingConverted>{PAWN_nameDef}'s carry ability was converted to sire ability.</SimpleTransMasculinizingConverted>
-  <SimpleTransMasculinizingGranted>{PAWN_nameDef} has been granted sire ability.</SimpleTransMasculinizingGranted>
-  
-  <!-- Feminizing Cycle Messages -->
-  <SimpleTransFeminizingNoEffect>{PAWN_nameDef} already had carry ability - feminizing cycle had no effect.</SimpleTransFeminizingNoEffect>
-  <SimpleTransFeminizingRemovedSire>{PAWN_nameDef}'s sire ability was removed, retaining carry ability.</SimpleTransFeminizingRemovedSire>
-  <SimpleTransFeminizingConverted>{PAWN_nameDef}'s sire ability was converted to carry ability.</SimpleTransFeminizingConverted>
-  <SimpleTransFeminizingGranted>{PAWN_nameDef} has been granted carry ability.</SimpleTransFeminizingGranted>
-  
-  <!-- New Cycle Messages -->
-  <SimpleTransCompleteReset>{PAWN_nameDef} has undergone complete biological and identity reset - a fresh start.</SimpleTransCompleteReset>
-  <SimpleTransAndrogynized>{PAWN_nameDef} has been androgynized - all reproductive capabilities removed, body made androgynous.</SimpleTransAndrogynized>
-  <SimpleTransDuosexComplete>{PAWN_nameDef} now has dual reproductive systems - complete duosex transformation achieved.</SimpleTransDuosexComplete>
-
-  <!-- Debug Actions -->
-  <SimpleTrans.Debug.ModName>Simple Trans</SimpleTrans.Debug.ModName>
-  <SimpleTrans.Debug.ValidateAllGenders>Validate All Genders</SimpleTrans.Debug.ValidateAllGenders>
-  <SimpleTrans.Debug.SetTransgender>Set Transgender</SimpleTrans.Debug.SetTransgender>
-  <SimpleTrans.Debug.SetCisgender>Set Cisgender</SimpleTrans.Debug.SetCisgender>
-  <SimpleTrans.Debug.SetCarryExclusive>Set Able to Carry (exclusive)</SimpleTrans.Debug.SetCarryExclusive>
-  <SimpleTrans.Debug.SetSireExclusive>Set Able to Sire (exclusive)</SimpleTrans.Debug.SetSireExclusive>
-  <SimpleTrans.Debug.SetDualReproductive>Set Dual Reproductive</SimpleTrans.Debug.SetDualReproductive>
-  <SimpleTrans.Debug.ResetGender>Reset Gender</SimpleTrans.Debug.ResetGender>
-  <SimpleTrans.Debug.ClearGender>Clear Gender</SimpleTrans.Debug.ClearGender>
-
   <!-- Surgery Messages -->
   <SimpleTrans.Surgery.MustBePawn>Must be performed on a pawn</SimpleTrans.Surgery.MustBePawn>
   <SimpleTrans.Surgery.NoOrgansFound>No reproductive anatomy or prosthetics found</SimpleTrans.Surgery.NoOrgansFound>
@@ -52,7 +18,6 @@
   <SimpleTrans.Surgery.CannotReplace>Cannot replace with this type</SimpleTrans.Surgery.CannotReplace>
   <SimpleTrans.Surgery.NoAbilitiesToReplace>No reproductive abilities to replace</SimpleTrans.Surgery.NoAbilitiesToReplace>
   <SimpleTrans.Surgery.PregnancyWarning>WARNING: {PAWN_nameDef} is currently pregnant. The surgery '{1}' will terminate the pregnancy. Do you want to proceed?</SimpleTrans.Surgery.PregnancyWarning>
-  <SimpleTrans.Surgery.PregnantPawnWarning>Pawn is pregnant - surgery will terminate pregnancy</SimpleTrans.Surgery.PregnantPawnWarning>
   
   <!-- Item Labels for Surgery -->
   <SimpleTrans.Items.NaturalCarryOrgans>natural carrying anatomy</SimpleTrans.Items.NaturalCarryOrgans>
@@ -62,30 +27,9 @@
   <SimpleTrans.Items.BionicCarryProsthetic>bionic carrying prosthetic</SimpleTrans.Items.BionicCarryProsthetic>
   <SimpleTrans.Items.BionicSireProsthetic>bionic siring prosthetic</SimpleTrans.Items.BionicSireProsthetic>
 
-  <!-- Biosculpter Descriptions -->
-  <SimpleTrans.Biosculpter.MasculinizingDesc>Complete masculinizing transformation</SimpleTrans.Biosculpter.MasculinizingDesc>
-  <SimpleTrans.Biosculpter.FeminizingDesc>Complete feminizing transformation</SimpleTrans.Biosculpter.FeminizingDesc>
-  <SimpleTrans.Biosculpter.DuosexDesc>Complete duosex transformation</SimpleTrans.Biosculpter.DuosexDesc>
-  <SimpleTrans.Biosculpter.AndrogynizeDesc>Complete androgynizing transformation</SimpleTrans.Biosculpter.AndrogynizeDesc>
-  <SimpleTrans.Biosculpter.SetGenderMale>Sets gender to male</SimpleTrans.Biosculpter.SetGenderMale>
-  <SimpleTrans.Biosculpter.SetGenderFemale>Sets gender to female</SimpleTrans.Biosculpter.SetGenderFemale>
-  <SimpleTrans.Biosculpter.SetGenderNonBinary>Sets gender to non-binary</SimpleTrans.Biosculpter.SetGenderNonBinary>
-  <SimpleTrans.Biosculpter.GenderModNotLoaded>Gender remains unchanged (non-binary mod not loaded)</SimpleTrans.Biosculpter.GenderModNotLoaded>
-  <SimpleTrans.Biosculpter.ChangeBodyType>Changes body type to match gender</SimpleTrans.Biosculpter.ChangeBodyType>
-  <SimpleTrans.Biosculpter.SetThinBodyType>Changes body type to thin</SimpleTrans.Biosculpter.SetThinBodyType>
-  <SimpleTrans.Biosculpter.GrantSireRemoveCarry>Grants siring ability, removes carrying ability</SimpleTrans.Biosculpter.GrantSireRemoveCarry>
-  <SimpleTrans.Biosculpter.GrantCarryRemoveSire>Grants carrying ability, removes siring ability</SimpleTrans.Biosculpter.GrantCarryRemoveSire>
-  <SimpleTrans.Biosculpter.GrantBothAbilities>Grants BOTH reproductive abilities</SimpleTrans.Biosculpter.GrantBothAbilities>
-  <SimpleTrans.Biosculpter.RemoveAllAbilities>Removes all reproductive abilities</SimpleTrans.Biosculpter.RemoveAllAbilities>
-  <SimpleTrans.Biosculpter.RemoveProsthetics>Removes all reproductive prosthetics</SimpleTrans.Biosculpter.RemoveProsthetics>
-  <SimpleTrans.Biosculpter.SetTransgender>Sets gender identity to transgender</SimpleTrans.Biosculpter.SetTransgender>
-  <SimpleTrans.Biosculpter.SetCisgender>Sets gender identity to cisgender</SimpleTrans.Biosculpter.SetCisgender>
-
   <!-- Consistent Terminology -->
   <SimpleTrans.Terms.CarryingAbility>carrying ability</SimpleTrans.Terms.CarryingAbility>
   <SimpleTrans.Terms.SiringAbility>siring ability</SimpleTrans.Terms.SiringAbility>
-  <SimpleTrans.Terms.ReproductiveSystem>reproductive system</SimpleTrans.Terms.ReproductiveSystem>
-  <SimpleTrans.Terms.ReproductiveSystems>reproductive systems</SimpleTrans.Terms.ReproductiveSystems>
   <SimpleTrans.Terms.BasicProsthetic>basic prosthetic</SimpleTrans.Terms.BasicProsthetic>
   <SimpleTrans.Terms.BionicProsthetic>bionic prosthetic</SimpleTrans.Terms.BionicProsthetic>
 
@@ -98,26 +42,11 @@
   <SimpleTrans.ConsentProceed>I Understand - Proceed</SimpleTrans.ConsentProceed>
   <SimpleTrans.NoChangesConfirm>{PAWN_nameDef} already matches the target configuration for {1}. Proceed anyway?</SimpleTrans.NoChangesConfirm>
 
-  <!-- Biosculpter Cycle Labels -->
-  <SimpleTrans.Biosculpter.MasculinizingLabel>Masculinizing Transformation</SimpleTrans.Biosculpter.MasculinizingLabel>
-  <SimpleTrans.Biosculpter.FeminizingLabel>Feminizing Transformation</SimpleTrans.Biosculpter.FeminizingLabel>
-  <SimpleTrans.Biosculpter.FertilityRestorationLabel>Fertility Restoration</SimpleTrans.Biosculpter.FertilityRestorationLabel>
-  <SimpleTrans.Biosculpter.AndrogynizeLabel>Androgynizing Transformation</SimpleTrans.Biosculpter.AndrogynizeLabel>
-  <SimpleTrans.Biosculpter.DuosexLabel>Duosex Transformation</SimpleTrans.Biosculpter.DuosexLabel>
-
   <!-- Transformation Change Descriptions -->
-  <SimpleTrans.Change.SetGenderMale>Gender will be set to male</SimpleTrans.Change.SetGenderMale>
-  <SimpleTrans.Change.SetGenderFemale>Gender will be set to female</SimpleTrans.Change.SetGenderFemale>
   <SimpleTrans.Change.SetGenderNonBinary>Gender will be set to non-binary</SimpleTrans.Change.SetGenderNonBinary>
-  <SimpleTrans.Change.SetBodyTypeMale>Body type will be changed to male</SimpleTrans.Change.SetBodyTypeMale>
-  <SimpleTrans.Change.SetBodyTypeFemale>Body type will be changed to female</SimpleTrans.Change.SetBodyTypeFemale>
   <SimpleTrans.Change.SetBodyTypeThin>Body type will be changed to thin/androgynous</SimpleTrans.Change.SetBodyTypeThin>
-  <SimpleTrans.Change.AddCarryingAbility>Carrying capability will be granted</SimpleTrans.Change.AddCarryingAbility>
-  <SimpleTrans.Change.AddSiringAbility>Siring capability will be granted</SimpleTrans.Change.AddSiringAbility>
   <SimpleTrans.Change.RemoveCarryingAbility>Carrying capability will be removed</SimpleTrans.Change.RemoveCarryingAbility>
   <SimpleTrans.Change.RemoveSiringAbility>Siring capability will be removed</SimpleTrans.Change.RemoveSiringAbility>
-  <SimpleTrans.Change.RestoreNaturalCarrying>Natural carrying capability will be restored</SimpleTrans.Change.RestoreNaturalCarrying>
-  <SimpleTrans.Change.RestoreNaturalSiring>Natural siring capability will be restored</SimpleTrans.Change.RestoreNaturalSiring>
   <SimpleTrans.Change.SetCisgender>Gender identity will be set to cisgender</SimpleTrans.Change.SetCisgender>
   <SimpleTrans.Change.SetTransgender>Gender identity will be set to transgender</SimpleTrans.Change.SetTransgender>
   <SimpleTrans.Change.RemoveBasicCarryProsthetic>Basic carrying prosthetic will be removed</SimpleTrans.Change.RemoveBasicCarryProsthetic>
@@ -127,33 +56,53 @@
   <SimpleTrans.Change.TerminatePregnancy>Current pregnancy will be terminated</SimpleTrans.Change.TerminatePregnancy>
   <SimpleTrans.Change.PreservePregnancy>Current pregnancy will be safely preserved</SimpleTrans.Change.PreservePregnancy>
 
-  <!-- Biosculpter Cycle Detail Descriptions -->
-  <SimpleTrans.CycleDesc.FertilityRestoration>Fertility restoration treatment:</SimpleTrans.CycleDesc.FertilityRestoration>
-  <SimpleTrans.CycleDesc.FixesSterility>Fixes sterility and fertility issues</SimpleTrans.CycleDesc.FixesSterility>
-  <SimpleTrans.CycleDesc.RestoresNaturalAbilities>Restores natural reproductive abilities based on gender identity</SimpleTrans.CycleDesc.RestoresNaturalAbilities>
-  <SimpleTrans.CycleDesc.NoGenderChange>Does not change gender, body type, or gender identity</SimpleTrans.CycleDesc.NoGenderChange>
-  <SimpleTrans.CycleDesc.PreservesProsthetics>Preserves existing prosthetics and enhancements</SimpleTrans.CycleDesc.PreservesProsthetics>
+  <!-- Embryo Implantation -->
+  <SimpleTrans.ImplantDisabledNoCarriers>No available carriers</SimpleTrans.ImplantDisabledNoCarriers>
+
+  <!-- Gender Affirming Choice Dialog -->
+  <SimpleTrans.GenderAffirmingChoice.Title>Gender Affirming Transformation</SimpleTrans.GenderAffirmingChoice.Title>
+  <SimpleTrans.GenderAffirmingChoice.Subtitle>Customize transformation for {PAWN_nameDef}</SimpleTrans.GenderAffirmingChoice.Subtitle>
+  <SimpleTrans.GenderAffirmingChoice.Continue>Continue to Consent</SimpleTrans.GenderAffirmingChoice.Continue>
+  <SimpleTrans.GenderAffirmingChoice.CycleLabel>Gender Affirming Cycle</SimpleTrans.GenderAffirmingChoice.CycleLabel>
   
-  <SimpleTrans.CycleDesc.MasculinizingTransformation>Complete masculinizing transformation:</SimpleTrans.CycleDesc.MasculinizingTransformation>
-  <SimpleTrans.CycleDesc.SetsGenderMale>Sets gender to male</SimpleTrans.CycleDesc.SetsGenderMale>
-  <SimpleTrans.CycleDesc.ChangeBodyMale>Changes body type to male</SimpleTrans.CycleDesc.ChangeBodyMale>
-  <SimpleTrans.CycleDesc.GrantSireRemoveCarry>Grants sire ability, removes carry ability</SimpleTrans.CycleDesc.GrantSireRemoveCarry>
-  <SimpleTrans.CycleDesc.RemoveAllProsthetics>Removes all reproductive prosthetics</SimpleTrans.CycleDesc.RemoveAllProsthetics>
-  <SimpleTrans.CycleDesc.SetCisgender>Sets gender identity to cisgender</SimpleTrans.CycleDesc.SetCisgender>
+  <!-- Tab Labels -->
+  <BodyType>Body Type</BodyType>
+  <Gender>Gender</Gender>
+  <Identity>Identity</Identity>
+  <Reproduction>Reproduction</Reproduction>
   
-  <SimpleTrans.CycleDesc.FeminizingTransformation>Complete feminizing transformation:</SimpleTrans.CycleDesc.FeminizingTransformation>
-  <SimpleTrans.CycleDesc.SetsGenderFemale>Sets gender to female</SimpleTrans.CycleDesc.SetsGenderFemale>
-  <SimpleTrans.CycleDesc.ChangeBodyFemale>Changes body type to female</SimpleTrans.CycleDesc.ChangeBodyFemale>
-  <SimpleTrans.CycleDesc.GrantCarryRemoveSire>Grants carry ability, removes sire ability</SimpleTrans.CycleDesc.GrantCarryRemoveSire>
+  <!-- Current State Labels -->
+  <SimpleTrans.GenderAffirmingChoice.CurrentBodyType>Current body type: {0}</SimpleTrans.GenderAffirmingChoice.CurrentBodyType>
+  <SimpleTrans.GenderAffirmingChoice.CurrentGender>Current gender: {0}</SimpleTrans.GenderAffirmingChoice.CurrentGender>
+  <SimpleTrans.GenderAffirmingChoice.CurrentIdentity>Current identity: {0}</SimpleTrans.GenderAffirmingChoice.CurrentIdentity>
+  <SimpleTrans.GenderAffirmingChoice.CurrentReproduction>Current capabilities: {0}</SimpleTrans.GenderAffirmingChoice.CurrentReproduction>
   
-  <SimpleTrans.CycleDesc.AndrogynizingTransformation>Complete androgynizing transformation:</SimpleTrans.CycleDesc.AndrogynizingTransformation>
-  <SimpleTrans.CycleDesc.SetsGenderNonBinary>Sets gender to non-binary</SimpleTrans.CycleDesc.SetsGenderNonBinary>
-  <SimpleTrans.CycleDesc.GenderUnchanged>Gender remains unchanged (non-binary mod not loaded)</SimpleTrans.CycleDesc.GenderUnchanged>
-  <SimpleTrans.CycleDesc.ChangeBodyThin>Changes body type to thin</SimpleTrans.CycleDesc.ChangeBodyThin>
-  <SimpleTrans.CycleDesc.RemoveAllAbilities>Removes all reproductive abilities</SimpleTrans.CycleDesc.RemoveAllAbilities>
-  <SimpleTrans.CycleDesc.SetTransgender>Sets gender identity to transgender</SimpleTrans.CycleDesc.SetTransgender>
+  <!-- Gender Options -->
+  <SimpleTrans.Gender.NonBinary>Non-binary</SimpleTrans.Gender.NonBinary>
   
-  <SimpleTrans.CycleDesc.DuosexTransformation>Complete duosex transformation:</SimpleTrans.CycleDesc.DuosexTransformation>
-  <SimpleTrans.CycleDesc.GrantBothAbilities>Grants BOTH reproductive abilities</SimpleTrans.CycleDesc.GrantBothAbilities>
+  <!-- Identity Options -->
+  <SimpleTrans.Identity.Cisgender>Cisgender</SimpleTrans.Identity.Cisgender>
+  <SimpleTrans.Identity.Transgender>Transgender</SimpleTrans.Identity.Transgender>
+  
+  <!-- Reproductive Capability Options -->
+  <SimpleTrans.Reproduction.None>None</SimpleTrans.Reproduction.None>
+  <SimpleTrans.Reproduction.CarryOnly>Carry only</SimpleTrans.Reproduction.CarryOnly>
+  <SimpleTrans.Reproduction.SireOnly>Sire only</SimpleTrans.Reproduction.SireOnly>
+  <SimpleTrans.Reproduction.Both>Both carry and sire</SimpleTrans.Reproduction.Both>
+  
+  <!-- Cycle Description Updates -->
+  <SimpleTrans.GenderAffirmingChoice.SelectedChanges>Selected changes:</SimpleTrans.GenderAffirmingChoice.SelectedChanges>
+  <SimpleTrans.GenderAffirmingChoice.WillChangeBodyType>Will change body type to {0}</SimpleTrans.GenderAffirmingChoice.WillChangeBodyType>
+  <SimpleTrans.GenderAffirmingChoice.WillChangeGender>Will change gender to {0}</SimpleTrans.GenderAffirmingChoice.WillChangeGender>
+  <SimpleTrans.GenderAffirmingChoice.WillChangeIdentity>Will change identity to {0}</SimpleTrans.GenderAffirmingChoice.WillChangeIdentity>
+  <SimpleTrans.GenderAffirmingChoice.WillChangeReproduction>Will change reproductive capabilities to {0}</SimpleTrans.GenderAffirmingChoice.WillChangeReproduction>
+  <SimpleTrans.GenderAffirmingChoice.NoChoicesSelected>No transformation choices selected yet</SimpleTrans.GenderAffirmingChoice.NoChoicesSelected>
+  <SimpleTrans.GenderAffirmingChoice.TransformationComplete>{PAWN_nameDef} has completed their gender affirming transformation.</SimpleTrans.GenderAffirmingChoice.TransformationComplete>
+  
+  <!-- Transformation Change Labels -->
+  <SimpleTrans.Change.NoChoicesSelected>No transformation choices selected</SimpleTrans.Change.NoChoicesSelected>
+  <SimpleTrans.Change.SetGender>Change gender to {0}</SimpleTrans.Change.SetGender>
+  <SimpleTrans.Change.SetBodyType>Change body type to {0}</SimpleTrans.Change.SetBodyType>
+  <SimpleTrans.Change.SetIdentity>Change identity to {0}</SimpleTrans.Change.SetIdentity>
 
 </LanguageData>

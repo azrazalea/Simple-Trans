@@ -19,7 +19,7 @@ namespace Simple_Trans
         private readonly Action proceedAction;
         private readonly string cycleLabel;
         private readonly List<TransformationChange> changes;
-        
+
         private Vector2 scrollPosition = Vector2.zero;
         public override Vector2 InitialSize => new Vector2(750f, 550f);
 
@@ -40,7 +40,7 @@ namespace Simple_Trans
             {
                 // No changes would occur - ask if they want to proceed anyway
                 Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
-                    "SimpleTrans.NoChangesConfirm".Translate(pawn.Named("PAWN"), cycleLabel),
+                    "SimpleTrans.NoChangesConfirm".Translate(pawn.Named("PAWN"), cycleLabel).Resolve(),
                     proceedAction));
             }
         }
@@ -64,24 +64,24 @@ namespace Simple_Trans
             var oriFont = Text.Font;
 
             float y = inRect.y;
-            
+
             // Title
             Text.Font = GameFont.Medium;
-            var titleText = "SimpleTrans.ConsentDialogTitle".Translate(cycleLabel);
+            var titleText = "SimpleTrans.ConsentDialogTitle".Translate(cycleLabel).Resolve();
             float titleHeight = Text.CalcHeight(titleText, inRect.width);
             Widgets.Label(new Rect(0f, y, inRect.width, titleHeight), titleText);
             y += titleHeight + 5f; // Add small buffer after title
 
             // Subtitle with pawn name
             Text.Font = GameFont.Small;
-            var subtitleText = "SimpleTrans.ConsentDialogSubtitle".Translate(pawn.Named("PAWN"));
+            var subtitleText = "SimpleTrans.ConsentDialogSubtitle".Translate(pawn.Named("PAWN")).Resolve();
             float subtitleHeight = Text.CalcHeight(subtitleText, inRect.width);
             Widgets.Label(new Rect(0f, y, inRect.width, subtitleHeight), subtitleText);
             y += subtitleHeight + 15f; // Add larger buffer for spacing
 
             // Changes section
             Text.Font = GameFont.Small;
-            var changesLabel = "SimpleTrans.ConsentChangesHeader".Translate();
+            var changesLabel = "SimpleTrans.ConsentChangesHeader".Translate().Resolve();
             Widgets.Label(new Rect(0f, y, inRect.width, 25f), changesLabel);
             y += 30f;
 
@@ -89,52 +89,52 @@ namespace Simple_Trans
             Rect outRect = new Rect(inRect.x, y, inRect.width, inRect.height - 135f - y);
             float contentHeight = CalculateContentHeight(outRect.width);
             Rect viewRect = new Rect(0f, 0f, outRect.width - 16f, contentHeight);
-            
+
             Widgets.BeginScrollView(outRect, ref scrollPosition, viewRect);
-            
+
             float scrollY = 0f;
             foreach (var change in changes)
             {
                 DrawTransformationChange(new Rect(10f, scrollY, viewRect.width - 20f, 25f), change);
                 scrollY += 30f;
             }
-            
+
             Widgets.EndScrollView();
 
             // Warning text - start further up to accommodate both warnings
             float warningsStartY = inRect.height - 120f;
             y = warningsStartY;
-            
+
             // Check if pregnancy warning is needed
             bool showPregnancyWarning = WillTerminatePregnancy(pawn, cycle);
-            
+
             if (showPregnancyWarning)
             {
                 // Pregnancy warning in red
                 GUI.color = Color.red;
                 Text.Font = GameFont.Tiny;
-                var pregnancyWarningText = "SimpleTrans.ConsentPregnancyWarning".Translate(pawn.Named("PAWN"));
+                var pregnancyWarningText = "SimpleTrans.ConsentPregnancyWarning".Translate(pawn.Named("PAWN")).Resolve();
                 float pregnancyWarningHeight = Text.CalcHeight(pregnancyWarningText, inRect.width);
                 Widgets.Label(new Rect(0f, y, inRect.width, pregnancyWarningHeight), pregnancyWarningText);
                 y += pregnancyWarningHeight + 5f;
             }
-            
+
             // General warning in yellow
             GUI.color = Color.yellow;
             Text.Font = GameFont.Tiny;
-            var warningText = "SimpleTrans.ConsentWarning".Translate();
+            var warningText = "SimpleTrans.ConsentWarning".Translate().Resolve();
             float warningHeight = Text.CalcHeight(warningText, inRect.width);
             Widgets.Label(new Rect(0f, y, inRect.width, warningHeight), warningText);
             GUI.color = oriColor;
 
             // Buttons
             y = inRect.height - 35f;
-            if (Widgets.ButtonText(new Rect(0f, y, inRect.width / 2f - 10f, 35f), "CancelButton".Translate()))
+            if (Widgets.ButtonText(new Rect(0f, y, inRect.width / 2f - 10f, 35f), "CancelButton".Translate().Resolve()))
             {
                 Close();
             }
 
-            if (Widgets.ButtonText(new Rect(inRect.width / 2f + 10f, y, inRect.width / 2f - 10f, 35f), "SimpleTrans.ConsentProceed".Translate()))
+            if (Widgets.ButtonText(new Rect(inRect.width / 2f + 10f, y, inRect.width / 2f - 10f, 35f), "SimpleTrans.ConsentProceed".Translate().Resolve()))
             {
                 Close();
                 proceedAction.Invoke();
@@ -147,7 +147,7 @@ namespace Simple_Trans
         private void DrawTransformationChange(Rect rect, TransformationChange change)
         {
             var oriColor = GUI.color;
-            
+
             // Color coding for change types
             switch (change.Type)
             {
@@ -177,9 +177,9 @@ namespace Simple_Trans
                 TransformationChangeType.Information => "ℹ",
                 _ => "•"
             };
-            
+
             Widgets.Label(new Rect(rect.x, rect.y, 20f, rect.height), icon);
-            
+
             // Description
             GUI.color = oriColor;
             Widgets.Label(new Rect(rect.x + 25f, rect.y, rect.width - 25f, rect.height), change.Description);
@@ -200,33 +200,21 @@ namespace Simple_Trans
             // Check for pregnancy effects first
             bool willTerminatePregnancy = WillTerminatePregnancy(pawn, cycle);
             bool willPreservePregnancy = WillPreservePregnancy(pawn, cycle);
-            
+
             if (willTerminatePregnancy)
             {
-                changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.TerminatePregnancy".Translate()));
+                changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.TerminatePregnancy".Translate().Resolve()));
             }
             else if (willPreservePregnancy)
             {
-                changes.Add(new TransformationChange(TransformationChangeType.Information, "SimpleTrans.Change.PreservePregnancy".Translate()));
+                changes.Add(new TransformationChange(TransformationChangeType.Information, "SimpleTrans.Change.PreservePregnancy".Translate().Resolve()));
             }
 
             // We need to cast to our specific cycle types to analyze changes
             switch (cycle)
             {
-                case CompBiosculpterPod_ReproductiveReconstructionMasculinizing:
-                    AnalyzeMasculinizingChanges(pawn, changes);
-                    break;
-                case CompBiosculpterPod_ReproductiveReconstructionFeminizing:
-                    AnalyzeFeminizingChanges(pawn, changes);
-                    break;
-                case CompBiosculpterPod_FertilityRestoration:
-                    AnalyzeFertilityRestorationChanges(pawn, changes);
-                    break;
-                case CompBiosculpterPod_Androgynize:
-                    AnalyzeAndrogynizeChanges(pawn, changes);
-                    break;
-                case CompBiosculpterPod_Duosex:
-                    AnalyzeDuosexChanges(pawn, changes);
+                case CompBiosculpterPod_GenderAffirmingCycle genderAffirmingCycle:
+                    AnalyzeGenderAffirmingChanges(pawn, genderAffirmingCycle, changes);
                     break;
             }
 
@@ -245,20 +233,12 @@ namespace Simple_Trans
             // Only terminate pregnancy when REMOVING carry ability (the metaphorical uterus)
             switch (cycle)
             {
-                case CompBiosculpterPod_ReproductiveReconstructionMasculinizing:
-                    return true; // Removes carry, adds sire
-                case CompBiosculpterPod_ReproductiveReconstructionFeminizing:
-                    return false; // Removes sire, adds/keeps carry - preserve pregnancy
-                case CompBiosculpterPod_Androgynize:
-                    return true; // Removes both carry and sire
-                case CompBiosculpterPod_Duosex:
-                    return false; // Adds both abilities including carry - preserve pregnancy
-                case CompBiosculpterPod_FertilityRestoration:
-                    // Only terminate when changing FROM carry TO sire
-                    // Cis males and trans females lose carry ability, others keep/get carry
-                    bool isTrans = pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.transDef);
-                    bool isCis = pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.cisDef);
-                    return (pawn.gender == Gender.Male && isCis) || (pawn.gender == Gender.Female && isTrans);
+                case CompBiosculpterPod_GenderAffirmingCycle genderAffirmingCycle:
+                    var choices = genderAffirmingCycle.GetChoices();
+                    if (choices == null) return false;
+                    // Terminate if removing carry ability
+                    return choices.ReproductiveCapability == ReproductiveCapability.None ||
+                           choices.ReproductiveCapability == ReproductiveCapability.SireOnly;
                 default:
                     return false;
             }
@@ -272,169 +252,129 @@ namespace Simple_Trans
             // Only show preserve message if pawn is actually pregnant
             if (RimWorld.PregnancyUtility.GetPregnancyHediff(pawn) == null)
                 return false;
-                
+
             // Show preserve message for cycles that keep/add carry ability
             switch (cycle)
             {
-                case CompBiosculpterPod_ReproductiveReconstructionFeminizing:
-                case CompBiosculpterPod_Duosex:
-                    return true; // These add/keep carry ability
-                case CompBiosculpterPod_FertilityRestoration:
-                    // Preserve for trans males, cis females, and non-binary
-                    bool isTrans = pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.transDef);
-                    bool isCis = pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.cisDef);
-                    return !((pawn.gender == Gender.Male && isCis) || (pawn.gender == Gender.Female && isTrans));
+                case CompBiosculpterPod_GenderAffirmingCycle genderAffirmingCycle:
+                    var choices = genderAffirmingCycle.GetChoices();
+                    if (choices == null) return false;
+                    // Preserve if keeping or adding carry ability
+                    return choices.ReproductiveCapability == ReproductiveCapability.CarryOnly ||
+                           choices.ReproductiveCapability == ReproductiveCapability.Both;
                 default:
                     return false;
             }
         }
 
-        private static void AnalyzeMasculinizingChanges(Pawn pawn, List<TransformationChange> changes)
+        private static void AnalyzeGenderAffirmingChanges(Pawn pawn, CompBiosculpterPod_GenderAffirmingCycle cycle, List<TransformationChange> changes)
         {
-            // Gender change
-            if (pawn.gender != Gender.Male)
-                changes.Add(new TransformationChange(TransformationChangeType.Modification, "SimpleTrans.Change.SetGenderMale".Translate()));
+            var choices = cycle.GetChoices();
+            if (choices == null)
+            {
+                changes.Add(new TransformationChange(TransformationChangeType.Information, "SimpleTrans.Change.NoChoicesSelected".Translate().Resolve()));
+                return;
+            }
 
-            // Body type change
-            if (pawn.story?.bodyType != BodyTypeDefOf.Male)
-                changes.Add(new TransformationChange(TransformationChangeType.Modification, "SimpleTrans.Change.SetBodyTypeMale".Translate()));
+            // Gender changes
+            if (choices.Gender != pawn.gender)
+            {
+                string genderLabel = choices.Gender == (Gender)3 ?
+                    "SimpleTrans.Gender.NonBinary".Translate().Resolve() :
+                    choices.Gender.GetLabel().CapitalizeFirst();
+                changes.Add(new TransformationChange(TransformationChangeType.Modification,
+                    "SimpleTrans.Change.SetGender".Translate(genderLabel).Resolve()));
+            }
 
-            // Reproductive abilities
-            bool hasCarry = SimpleTransPregnancyUtility.CanCarry(pawn);
-            bool hasSire = SimpleTransPregnancyUtility.CanSire(pawn);
+            // Body type changes
+            if (choices.BodyType != pawn.story?.bodyType)
+            {
+                changes.Add(new TransformationChange(TransformationChangeType.Modification,
+                    "SimpleTrans.Change.SetBodyType".Translate(choices.BodyType.defName.CapitalizeFirst()).Resolve()));
+            }
 
-            if (hasCarry)
-                changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.RemoveCarryingAbility".Translate()));
-            
-            if (!hasSire)
-                changes.Add(new TransformationChange(TransformationChangeType.Addition, "SimpleTrans.Change.AddSiringAbility".Translate()));
+            // Identity changes
+            var currentIdentity = GetCurrentIdentity(pawn);
+            if (choices.Identity != currentIdentity)
+            {
+                string identityLabel = choices.Identity == GenderIdentity.Transgender ?
+                    "SimpleTrans.Identity.Transgender".Translate().Resolve() :
+                    "SimpleTrans.Identity.Cisgender".Translate().Resolve();
+                changes.Add(new TransformationChange(TransformationChangeType.Modification,
+                    "SimpleTrans.Change.SetIdentity".Translate(identityLabel).Resolve()));
+            }
 
-            // Prosthetics removal
+            // Reproductive capability changes
+            var currentCapability = GetCurrentReproductiveCapability(pawn);
+            if (choices.ReproductiveCapability != currentCapability)
+            {
+                AnalyzeReproductiveCapabilityChanges(pawn, currentCapability, choices.ReproductiveCapability, changes);
+            }
+
+            // Prosthetics removal (Gender Affirming Cycle removes all prosthetics like other cycles)
             AnalyzeProstheticsRemoval(pawn, changes);
-
-            // Gender identity
-            bool isCis = pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.cisDef);
-            if (!isCis)
-                changes.Add(new TransformationChange(TransformationChangeType.Modification, "SimpleTrans.Change.SetCisgender".Translate()));
         }
 
-        private static void AnalyzeFeminizingChanges(Pawn pawn, List<TransformationChange> changes)
+        private static void AnalyzeReproductiveCapabilityChanges(Pawn pawn, ReproductiveCapability current, ReproductiveCapability target, List<TransformationChange> changes)
         {
-            // Gender change
-            if (pawn.gender != Gender.Female)
-                changes.Add(new TransformationChange(TransformationChangeType.Modification, "SimpleTrans.Change.SetGenderFemale".Translate()));
+            bool currentCarry = current == ReproductiveCapability.CarryOnly || current == ReproductiveCapability.Both;
+            bool currentSire = current == ReproductiveCapability.SireOnly || current == ReproductiveCapability.Both;
+            bool targetCarry = target == ReproductiveCapability.CarryOnly || target == ReproductiveCapability.Both;
+            bool targetSire = target == ReproductiveCapability.SireOnly || target == ReproductiveCapability.Both;
 
-            // Body type change  
-            if (pawn.story?.bodyType != BodyTypeDefOf.Female)
-                changes.Add(new TransformationChange(TransformationChangeType.Modification, "SimpleTrans.Change.SetBodyTypeFemale".Translate()));
+            // Check carry ability changes
+            if (currentCarry && !targetCarry)
+                changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.RemoveCarryingAbility".Translate().Resolve()));
+            else if (!currentCarry && targetCarry)
+                changes.Add(new TransformationChange(TransformationChangeType.Addition, "SimpleTrans.Change.AddCarryingAbility".Translate().Resolve()));
 
-            // Reproductive abilities
-            bool hasCarry = SimpleTransPregnancyUtility.CanCarry(pawn);
-            bool hasSire = SimpleTransPregnancyUtility.CanSire(pawn);
-
-            if (hasSire)
-                changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.RemoveSiringAbility".Translate()));
-            
-            if (!hasCarry)
-                changes.Add(new TransformationChange(TransformationChangeType.Addition, "SimpleTrans.Change.AddCarryingAbility".Translate()));
-
-            // Prosthetics removal
-            AnalyzeProstheticsRemoval(pawn, changes);
-
-            // Gender identity
-            bool isCis = pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.cisDef);
-            if (!isCis)
-                changes.Add(new TransformationChange(TransformationChangeType.Modification, "SimpleTrans.Change.SetCisgender".Translate()));
+            // Check sire ability changes
+            if (currentSire && !targetSire)
+                changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.RemoveSiringAbility".Translate().Resolve()));
+            else if (!currentSire && targetSire)
+                changes.Add(new TransformationChange(TransformationChangeType.Addition, "SimpleTrans.Change.AddSiringAbility".Translate().Resolve()));
         }
 
-        private static void AnalyzeFertilityRestorationChanges(Pawn pawn, List<TransformationChange> changes)
+        private static GenderIdentity GetCurrentIdentity(Pawn pawn)
         {
-            // Only prosthetics removal and natural restoration
-            AnalyzeProstheticsRemoval(pawn, changes);
-
-            // Check if natural abilities would be restored
-            bool hasCarry = SimpleTransPregnancyUtility.CanCarry(pawn);
-            bool hasSire = SimpleTransPregnancyUtility.CanSire(pawn);
-
-            if (!hasCarry && pawn.gender == Gender.Female)
-                changes.Add(new TransformationChange(TransformationChangeType.Addition, "SimpleTrans.Change.RestoreNaturalCarrying".Translate()));
-            
-            if (!hasSire && pawn.gender == Gender.Male)
-                changes.Add(new TransformationChange(TransformationChangeType.Addition, "SimpleTrans.Change.RestoreNaturalSiring".Translate()));
+            if (pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.transDef))
+                return GenderIdentity.Transgender;
+            else if (pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.cisDef))
+                return GenderIdentity.Cisgender;
+            else
+                return GenderIdentity.Cisgender; // Default
         }
 
-        private static void AnalyzeAndrogynizeChanges(Pawn pawn, List<TransformationChange> changes)
+        private static ReproductiveCapability GetCurrentReproductiveCapability(Pawn pawn)
         {
-            // Gender change to non-binary (if NBG mod loaded)
-            bool hasNBGMod = ModsConfig.IsActive("Coraizon.NonBinaryGenderMod") || ModsConfig.IsActive("Coraizon.NBGM");
-            if (hasNBGMod && (int)pawn.gender != 3)
-                changes.Add(new TransformationChange(TransformationChangeType.Modification, "SimpleTrans.Change.SetGenderNonBinary".Translate()));
+            bool canCarry = SimpleTransPregnancyUtility.CanCarry(pawn);
+            bool canSire = SimpleTransPregnancyUtility.CanSire(pawn);
 
-            // Body type to thin
-            if (pawn.story?.bodyType != BodyTypeDefOf.Thin)
-                changes.Add(new TransformationChange(TransformationChangeType.Modification, "SimpleTrans.Change.SetBodyTypeThin".Translate()));
-
-            // Remove all reproductive abilities
-            if (SimpleTransPregnancyUtility.CanCarry(pawn))
-                changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.RemoveCarryingAbility".Translate()));
-            
-            if (SimpleTransPregnancyUtility.CanSire(pawn))
-                changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.RemoveSiringAbility".Translate()));
-
-            // Prosthetics removal
-            AnalyzeProstheticsRemoval(pawn, changes);
-
-            // Gender identity to transgender
-            bool isTrans = pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.transDef);
-            if (!isTrans)
-                changes.Add(new TransformationChange(TransformationChangeType.Modification, "SimpleTrans.Change.SetTransgender".Translate()));
-        }
-
-        private static void AnalyzeDuosexChanges(Pawn pawn, List<TransformationChange> changes)
-        {
-            // Gender change to non-binary (if NBG mod loaded)
-            bool hasNBGMod = ModsConfig.IsActive("Coraizon.NonBinaryGenderMod") || ModsConfig.IsActive("Coraizon.NBGM");
-            if (hasNBGMod && (int)pawn.gender != 3)
-                changes.Add(new TransformationChange(TransformationChangeType.Modification, "SimpleTrans.Change.SetGenderNonBinary".Translate()));
-
-            // Body type to thin
-            if (pawn.story?.bodyType != BodyTypeDefOf.Thin)
-                changes.Add(new TransformationChange(TransformationChangeType.Modification, "SimpleTrans.Change.SetBodyTypeThin".Translate()));
-
-            // Grant both reproductive abilities
-            bool hasCarry = SimpleTransPregnancyUtility.CanCarry(pawn);
-            bool hasSire = SimpleTransPregnancyUtility.CanSire(pawn);
-
-            if (!hasCarry)
-                changes.Add(new TransformationChange(TransformationChangeType.Addition, "SimpleTrans.Change.AddCarryingAbility".Translate()));
-            
-            if (!hasSire)
-                changes.Add(new TransformationChange(TransformationChangeType.Addition, "SimpleTrans.Change.AddSiringAbility".Translate()));
-
-            // Prosthetics removal
-            AnalyzeProstheticsRemoval(pawn, changes);
-
-            // Gender identity to transgender
-            bool isTrans = pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.transDef);
-            if (!isTrans)
-                changes.Add(new TransformationChange(TransformationChangeType.Modification, "SimpleTrans.Change.SetTransgender".Translate()));
+            if (canCarry && canSire)
+                return ReproductiveCapability.Both;
+            else if (canCarry)
+                return ReproductiveCapability.CarryOnly;
+            else if (canSire)
+                return ReproductiveCapability.SireOnly;
+            else
+                return ReproductiveCapability.None;
         }
 
         private static void AnalyzeProstheticsRemoval(Pawn pawn, List<TransformationChange> changes)
         {
             var hediffs = pawn.health.hediffSet.hediffs;
-            
+
             if (hediffs.Any(h => h.def.defName == "BasicProstheticCarry"))
-                changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.RemoveBasicCarryProsthetic".Translate()));
-            
+                changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.RemoveBasicCarryProsthetic".Translate().Resolve()));
+
             if (hediffs.Any(h => h.def.defName == "BasicProstheticSire"))
-                changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.RemoveBasicSireProsthetic".Translate()));
-            
+                changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.RemoveBasicSireProsthetic".Translate().Resolve()));
+
             if (hediffs.Any(h => h.def.defName == "BionicProstheticCarry"))
-                changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.RemoveBionicCarryProsthetic".Translate()));
-            
+                changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.RemoveBionicCarryProsthetic".Translate().Resolve()));
+
             if (hediffs.Any(h => h.def.defName == "BionicProstheticSire"))
-                changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.RemoveBionicSireProsthetic".Translate()));
+                changes.Add(new TransformationChange(TransformationChangeType.Removal, "SimpleTrans.Change.RemoveBionicSireProsthetic".Translate().Resolve()));
         }
     }
 

@@ -19,75 +19,157 @@ public class PregnancyUtility_PregnancyChanceForPartners_Patch
 	/// <param name="man">The male pawn parameter (may not actually be the sirer)</param>
 	public static void Postfix(ref float __result, Pawn woman, Pawn man)
 	{
+		// Use affirming local variable names instead of assuming gender roles
+		Pawn first = woman;
+		Pawn second = man;
+
+		if (SimpleTrans.debugMode)
+		{
+			Log.Message($"[Simple Trans DEBUG] PregnancyChanceForPartners called - Original result: {__result:F3}");
+			Log.Message($"[Simple Trans DEBUG] Input pawns - First: {first?.Name?.ToStringShort ?? "null"} (Gender: {first?.gender}), Second: {second?.Name?.ToStringShort ?? "null"} (Gender: {second?.gender})");
+		}
+
 		// Determine actual carrier and sirer based on Simple Trans capabilities
-		Pawn carrier = (SimpleTransPregnancyUtility.CanCarry(woman) ? woman : (SimpleTransPregnancyUtility.CanCarry(man) ? man : null));
-		Pawn sirer = (SimpleTransPregnancyUtility.CanSire(man) ? man : (SimpleTransPregnancyUtility.CanSire(woman) ? woman : null));
-		
+		bool firstCanCarry = SimpleTransPregnancyUtility.CanCarry(first);
+		bool firstCanSire = SimpleTransPregnancyUtility.CanSire(first);
+		bool secondCanCarry = SimpleTransPregnancyUtility.CanCarry(second);
+		bool secondCanSire = SimpleTransPregnancyUtility.CanSire(second);
+
+		if (SimpleTrans.debugMode)
+		{
+			Log.Message($"[Simple Trans DEBUG] Reproductive capabilities - First can carry: {firstCanCarry}, can sire: {firstCanSire}");
+			Log.Message($"[Simple Trans DEBUG] Reproductive capabilities - Second can carry: {secondCanCarry}, can sire: {secondCanSire}");
+		}
+
+		Pawn carrier = (firstCanCarry ? first : (secondCanCarry ? second : null));
+		Pawn sirer = (secondCanSire ? second : (firstCanSire ? first : null));
+
+		if (SimpleTrans.debugMode)
+		{
+			Log.Message($"[Simple Trans DEBUG] Assigned roles - Carrier: {carrier?.Name?.ToStringShort ?? "null"}, Sirer: {sirer?.Name?.ToStringShort ?? "null"}");
+		}
+
 		if (carrier == null || sirer == null)
 		{
+			if (SimpleTrans.debugMode)
+			{
+				Log.Message($"[Simple Trans DEBUG] Missing reproductive capability - setting result to 0. Carrier null: {carrier == null}, Sirer null: {sirer == null}");
+			}
 			__result = 0f;
 			return;
 		}
-		
+
 		// Check pregnancy approach
 		PregnancyApproach carrierApproach = carrier.relations.GetPregnancyApproachForPartner(sirer);
 		PregnancyApproach sirerApproach = sirer.relations.GetPregnancyApproachForPartner(carrier);
-		
+
+		if (SimpleTrans.debugMode)
+		{
+			Log.Message($"[Simple Trans DEBUG] Pregnancy approaches - Carrier: {carrierApproach}, Sirer: {sirerApproach}");
+		}
+
 		// Check for bionic prosthetics
 		bool carrierHasBionic = HasBionicReproductiveProsthetic(carrier, false);
 		bool sirerHasBionic = HasBionicReproductiveProsthetic(sirer, true);
-		
+
+		if (SimpleTrans.debugMode)
+		{
+			Log.Message($"[Simple Trans DEBUG] Bionic prosthetics - Carrier has bionic: {carrierHasBionic}, Sirer has bionic: {sirerHasBionic}");
+		}
+
 		// BIONIC PREVENTION: If either has bionic and is avoiding pregnancy -> 0% chance
 		if ((carrierHasBionic && carrierApproach == PregnancyApproach.AvoidPregnancy) ||
-		    (sirerHasBionic && sirerApproach == PregnancyApproach.AvoidPregnancy))
+			(sirerHasBionic && sirerApproach == PregnancyApproach.AvoidPregnancy))
 		{
+			if (SimpleTrans.debugMode)
+			{
+				Log.Message($"[Simple Trans DEBUG] BIONIC PREVENTION: Setting result to 0 due to bionic contraception");
+			}
 			__result = 0f;
 			return;
 		}
-		
+
 		// BIONIC GUARANTEE: If both have bionic and both are trying for baby -> 100% chance
-		if (carrierHasBionic && sirerHasBionic && 
-		    carrierApproach == PregnancyApproach.TryForBaby && 
-		    sirerApproach == PregnancyApproach.TryForBaby)
+		if (carrierHasBionic && sirerHasBionic &&
+			carrierApproach == PregnancyApproach.TryForBaby &&
+			sirerApproach == PregnancyApproach.TryForBaby)
 		{
-			__result = 1f;
+			if (SimpleTrans.debugMode)
+			{
+				Log.Message($"[Simple Trans DEBUG] BIONIC GUARANTEE: Setting result to 20.0 for 100% chance (0.05 * 20 = 1.0)");
+			}
+			__result = 20f;
 			return;
 		}
-		
-		// Normal calculation with prosthetic modifiers
-		float sirerChance = GetModifiedFertilityChance(sirer, true);
-		float carrierChance = GetModifiedFertilityChance(carrier, false);
-		float combinedChance = sirerChance * carrierChance;
-		
-		// Apply pregnancy approach factor
-		float approachFactor = PregnancyUtility.GetPregnancyChanceFactor(carrierApproach);
-		__result = approachFactor * combinedChance;
+
+		// Check if the base system returned zero (likely due to gender/capability confusion)
+		// Note: 1.0 is fine (means no fertility issues), only 0.0 indicates system confusion
+		float baseChance;
+		if (__result <= 0.001f)
+		{
+			// Base system thinks pregnancy is impossible - calculate our own realistic base chance
+			baseChance = CalculateRealisticBaseChance(carrier, sirer);
+
+			if (SimpleTrans.debugMode)
+			{
+				Log.Message($"[Simple Trans DEBUG] Base system returned zero ({__result:F3}) - using our calculated base: {baseChance:F3}");
+			}
+		}
+		else
+		{
+			// Use the existing result (from VEF or vanilla) as our base chance
+			// This includes 1.0 (no fertility issues) and normal values like 0.805
+			baseChance = __result;
+		}
+
+		// Apply our capability-based modifiers on top of the base chance
+		float sirerModifier = GetCapabilityModifier(sirer, true);
+		float carrierModifier = GetCapabilityModifier(carrier, false);
+		float combinedModifier = sirerModifier * carrierModifier;
+
+		float originalResult = __result;
+		__result = baseChance * combinedModifier;
+
+		if (SimpleTrans.debugMode)
+		{
+			Log.Message($"[Simple Trans DEBUG] Capability modifiers - Sirer: {sirerModifier:F3}, Carrier: {carrierModifier:F3}, Combined: {combinedModifier:F3}");
+			Log.Message($"[Simple Trans DEBUG] Base chance: {baseChance:F3}, Final result: {__result:F3} (was {originalResult:F3})");
+		}
 	}
-	
+
 	/// <summary>
-	/// Gets fertility chance for a pawn with prosthetic-specific modifiers
+	/// Gets capability-based modifier for a pawn's reproductive ability
+	/// Returns a multiplier to apply to existing pregnancy chances
 	/// </summary>
 	/// <param name="pawn">The pawn to check</param>
 	/// <param name="isSiring">True if checking siring ability, false if checking carrying ability</param>
-	/// <returns>Modified fertility chance</returns>
-	private static float GetModifiedFertilityChance(Pawn pawn, bool isSiring)
+	/// <returns>Capability modifier (1.0 = no change, 0.0 = sterile, >1.0 = enhanced)</returns>
+	private static float GetCapabilityModifier(Pawn pawn, bool isSiring)
 	{
-		// Get base fertility chance
-		float baseFertility = isSiring ? PregnancyUtility.PregnancyChanceForPawn(pawn) : PregnancyUtility.PregnancyChanceForWoman(pawn);
-		
+		// Check if pawn has the required capability
+		if (isSiring && !SimpleTransPregnancyUtility.CanSire(pawn))
+		{
+			return 0f; // Cannot sire at all
+		}
+		if (!isSiring && !SimpleTransPregnancyUtility.CanCarry(pawn))
+		{
+			return 0f; // Cannot carry at all
+		}
+
+		// Start with base capability modifier (1.0 = normal)
+		float modifier = 1f;
+
 		// Apply prosthetic modifiers based on ability type
-		float prostheticModifier = 0f;
-		
 		if (isSiring)
 		{
 			// Check for sire prosthetic modifiers
 			if (pawn.health.hediffSet.HasHediff(HediffDef.Named("BasicProstheticSire")))
 			{
-				prostheticModifier = -0.3f; // 30% reduction
+				modifier *= 0.7f; // 30% reduction
 			}
 			else if (pawn.health.hediffSet.HasHediff(HediffDef.Named("BionicProstheticSire")))
 			{
-				prostheticModifier = 0.2f; // 20% increase
+				modifier *= 1.2f; // 20% increase
 			}
 		}
 		else
@@ -95,18 +177,58 @@ public class PregnancyUtility_PregnancyChanceForPartners_Patch
 			// Check for carry prosthetic modifiers
 			if (pawn.health.hediffSet.HasHediff(HediffDef.Named("BasicProstheticCarry")))
 			{
-				prostheticModifier = -0.3f; // 30% reduction
+				modifier *= 0.7f; // 30% reduction
 			}
 			else if (pawn.health.hediffSet.HasHediff(HediffDef.Named("BionicProstheticCarry")))
 			{
-				prostheticModifier = 0.2f; // 20% increase
+				modifier *= 1.2f; // 20% increase
 			}
 		}
-		
-		// Apply modifier to base fertility
-		return baseFertility * (1f + prostheticModifier);
+
+		return modifier;
 	}
-	
+
+	/// <summary>
+	/// Calculates a realistic base pregnancy chance when the base system returns extreme values
+	/// Uses vanilla pregnancy calculation but with capability-based role assignment
+	/// </summary>
+	/// <param name="carrier">The pawn with carry capability</param>
+	/// <param name="sirer">The pawn with sire capability</param>
+	/// <returns>Realistic base pregnancy chance</returns>
+	private static float CalculateRealisticBaseChance(Pawn carrier, Pawn sirer)
+	{
+		try
+		{
+			// Use vanilla's internal pregnancy calculation methods with correct role assignment
+			// Get carrier's fertility (using PregnancyChanceForWoman regardless of actual gender)
+			float carrierFertility = PregnancyUtility.PregnancyChanceForWoman(carrier);
+
+			// Get sirer's fertility (using PregnancyChanceForPawn regardless of actual gender)  
+			float sirerFertility = PregnancyUtility.PregnancyChanceForPawn(sirer);
+
+			// Combine using vanilla's approach
+			float combinedChance = carrierFertility * sirerFertility;
+
+			// Apply pregnancy approach factor (use carrier's approach as they're the one getting pregnant)
+			PregnancyApproach carrierApproach = carrier.relations.GetPregnancyApproachForPartner(sirer);
+			float approachFactor = PregnancyUtility.GetPregnancyChanceFactor(carrierApproach);
+
+			float result = combinedChance * approachFactor;
+
+			if (SimpleTrans.debugMode)
+			{
+				Log.Message($"[Simple Trans DEBUG] Realistic calculation - Carrier fertility: {carrierFertility:F3}, Sirer fertility: {sirerFertility:F3}, Combined: {combinedChance:F3}, Approach factor: {approachFactor:F3}, Final: {result:F3}");
+			}
+
+			return result;
+		}
+		catch (System.Exception ex)
+		{
+			Log.Error($"[Simple Trans] Error calculating realistic base chance: {ex}");
+			return 0.05f; // Fallback to reasonable default
+		}
+	}
+
 	/// <summary>
 	/// Checks if a pawn has bionic reproductive prosthetics
 	/// </summary>

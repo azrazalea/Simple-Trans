@@ -2,11 +2,11 @@
 
 <ModMetaData>
     <name>Simple Trans (Continued)</name>
-    <description>This mod adds a simple system for differentiating how pawns interact with pregnancy and AGAR (Assigned Gender at Rimworld).
+    <description>This mod adds a comprehensive system for differentiating how pawns interact with pregnancy and AGAR (Assigned Gender at Rimworld). Features include transgender/cisgender identity hediffs, reproductive capability tracking, and extensive medical systems for transition care.
 
-NEW AUTHOR UPDATE: This is a continued version of the original Simple Trans mod by Runaway, completely decompiled and modernized for RimWorld 1.6 compatibility. The original mod was created for RimWorld 1.5. This version maintains all original functionality while adding comprehensive error handling, improved documentation, and modern code practices.
+NEW AUTHOR UPDATE: This is a continued version of the original Simple Trans mod by Runaway, completely decompiled and modernized for RimWorld 1.6 compatibility. Major additions include organ transplantation, prosthetic reproductive systems, biosculpter integration with specialized cycles, informed consent dialogs, and enhanced sterilization systems.
 
-This continued version preserves the original mod's philosophy and design while ensuring compatibility with current RimWorld versions and improved stability.</description>
+This continued version preserves the original mod's philosophy while adding comprehensive medical systems for transgender colonists, detailed safety features, and improved mod compatibility.</description>
     <author>Original author Runaway, Current azrazalea</author>
     <supportedVersions>
         <li>1.5</li>
@@ -40,6 +40,7 @@ This continued version preserves the original mod's philosophy and design while 
         <li>OskarPotocki.VanillaFactionsExpanded.Core</li>
         <li>vanillaexpanded.vanillasocialinteractionsexpanded</li>
         <li>divinederivative.nonbinarygender</li>
+        <li>LovelyDovey.Sex.WithEuterpe</li>
     </loadAfter>
     <incompatibleWith>
         <li>rim.job.world</li>

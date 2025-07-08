@@ -25,6 +25,11 @@ public static class SimpleTrans
 	public static bool HARActive { get; private set; }
 
 	/// <summary>
+	/// True if Ideology DLC is active
+	/// </summary>
+	public static bool IdeologyActive { get; private set; }
+	
+	/// <summary>
 	/// True if debug mode is enabled in mod settings
 	/// </summary>
 	public static bool debugMode { get; private set; }
@@ -57,6 +62,15 @@ public static class SimpleTrans
 				harmony.PatchNBG();
 			}
 			
+			// Apply biosculpter patches if Ideology DLC is active
+			if (IdeologyActive)
+			{
+				TryPatchBiosculpter(harmony);
+			}
+			
+			// Apply pregnancy system patches for all compatible mods
+			PregnancyApplicationPatches.TryPatchAllPregnancySystems(harmony);
+			
 			Log.Message("[Simple Trans] Mod initialized successfully");
 		}
 		catch (System.Exception ex)
@@ -74,10 +88,11 @@ public static class SimpleTrans
 		{
 			HARActive = ModsConfig.IsActive("erdelf.humanoidalienraces") || ModsConfig.IsActive("erdelf.humanoidalienraces.dev");
 			NBGenderActive = ModsConfig.IsActive("divinederivative.nonbinarygender");
+			IdeologyActive = ModsConfig.IdeologyActive;
 			
 			if (debugMode)
 			{
-				Log.Message($"[Simple Trans] Mod detection - HAR: {HARActive}, NBG: {NBGenderActive}");
+				Log.Message($"[Simple Trans] Mod detection - HAR: {HARActive}, NBG: {NBGenderActive}, Ideology: {IdeologyActive}");
 			}
 		}
 		catch (System.Exception ex)
@@ -86,6 +101,7 @@ public static class SimpleTrans
 			// Set safe defaults
 			HARActive = false;
 			NBGenderActive = false;
+			IdeologyActive = false;
 		}
 	}
 	
@@ -116,6 +132,38 @@ public static class SimpleTrans
 		{
 			Log.Error($"[Simple Trans] Error loading debug mode setting: {ex}");
 			debugMode = false;
+		}
+	}
+	
+	/// <summary>
+	/// Conditionally applies biosculpter pod patches when Ideology DLC is active
+	/// </summary>
+	/// <param name="harmony">The Harmony instance to use for patching</param>
+	private static void TryPatchBiosculpter(Harmony harmony)
+	{
+		try
+		{
+			// Manually patch the biosculpter class since we removed the [HarmonyPatch] attribute
+			var originalMethod = AccessTools.Method(typeof(RimWorld.CompBiosculpterPod), "OrderToPod");
+			var prefixMethod = AccessTools.Method(typeof(SimpleTransBiosculpterPatch), "OrderToPod_Prefix");
+			
+			if (originalMethod != null && prefixMethod != null)
+			{
+				harmony.Patch(originalMethod, prefix: new HarmonyMethod(prefixMethod));
+				
+				if (debugMode)
+				{
+					Log.Message("[Simple Trans] Successfully patched biosculpter pod system");
+				}
+			}
+			else
+			{
+				Log.Error("[Simple Trans] Failed to find biosculpter patch methods - CompBiosculpterPod.OrderToPod or OrderToPod_Prefix not found");
+			}
+		}
+		catch (System.Exception ex)
+		{
+			Log.Error($"[Simple Trans] Error patching biosculpter system: {ex}");
 		}
 	}
 	

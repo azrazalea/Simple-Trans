@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using HarmonyLib;
 using RimWorld;
 using Verse;
@@ -19,83 +20,78 @@ public class PregnancyUtility_CanEverProduceChild_Patch
 	/// <param name="second">Second pawn in the pair</param>
 	public static void Postfix(ref AcceptanceReport __result, Pawn first, Pawn second)
 	{
-		string reason = __result.Reason;
-		TaggedString sameGenderText = Translator.Translate("SimpleTrans.SameGender");
-		
-		// Handle originally rejected same-gender pairs
-		if (reason.Contains(sameGenderText.Resolve()))
-		{
-			HandleSameGenderPair(ref __result, first, second);
-		}
-		// Verify reproductive capabilities for originally accepted pairs
-		else if (__result)
-		{
-			VerifyReproductiveCapabilities(ref __result, first, second);
-		}
+		// Override vanilla logic completely - check reproductive capabilities for ALL pairs
+		// This ensures trans individuals, prosthetics, and custom reproductive setups work correctly
+
+		CheckReproductiveCompatibility(ref __result, first, second);
 	}
-	
+
 	/// <summary>
-	/// Handles same-gender pairs by checking if they have compatible reproductive capabilities
+	/// Checks reproductive compatibility for all pawn pairs (replaces vanilla gender-based logic)
+	/// Handles trans individuals, prosthetics, and custom reproductive configurations
 	/// </summary>
 	/// <param name="result">The acceptance report to modify</param>
 	/// <param name="first">First pawn in the pair</param>
 	/// <param name="second">Second pawn in the pair</param>
-	private static void HandleSameGenderPair(ref AcceptanceReport result, Pawn first, Pawn second)
+	private static void CheckReproductiveCompatibility(ref AcceptanceReport result, Pawn first, Pawn second)
 	{
-		Pawn sirer = (SimpleTransPregnancyUtility.CanSire(first) ? first : (SimpleTransPregnancyUtility.CanSire(second) ? second : null));
-		Pawn carrier = (SimpleTransPregnancyUtility.CanCarry(second) ? second : (SimpleTransPregnancyUtility.CanCarry(first) ? first : null));
-		
-		// Initially accept the pair
-		result = true;
-		
-		// Check for reproductive capability issues
+		// Validate input pawns
+		if (first == null || second == null)
+		{
+			result = "One or both pawns are null";
+			return;
+		}
+
+		// Check basic requirements (humanlike, alive, etc.)
+		if (!first.RaceProps.Humanlike || !second.RaceProps.Humanlike)
+		{
+			result = "Both pawns must be humanlike";
+			return;
+		}
+
+		bool firstCanSire = SimpleTransPregnancyUtility.CanSire(first);
+		bool firstCanCarry = SimpleTransPregnancyUtility.CanCarry(first);
+		bool secondCanSire = SimpleTransPregnancyUtility.CanSire(second);
+		bool secondCanCarry = SimpleTransPregnancyUtility.CanCarry(second);
+
+		// Determine reproductive roles
+		Pawn sirer = (firstCanSire ? first : (secondCanSire ? second : null));
+		Pawn carrier = (secondCanCarry ? second : (firstCanCarry ? first : null));
+
+
+		// Check for reproductive capability requirements
 		if (sirer == null)
 		{
 			TaggedString message = TranslatorFormattedStringExtensions.Translate("SimpleTrans.PawnsCannotSireChild", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
 			result = message.Resolve();
 			return;
 		}
-		
+
 		if (carrier == null)
 		{
 			TaggedString message = TranslatorFormattedStringExtensions.Translate("SimpleTrans.PawnsCannotCarryChild", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
 			result = message.Resolve();
 			return;
 		}
-		
+
+		// Initially accept the pair - we have basic reproductive compatibility
+		result = true;
+
+
 		// Check fertility issues
 		CheckFertilityIssues(ref result, first, second, sirer);
-		
+		if (!result.Accepted) return;
+
 		// Check age issues
 		CheckAgeIssues(ref result, first, second);
-		
+		if (!result.Accepted) return;
+
 		// Check sterility issues
 		CheckSterilityIssues(ref result, first, second);
+		if (!result.Accepted) return;
 	}
-	
-	/// <summary>
-	/// Verifies that already-accepted pairs have the necessary reproductive capabilities
-	/// </summary>
-	/// <param name="result">The acceptance report to modify</param>
-	/// <param name="first">First pawn in the pair</param>
-	/// <param name="second">Second pawn in the pair</param>
-	private static void VerifyReproductiveCapabilities(ref AcceptanceReport result, Pawn first, Pawn second)
-	{
-		Pawn sirer = (SimpleTransPregnancyUtility.CanSire(first) ? first : (SimpleTransPregnancyUtility.CanSire(second) ? second : null));
-		Pawn carrier = (SimpleTransPregnancyUtility.CanCarry(second) ? second : (SimpleTransPregnancyUtility.CanCarry(first) ? first : null));
-		
-		if (sirer == null)
-		{
-			TaggedString message = TranslatorFormattedStringExtensions.Translate("SimpleTrans.PawnsCannotSireChild", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
-			result = message.Resolve();
-		}
-		else if (carrier == null)
-		{
-			TaggedString message = TranslatorFormattedStringExtensions.Translate("SimpleTrans.PawnsCannotCarryChild", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
-			result = message.Resolve();
-		}
-	}
-	
+
+
 	/// <summary>
 	/// Checks for fertility issues between pawns
 	/// </summary>
@@ -105,9 +101,12 @@ public class PregnancyUtility_CanEverProduceChild_Patch
 	/// <param name="sirer">The pawn that can sire</param>
 	private static void CheckFertilityIssues(ref AcceptanceReport result, Pawn first, Pawn second, Pawn sirer)
 	{
-		bool firstIsInfertile = StatExtension.GetStatValue((Thing)(object)first, StatDefOf.Fertility, true, -1) <= 0f;
-		bool secondIsInfertile = StatExtension.GetStatValue((Thing)(object)second, StatDefOf.Fertility, true, -1) <= 0f;
-		
+		float firstFertility = StatExtension.GetStatValue((Thing)(object)first, StatDefOf.Fertility, true, -1);
+		float secondFertility = StatExtension.GetStatValue((Thing)(object)second, StatDefOf.Fertility, true, -1);
+		bool firstIsInfertile = firstFertility <= 0f;
+		bool secondIsInfertile = secondFertility <= 0f;
+
+
 		if (firstIsInfertile && secondIsInfertile)
 		{
 			TaggedString message = TranslatorFormattedStringExtensions.Translate("PawnsAreInfertile", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
@@ -115,11 +114,11 @@ public class PregnancyUtility_CanEverProduceChild_Patch
 		}
 		else if (firstIsInfertile != secondIsInfertile)
 		{
-			TaggedString message = TranslatorFormattedStringExtensions.Translate("PawnIsInfertile", NamedArgumentUtility.Named((object)(firstIsInfertile ? sirer : second), "PAWN"));
+			TaggedString message = TranslatorFormattedStringExtensions.Translate("PawnIsInfertile", NamedArgumentUtility.Named((object)(firstIsInfertile ? first : second), "PAWN"));
 			result = message.Resolve();
 		}
 	}
-	
+
 	/// <summary>
 	/// Checks for age-related reproduction issues
 	/// </summary>
@@ -130,7 +129,8 @@ public class PregnancyUtility_CanEverProduceChild_Patch
 	{
 		bool firstIsTooYoung = !first.ageTracker.CurLifeStage.reproductive;
 		bool secondIsTooYoung = !second.ageTracker.CurLifeStage.reproductive;
-		
+
+
 		if (firstIsTooYoung && secondIsTooYoung)
 		{
 			TaggedString message = TranslatorFormattedStringExtensions.Translate("PawnsAreTooYoung", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
@@ -142,7 +142,7 @@ public class PregnancyUtility_CanEverProduceChild_Patch
 			result = message.Resolve();
 		}
 	}
-	
+
 	/// <summary>
 	/// Checks for sterility issues between pawns
 	/// </summary>
@@ -151,9 +151,12 @@ public class PregnancyUtility_CanEverProduceChild_Patch
 	/// <param name="second">Second pawn in the pair</param>
 	private static void CheckSterilityIssues(ref AcceptanceReport result, Pawn first, Pawn second)
 	{
+
 		bool firstIsSterile = first.Sterile();
 		bool secondIsSterile = second.Sterile() && PregnancyUtility.GetPregnancyHediff(second) == null;
-		
+		bool secondIsPregnant = PregnancyUtility.GetPregnancyHediff(second) != null;
+
+
 		if (firstIsSterile && secondIsSterile)
 		{
 			TaggedString message = TranslatorFormattedStringExtensions.Translate("PawnsAreSterile", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
@@ -164,5 +167,25 @@ public class PregnancyUtility_CanEverProduceChild_Patch
 			TaggedString message = TranslatorFormattedStringExtensions.Translate("PawnIsSterile", NamedArgumentUtility.Named((object)(firstIsSterile ? first : second), "PAWN"));
 			result = message.Resolve();
 		}
+	}
+
+	/// <summary>
+	/// Creates a unique key for a pawn pair (order-independent)
+	/// </summary>
+	/// <param name="first">First pawn</param>
+	/// <param name="second">Second pawn</param>
+	/// <returns>Unique string key for the pair</returns>
+	private static string GetPairKey(Pawn first, Pawn second)
+	{
+		if (first == null || second == null) return "null_pair";
+
+		// Create order-independent key
+		int firstId = first.thingIDNumber;
+		int secondId = second.thingIDNumber;
+
+		if (firstId < secondId)
+			return $"{firstId}_{secondId}";
+		else
+			return $"{secondId}_{firstId}";
 	}
 }

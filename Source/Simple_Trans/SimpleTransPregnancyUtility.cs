@@ -104,7 +104,26 @@ public static class SimpleTransPregnancyUtility
 			SimpleTransDebug.Log("CanCarry called with null pawn or missing health data", 1);
 			return false;
 		}
-		return pawn.health.hediffSet.HasHediff(canCarryDef, false);
+		
+		// Check if pawn has carry capability
+		if (!pawn.health.hediffSet.HasHediff(canCarryDef, false))
+		{
+			return false;
+		}
+		
+		// Check for sterilization that blocks carrying
+		if (pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Sterilized) != null)
+		{
+			return false; // Vanilla sterilized blocks all reproduction
+		}
+		
+		var sterilizedCarryDef = DefDatabase<HediffDef>.GetNamedSilentFail("SterilizedCarry");
+		if (sterilizedCarryDef != null && pawn.health.hediffSet.HasHediff(sterilizedCarryDef, false))
+		{
+			return false; // Specifically sterilized for carrying
+		}
+		
+		return true;
 	}
 
 	/// <summary>
@@ -119,7 +138,26 @@ public static class SimpleTransPregnancyUtility
 			SimpleTransDebug.Log("CanSire called with null pawn or missing health data", 1);
 			return false;
 		}
-		return pawn.health.hediffSet.HasHediff(canSireDef, false);
+		
+		// Check if pawn has sire capability
+		if (!pawn.health.hediffSet.HasHediff(canSireDef, false))
+		{
+			return false;
+		}
+		
+		// Check for sterilization that blocks siring
+		if (pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Sterilized) != null)
+		{
+			return false; // Vanilla sterilized blocks all reproduction
+		}
+		
+		var sterilizedSireDef = DefDatabase<HediffDef>.GetNamedSilentFail("SterilizedSire");
+		if (sterilizedSireDef != null && pawn.health.hediffSet.HasHediff(sterilizedSireDef, false))
+		{
+			return false; // Specifically sterilized for siring
+		}
+		
+		return true;
 	}
 	
 	#endregion
@@ -238,6 +276,9 @@ public static class SimpleTransPregnancyUtility
 			{
 				SetSire(pawn, false);
 			}
+			
+			// Handle backwards compatibility: convert vanilla Sterilized to capability-specific sterilization
+			ConvertVanillaSterilizedHediff(pawn, isTransgender);
 
 			// Process genes for additional gender/reproductive overrides
 			// This handles VEF (Vanilla Expanded Framework) gene extensions that can force specific genders
@@ -754,6 +795,86 @@ public static class SimpleTransPregnancyUtility
 		catch (System.Exception ex)
 		{
 			Log.Error($"[Simple Trans] Error clearing gender hediffs for {pawn?.Name?.ToStringShort ?? "unknown"}: {ex}");
+		}
+	}
+	
+	/// <summary>
+	/// Converts vanilla Sterilized hediffs to capability-specific sterilization for backwards compatibility
+	/// </summary>
+	/// <param name="pawn">The pawn to check and convert</param>
+	/// <param name="isTransgender">Whether the pawn is transgender</param>
+	private static void ConvertVanillaSterilizedHediff(Pawn pawn, bool isTransgender)
+	{
+		if (pawn?.health?.hediffSet == null) return;
+		
+		try
+		{
+			// Check if pawn has vanilla Sterilized hediff
+			var vanillaSterilized = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Sterilized);
+			if (vanillaSterilized == null) return;
+			
+			// Remove vanilla sterilized hediff
+			pawn.health.RemoveHediff(vanillaSterilized);
+			
+			// Determine which capability was sterilized based on AGAB (Assigned Gender at Birth)
+			bool shouldSterilizeCarry = false;
+			bool shouldSterilizeSire = false;
+			
+			if (isTransgender)
+			{
+				// For trans pawns, sterilization affects their birth-assigned capability
+				if (pawn.gender == Gender.Male)
+				{
+					// Trans male (AFAB) - sterilization would have been tubal ligation
+					shouldSterilizeCarry = true;
+				}
+				else if (pawn.gender == Gender.Female)
+				{
+					// Trans female (AMAB) - sterilization would have been vasectomy
+					shouldSterilizeSire = true;
+				}
+			}
+			else
+			{
+				// For cis pawns, sterilization affects their current gender's capability
+				if (pawn.gender == Gender.Male)
+				{
+					// Cis male - sterilization would have been vasectomy
+					shouldSterilizeSire = true;
+				}
+				else if (pawn.gender == Gender.Female)
+				{
+					// Cis female - sterilization would have been tubal ligation
+					shouldSterilizeCarry = true;
+				}
+			}
+			
+			// Apply capability-specific sterilization
+			if (shouldSterilizeCarry)
+			{
+				var sterilizedCarryDef = DefDatabase<HediffDef>.GetNamedSilentFail("SterilizedCarry");
+				if (sterilizedCarryDef != null)
+				{
+					var hediff = HediffMaker.MakeHediff(sterilizedCarryDef, pawn);
+					pawn.health.AddHediff(hediff);
+					SimpleTransDebug.Log($"Converted vanilla Sterilized to SterilizedCarry for {pawn.Name}", 2);
+				}
+			}
+			
+			if (shouldSterilizeSire)
+			{
+				var sterilizedSireDef = DefDatabase<HediffDef>.GetNamedSilentFail("SterilizedSire");
+				if (sterilizedSireDef != null)
+				{
+					var hediff = HediffMaker.MakeHediff(sterilizedSireDef, pawn);
+					pawn.health.AddHediff(hediff);
+					SimpleTransDebug.Log($"Converted vanilla Sterilized to SterilizedSire for {pawn.Name}", 2);
+				}
+			}
+		}
+		catch (System.Exception ex)
+		{
+			Log.Error($"[Simple Trans] Error converting vanilla sterilized hediff for {pawn?.Name?.ToStringShort ?? "unknown"}: {ex}");
 		}
 	}
 	

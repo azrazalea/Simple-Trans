@@ -1,0 +1,14 @@
+🏥 **Major Medical System Update**
+- Complete surgery system: organ transplantation, basic/bionic prosthetics, 5 biosculpter cycles
+- Capability-specific sterilization (carry vs sire) with backwards compatibility  
+- Comprehensive safety features: informed consent dialogs, pregnancy preservation warnings
+- Enhanced vanilla surgery integration (vasectomy, IUD, embryo implantation now work with carry/sire system)
+- **PREGNANCY SYSTEM OVERHAUL**: All pregnancy compatibility checks now use carry/sire capabilities instead of gender
+- **COMPREHENSIVE DEBUG LOGGING**: Extensive debug mode for testing pregnancy/romance mod compatibility
+- Full gene system compatibility and improved mod integration
+
+⚠️ **Important:** This update involved extensive code changes including a complete pregnancy system rewrite. The mod now overrides ALL vanilla pregnancy logic to support trans individuals and prosthetics properly.
+
+🔧 **For Mod Compatibility Testing:** Enable debug mode in mod settings to get detailed logs of all pregnancy/romance decisions - essential for testing compatibility with mods like Intimacy, Way Better Romance, etc.
+
+This update transforms Simple Trans from a basic gender identity mod into a comprehensive medical system for reproductive healthcare in RimWorld.
