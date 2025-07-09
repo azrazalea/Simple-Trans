@@ -314,60 +314,18 @@ public static class PregnancyApplicationPatches
 				return;
 			}
 
-			// Determine actual reproductive roles based on capabilities, not gender
-			Pawn sirer = SimpleTransPregnancyUtility.CanSire(pawn1) ? pawn1 :
-						(SimpleTransPregnancyUtility.CanSire(pawn2) ? pawn2 : null);
-			Pawn carrier = SimpleTransPregnancyUtility.CanCarry(pawn1) ? pawn1 :
-						  (SimpleTransPregnancyUtility.CanCarry(pawn2) ? pawn2 : null);
-
-			// This fixes the original problem: vanilla would set sirer or carrier to null for same-gender couples
-			// But we determine them based on capabilities, so same-gender couples work if they have compatible capabilities
-			if (sirer == null || carrier == null)
+			// Use unified pregnancy method that handles capability-based role assignment and chance calculation
+			bool success = SimpleTransPregnancyUtility.TryCreatePregnancy(pawn1, pawn2, baseChance, showIncompatibilityMessage: true);
+			
+			if (SimpleTrans.debugMode)
 			{
-				if (SimpleTrans.debugMode)
+				if (success)
 				{
-					Log.Message($"[Simple Trans DEBUG] No viable sirer/carrier pair found - sirer: {sirer?.Name?.ToStringShort ?? "null"}, carrier: {carrier?.Name?.ToStringShort ?? "null"}");
+					Log.Message($"[Simple Trans DEBUG] PREGNANCY CREATED");
 				}
-				return;
-			}
-
-			// Calculate pregnancy chance using our patched method (includes the 20f temporary override)
-			float pregnancyChance = baseChance * PregnancyUtility.PregnancyChanceForPartners(carrier, sirer);
-
-			if (!Rand.Chance(pregnancyChance))
-			{
-				if (SimpleTrans.debugMode)
+				else
 				{
-					Log.Message($"[Simple Trans DEBUG] Pregnancy chance failed: {pregnancyChance:F3}");
-				}
-				return;
-			}
-
-			// Create pregnancy with gene compatibility
-			bool success;
-			var inheritedGeneSet = PregnancyUtility.GetInheritedGeneSet(sirer, carrier, out success);
-
-			if (success)
-			{
-				var pregnancy = (Hediff_Pregnant)HediffMaker.MakeHediff(HediffDefOf.PregnantHuman, carrier);
-				pregnancy.SetParents(null, sirer, inheritedGeneSet);
-				carrier.health.AddHediff(pregnancy);
-
-				if (SimpleTrans.debugMode)
-				{
-					Log.Message($"[Simple Trans DEBUG] PREGNANCY CREATED: {carrier.Name?.ToStringShort} pregnant with {sirer.Name?.ToStringShort}'s child");
-				}
-			}
-			else if (PawnUtility.ShouldSendNotificationAbout(sirer) || PawnUtility.ShouldSendNotificationAbout(carrier))
-			{
-				// Send gene incompatibility message
-				var message = "MessagePregnancyFailed".Translate(sirer.Named("FATHER"), carrier.Named("MOTHER")) +
-							 ": " + "CombinedGenesExceedMetabolismLimits".Translate();
-				Messages.Message(message, new LookTargets(sirer, carrier), MessageTypeDefOf.NegativeEvent);
-
-				if (SimpleTrans.debugMode)
-				{
-					Log.Message($"[Simple Trans DEBUG] Pregnancy failed due to gene incompatibility");
+					Log.Message($"[Simple Trans DEBUG] Pregnancy creation failed");
 				}
 			}
 		}

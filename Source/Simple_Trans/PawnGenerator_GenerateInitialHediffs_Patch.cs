@@ -73,7 +73,7 @@ public class PawnGenerator_GenerateInitialHediffs_Patch
 				request.AllowPregnant &&
 				Rand.Chance(pregnancyChance))
 			{
-				TryCreatePregnancy(pawn);
+				SimpleTransPregnancyUtility.TryCreatePregnancy(pawn, findRandomFather: true);
 			}
 		}
 		catch (System.Exception ex)
@@ -82,56 +82,4 @@ public class PawnGenerator_GenerateInitialHediffs_Patch
 		}
 	}
 
-	/// <summary>
-	/// Safely attempts to create a pregnancy for the given pawn
-	/// </summary>
-	/// <param name="pawn">The pawn to make pregnant</param>
-	private static void TryCreatePregnancy(Pawn pawn)
-	{
-		try
-		{
-			// Create pregnancy hediff
-			Hediff_Pregnant pregnancy = (Hediff_Pregnant)HediffMaker.MakeHediff(HediffDefOf.PregnantHuman, pawn, (BodyPartRecord)null);
-			if (pregnancy == null)
-			{
-				Log.Error("[Simple Trans] Failed to create pregnancy hediff");
-				return;
-			}
-
-			FloatRange generatedPawnPregnancyProgressRange = PregnancyUtility.GeneratedPawnPregnancyProgressRange;
-			((Hediff)pregnancy).Severity = generatedPawnPregnancyProgressRange.RandomInRange;
-
-			// Determine father (if any)
-			Pawn father = null;
-			DirectPawnRelation fatherRelation = default(DirectPawnRelation);
-
-			if (pawn.relations?.DirectRelations != null &&
-				!Rand.Chance(SimpleTransConstants.RandomFatherlessChance) &&
-				GenCollection.TryRandomElementByWeight<DirectPawnRelation>(
-					pawn.relations.DirectRelations.Where((DirectPawnRelation r) => PregnancyUtility.BeingFatherWeightPerRelation.ContainsKey(r.def)),
-					(Func<DirectPawnRelation, float>)((DirectPawnRelation r) => PregnancyUtility.BeingFatherWeightPerRelation[r.def]),
-					out fatherRelation))
-			{
-				father = fatherRelation.otherPawn;
-			}
-
-			// Generate gene set and apply pregnancy if compatible
-			bool genesCompatible = default(bool);
-			GeneSet inheritedGeneSet = PregnancyUtility.GetInheritedGeneSet(father, pawn, out genesCompatible);
-			if (genesCompatible)
-			{
-				((HediffWithParents)pregnancy).SetParents((Pawn)null, father, inheritedGeneSet);
-				pawn.health.AddHediff((Hediff)(object)pregnancy, (BodyPartRecord)null, (DamageInfo?)null);
-				SimpleTransDebug.Log($"Created pregnancy for {pawn.Name?.ToStringShort ?? "unknown"} with father {father?.Name?.ToStringShort ?? "none"}", 3);
-			}
-			else
-			{
-				SimpleTransDebug.Log($"Genes incompatible for pregnancy between {pawn.Name?.ToStringShort ?? "unknown"} and {father?.Name?.ToStringShort ?? "none"}", 2);
-			}
-		}
-		catch (System.Exception ex)
-		{
-			Log.Error($"[Simple Trans] Error creating pregnancy for {pawn?.Name?.ToStringShort ?? "unknown"}: {ex}");
-		}
-	}
 }

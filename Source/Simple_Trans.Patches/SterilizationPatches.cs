@@ -103,5 +103,53 @@ namespace Simple_Trans.Patches
             }
         }
 
+        // Replace vanilla CanFertilizeReport with our sirer-based implementation
+        [HarmonyPatch(typeof(HumanOvum), "CanFertilizeReport")]
+        [HarmonyPrefix]
+        public static bool HumanOvum_CanFertilizeReport_Prefix(Pawn pawn, ref AcceptanceReport __result)
+        {
+            // Replace the entire method with our implementation
+            __result = CanFertilizeReport_SimpleTrans(pawn);
+            return false; // Skip original method
+        }
+
+        /// <summary>
+        /// Simple Trans replacement for HumanOvum.CanFertilizeReport
+        /// Checks sirer capability instead of vanilla gender/sterility
+        /// </summary>
+        /// <param name="pawn">The pawn to check</param>
+        /// <returns>AcceptanceReport indicating if pawn can fertilize</returns>
+        private static AcceptanceReport CanFertilizeReport_SimpleTrans(Pawn pawn)
+        {
+            // Check if pawn can sire (this handles both capability and sterility checks)
+            if (!SimpleTransPregnancyUtility.CanSire(pawn))
+            {
+                return "CannotSterile".Translate();
+            }
+
+            // Check if pawn is quest lodger
+            if (pawn.IsQuestLodger())
+            {
+                return false;
+            }
+
+            // Check if pawn can reach the ovum (this requires the ovum instance, but we'll skip path check in prefix)
+            // The path check will be handled by the gizmo/float menu system
+
+            // Check age requirement
+            if ((float)pawn.ageTracker.AgeBiologicalYears < 14f)
+            {
+                return "CannotMustBeAge".Translate(14f).CapitalizeFirst();
+            }
+
+            // Check if pawn is incapacitated
+            if (pawn.Downed || !pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
+            {
+                return "Incapacitated".Translate().ToLower();
+            }
+
+            return true;
+        }
+
     }
 }

@@ -14,125 +14,125 @@ namespace Simple_Trans;
 public static class SimpleTransPregnancyUtility
 {
 	#region Static Configuration Fields
-	
+
 	/// <summary>
 	/// Current cisgender rate (percentage of pawns that are cisgender)
 	/// </summary>
 	public static float cisRate;
-	
+
 	/// <summary>
 	/// Rate at which trans men can carry pregnancies
 	/// </summary>
 	public static float transManCarryRate;
-	
+
 	/// <summary>
 	/// Rate at which trans women can sire offspring
 	/// </summary>
 	public static float transWomanSireRate;
-	
+
 	/// <summary>
 	/// Rate at which non-binary pawns can carry pregnancies
 	/// </summary>
 	public static float enbyCarryRate;
-	
+
 	/// <summary>
 	/// Whether genes represent assigned gender at birth (AGAB)
 	/// </summary>
 	public static bool genesAreAgab;
-	
+
 	/// <summary>
 	/// Rate at which trans people have both abilities
 	/// </summary>
 	public static float transBothRate;
-	
+
 	/// <summary>
 	/// Rate at which trans people have neither ability
 	/// </summary>
 	public static float transNeitherRate;
-	
+
 	/// <summary>
 	/// Rate at which cis men can carry
 	/// </summary>
 	public static float cisManCarryRate;
-	
+
 	/// <summary>
 	/// Rate at which cis women can sire
 	/// </summary>
 	public static float cisWomanSireRate;
-	
+
 	/// <summary>
 	/// Rate at which cis people have both abilities
 	/// </summary>
 	public static float cisBothRate;
-	
+
 	/// <summary>
 	/// Rate at which non-binary people have both abilities
 	/// </summary>
 	public static float enbyBothRate;
-	
+
 	/// <summary>
 	/// Rate at which non-binary people have neither ability
 	/// </summary>
 	public static float enbyNeitherRate;
-	
+
 	/// <summary>
 	/// Rate at which pawns are sterilized for carrying
 	/// </summary>
 	public static float carrySterilizationRate;
-	
+
 	/// <summary>
 	/// Rate at which pawns are sterilized for siring
 	/// </summary>
 	public static float sireSterilizationRate;
-	
+
 	/// <summary>
 	/// Rate at which sterilizations are reversible vs permanent
 	/// </summary>
 	public static float reversibleSterilizationRate;
-	
+
 	/// <summary>
 	/// Rate at which pawns have prosthetic carry organs instead of natural
 	/// </summary>
 	public static float prostheticCarryRate;
-	
+
 	/// <summary>
 	/// Rate at which pawns have prosthetic sire organs instead of natural
 	/// </summary>
 	public static float prostheticSireRate;
-	
+
 	/// <summary>
 	/// Rate at which prosthetics are bionic instead of basic
 	/// </summary>
 	public static float bionicUpgradeRate;
-	
+
 	#endregion
 
 	#region Hediff Definitions
-	
+
 	/// <summary>
 	/// Hediff definition for cisgender identity
 	/// </summary>
 	public static readonly HediffDef cisDef = HediffDef.Named("Cisgender");
-	
+
 	/// <summary>
 	/// Hediff definition for transgender identity
 	/// </summary>
 	public static readonly HediffDef transDef = HediffDef.Named("Transgender");
-	
+
 	/// <summary>
 	/// Hediff definition for pregnancy carrying ability
 	/// </summary>
 	public static readonly HediffDef canCarryDef = HediffDef.Named("PregnancyCarry");
-	
+
 	/// <summary>
 	/// Hediff definition for pregnancy siring ability
 	/// </summary>
 	public static readonly HediffDef canSireDef = HediffDef.Named("PregnancySire");
-	
+
 	#endregion
 
 	#region Public Query Methods
-	
+
 	/// <summary>
 	/// Determines if a pawn can carry pregnancies
 	/// </summary>
@@ -145,25 +145,25 @@ public static class SimpleTransPregnancyUtility
 			SimpleTransDebug.Log("CanCarry called with null pawn or missing health data", 1);
 			return false;
 		}
-		
+
 		// Check if pawn has carry capability
 		if (!pawn.health.hediffSet.HasHediff(canCarryDef, false))
 		{
 			return false;
 		}
-		
+
 		// Check for sterilization that blocks carrying
 		if (pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Sterilized) != null)
 		{
 			return false; // Vanilla sterilized blocks all reproduction
 		}
-		
+
 		var sterilizedCarryDef = DefDatabase<HediffDef>.GetNamedSilentFail("SterilizedCarry");
 		if (sterilizedCarryDef != null && pawn.health.hediffSet.HasHediff(sterilizedCarryDef, false))
 		{
 			return false; // Specifically sterilized for carrying
 		}
-		
+
 		return true;
 	}
 
@@ -179,32 +179,32 @@ public static class SimpleTransPregnancyUtility
 			SimpleTransDebug.Log("CanSire called with null pawn or missing health data", 1);
 			return false;
 		}
-		
+
 		// Check if pawn has sire capability
 		if (!pawn.health.hediffSet.HasHediff(canSireDef, false))
 		{
 			return false;
 		}
-		
+
 		// Check for sterilization that blocks siring
 		if (pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Sterilized) != null)
 		{
 			return false; // Vanilla sterilized blocks all reproduction
 		}
-		
+
 		var sterilizedSireDef = DefDatabase<HediffDef>.GetNamedSilentFail("SterilizedSire");
 		if (sterilizedSireDef != null && pawn.health.hediffSet.HasHediff(sterilizedSireDef, false))
 		{
 			return false; // Specifically sterilized for siring
 		}
-		
+
 		return true;
 	}
-	
+
 	#endregion
 
 	#region Unified Generation Logic
-	
+
 	/// <summary>
 	/// Determines gender identity and reproductive capabilities for a pawn using consistent logic
 	/// Used for both new pawn generation and updating existing pawns
@@ -511,11 +511,11 @@ public static class SimpleTransPregnancyUtility
 			Log.Error($"[Simple Trans] Error applying reproductive capabilities for {pawn?.Name?.ToStringShort ?? "unknown"}: {ex}");
 		}
 	}
-	
+
 	#endregion
 
 	#region Core Gender Logic
-	
+
 	/// <summary>
 	/// Main entry point for validating or setting gender identity and reproductive capabilities
 	/// Uses unified logic to ensure consistency between new pawns and existing pawns
@@ -575,17 +575,17 @@ public static class SimpleTransPregnancyUtility
 			Log.Error($"[Simple Trans] Error in ValidateOrSetGender for pawn {pawn?.Name?.ToStringShort ?? "null"}: {ex}");
 		}
 	}
-	
+
 	/// <summary>
 	/// Whether organ transplant system is enabled
 	/// </summary>
 	public static bool enableOrganTransplants;
-	
+
 	/// <summary>
 	/// Whether prosthetic system is enabled
 	/// </summary>
 	public static bool enableProsthetics;
-	
+
 	/// <summary>
 	/// Checks if a pawn is non-binary
 	/// Default implementation returns false, but NBG mod patches this to return EnbyUtility.IsEnby(pawn)
@@ -677,11 +677,11 @@ public static class SimpleTransPregnancyUtility
 			bionicUpgradeRate = 0.20f;
 		}
 	}
-	
+
 	#endregion
 
 	#region Gender Assignment Methods
-	
+
 	/// <summary>
 	/// Sets a pawn as transgender by adding the transgender hediff and removing cisgender hediff
 	/// </summary>
@@ -693,7 +693,7 @@ public static class SimpleTransPregnancyUtility
 			Log.Error("[Simple Trans] SetTrans called with null pawn or missing health data");
 			return;
 		}
-		
+
 		try
 		{
 			if (!pawn.health.hediffSet.HasHediff(transDef, false))
@@ -719,7 +719,7 @@ public static class SimpleTransPregnancyUtility
 			Log.Error("[Simple Trans] SetCis called with null pawn or missing health data");
 			return;
 		}
-		
+
 		try
 		{
 			// Warn if setting non-binary pawn to cisgender
@@ -739,11 +739,11 @@ public static class SimpleTransPregnancyUtility
 			Log.Error($"[Simple Trans] Error setting cisgender hediff for {pawn?.Name?.ToStringShort ?? "unknown"}: {ex}");
 		}
 	}
-	
+
 	#endregion
 
 	#region Reproductive Ability Methods
-	
+
 	/// <summary>
 	/// Grants a pawn the ability to carry pregnancies
 	/// </summary>
@@ -756,7 +756,7 @@ public static class SimpleTransPregnancyUtility
 			Log.Error("[Simple Trans] SetCarry called with null pawn or missing health data");
 			return;
 		}
-		
+
 		try
 		{
 			if (!pawn.health.hediffSet.HasHediff(canCarryDef, false))
@@ -786,7 +786,7 @@ public static class SimpleTransPregnancyUtility
 			Log.Error("[Simple Trans] SetSire called with null pawn or missing health data");
 			return;
 		}
-		
+
 		try
 		{
 			if (!pawn.health.hediffSet.HasHediff(canSireDef, false))
@@ -803,11 +803,11 @@ public static class SimpleTransPregnancyUtility
 			Log.Error($"[Simple Trans] Error setting sire hediff for {pawn?.Name?.ToStringShort ?? "unknown"}: {ex}");
 		}
 	}
-	
+
 	#endregion
 
 	#region Gene Integration
-	
+
 	/// <summary>
 	/// Validates or sets gender based on gene extensions (VEF integration)
 	/// </summary>
@@ -820,13 +820,13 @@ public static class SimpleTransPregnancyUtility
 			Log.Error("[Simple Trans] ValidateOrSetGenderWithGenes called with null pawn");
 			return;
 		}
-		
+
 		if (gene?.def == null)
 		{
 			SimpleTransDebug.Log("ValidateOrSetGenderWithGenes called with null gene or gene definition", 2);
 			return;
 		}
-		
+
 		try
 		{
 			// Check if this gene has VEF gender-forcing extensions
@@ -865,7 +865,7 @@ public static class SimpleTransPregnancyUtility
 
 				return;
 			}
-			
+
 			// Handle genes that force female reproductive capabilities
 			if (modExtension.forceFemale)
 			{
@@ -874,10 +874,10 @@ public static class SimpleTransPregnancyUtility
 				// Otherwise becomes cis female (F gender, F reproductive role)
 				// Don't mess with non-binary people
 				pawn.gender = (Rand.Range(0f, 1f) > cisRate) ? Gender.Male : Gender.Female;
-				
+
 				// Clear any existing reproductive hediffs first (but preserve identity as we're about to set it)
 				ClearGender(pawn, clearIdentity: false, clearCapabilities: true);
-				
+
 				if (pawn.gender == Gender.Male)
 				{
 					// Trans man: masculine gender identity, can carry pregnancies
@@ -905,38 +905,38 @@ public static class SimpleTransPregnancyUtility
 					// Cis woman: feminine gender identity, can carry pregnancies
 					SetCis(pawn);
 					if (Rand.Range(0f, 1f) < cisBothRate)
-				{
-					// Rare case: cis female with both abilities
-					SetCarry(pawn, false);
-					SetSire(pawn, false);
-				}
+					{
+						// Rare case: cis female with both abilities
+						SetCarry(pawn, false);
+						SetSire(pawn, false);
+					}
 					else
-				{
+					{
 						SetCarry(pawn, true);
-				}
+					}
 				}
 				else // Secret fourth thing?
 				{
 					SetCarry(pawn, true);
 				}
 			}
-			
+
 			// Handle genes that force male reproductive capabilities
 			if (modExtension.forceMale)
 			{
 				// Gene forces male reproductive role, but gender identity can still vary
 				// If above cis rate, assign female gender (trans female)
 				pawn.gender = (Rand.Range(0f, 1f) > cisRate) ? Gender.Female : Gender.Male;
-				
+
 				// Clear any existing reproductive hediffs first (but preserve identity as we're about to set it)
 				ClearGender(pawn, clearIdentity: false, clearCapabilities: true);
-				
+
 				if (pawn.gender == Gender.Female)
 				{
 					// Trans woman: feminine gender identity, can sire pregnancies
 					SetTrans(pawn);
 					if (Rand.Range(0f, 1f) < transBothRate)
-				{
+					{
 						// Rare case: trans woman with both abilities
 						SetCarry(pawn, false);
 						SetSire(pawn, false);
@@ -947,7 +947,7 @@ public static class SimpleTransPregnancyUtility
 						return;
 					}
 					else
-				{
+					{
 						// Standard: always grant siring ability for forceMale genes
 						SetSire(pawn, true);
 					}
@@ -959,11 +959,11 @@ public static class SimpleTransPregnancyUtility
 					if (Rand.Range(0f, 1f) < cisBothRate)
 					{
 						// Rare case: cis man with both abilities
-					SetCarry(pawn, false);
-					SetSire(pawn, false);
-				}
-				else
-				{
+						SetCarry(pawn, false);
+						SetSire(pawn, false);
+					}
+					else
+					{
 						SetSire(pawn, true);
 					}
 				}
@@ -978,11 +978,11 @@ public static class SimpleTransPregnancyUtility
 			Log.Error($"[Simple Trans] Error in ValidateOrSetGenderWithGenes for {pawn?.Name?.ToStringShort ?? "unknown"} with gene {gene?.def?.defName ?? "unknown"}: {ex}");
 		}
 	}
-	
+
 	#endregion
 
 	#region Helper Methods
-	
+
 	/// <summary>
 	/// Safely parses a float value with fallback to default
 	/// </summary>
@@ -995,16 +995,16 @@ public static class SimpleTransPregnancyUtility
 		{
 			return defaultValue;
 		}
-		
+
 		if (float.TryParse(value, out float result))
 		{
 			return result;
 		}
-		
+
 		Log.Warning($"[Simple Trans] Failed to parse float value '{value}', using default {defaultValue}");
 		return defaultValue;
 	}
-	
+
 	/// <summary>
 	/// Safely parses a boolean value with fallback to default
 	/// </summary>
@@ -1017,20 +1017,20 @@ public static class SimpleTransPregnancyUtility
 		{
 			return defaultValue;
 		}
-		
+
 		if (bool.TryParse(value, out bool result))
 		{
 			return result;
 		}
-		
+
 		Log.Warning($"[Simple Trans] Failed to parse boolean value '{value}', using default {defaultValue}");
 		return defaultValue;
 	}
-	
+
 	#endregion
 
 	#region Utility Methods
-	
+
 	/// <summary>
 	/// Removes gender-related and/or reproductive hediffs from a pawn
 	/// </summary>
@@ -1044,7 +1044,7 @@ public static class SimpleTransPregnancyUtility
 			Log.Error("[Simple Trans] ClearGender called with null pawn or missing health data");
 			return;
 		}
-		
+
 		try
 		{
 			// Remove identity hediffs if requested
@@ -1059,7 +1059,7 @@ public static class SimpleTransPregnancyUtility
 					pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(transDef));
 				}
 			}
-			
+
 			// Remove reproductive capability hediffs if requested
 			if (clearCapabilities)
 			{
@@ -1072,21 +1072,21 @@ public static class SimpleTransPregnancyUtility
 					pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(canSireDef));
 				}
 			}
-			
+
 			// Also remove prosthetic and sterilization hediffs if clearing capabilities
 			if (clearCapabilities)
 			{
-				var hediffsToRemove = pawn.health.hediffSet.hediffs.Where(h => 
-					h.def.defName == "BasicProstheticCarry" || 
-					h.def.defName == "BasicProstheticSire" || 
-					h.def.defName == "BionicProstheticCarry" || 
+				var hediffsToRemove = pawn.health.hediffSet.hediffs.Where(h =>
+					h.def.defName == "BasicProstheticCarry" ||
+					h.def.defName == "BasicProstheticSire" ||
+					h.def.defName == "BionicProstheticCarry" ||
 					h.def.defName == "BionicProstheticSire" ||
 					h.def.defName == "SterilizedCarry" ||
 					h.def.defName == "SterilizedSire" ||
 					h.def.defName == "ReversibleSterilizedCarry" ||
 					h.def.defName == "ReversibleSterilizedSire" ||
 					h.def.defName == "Sterilized").ToList();
-				
+
 				foreach (var hediff in hediffsToRemove)
 				{
 					pawn.health.RemoveHediff(hediff);
@@ -1098,7 +1098,7 @@ public static class SimpleTransPregnancyUtility
 			Log.Error($"[Simple Trans] Error clearing gender hediffs for {pawn?.Name?.ToStringShort ?? "unknown"}: {ex}");
 		}
 	}
-	
+
 	/// <summary>
 	/// Core conversion logic for vanilla Sterilized hediff to capability-specific sterilization
 	/// </summary>
@@ -1111,20 +1111,20 @@ public static class SimpleTransPregnancyUtility
 	public static bool ConvertVanillaSterilizedHediffCore(Pawn pawn, bool forceCarryingSterilization = false, bool forceSiringSterilization = false, bool useOppositeCapabilityLogic = false, AbilityType? targetAbility = null)
 	{
 		if (pawn?.health?.hediffSet == null) return false;
-		
+
 		try
 		{
 			// Check if pawn has vanilla Sterilized hediff
 			var vanillaSterilized = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Sterilized);
 			if (vanillaSterilized == null) return false;
-			
+
 			// Remove vanilla sterilized hediff
 			pawn.health.RemoveHediff(vanillaSterilized);
-			
+
 			// Determine which capability should be sterilized
 			bool shouldSterilizeCarry = forceCarryingSterilization;
 			bool shouldSterilizeSire = forceSiringSterilization;
-			
+
 			if (!forceCarryingSterilization && !forceSiringSterilization)
 			{
 				if (useOppositeCapabilityLogic && targetAbility.HasValue)
@@ -1144,12 +1144,12 @@ public static class SimpleTransPregnancyUtility
 						useOppositeCapabilityLogic = false;
 					}
 				}
-				
+
 				if (!useOppositeCapabilityLogic)
 				{
 					// AGAB-based logic
 					bool isTransgender = pawn.health.hediffSet.HasHediff(transDef);
-					
+
 					if (isTransgender)
 					{
 						// For trans pawns, sterilization affects their birth-assigned capability
@@ -1180,7 +1180,7 @@ public static class SimpleTransPregnancyUtility
 					}
 				}
 			}
-			
+
 			// Apply capability-specific sterilization
 			if (shouldSterilizeCarry)
 			{
@@ -1192,7 +1192,7 @@ public static class SimpleTransPregnancyUtility
 					SimpleTransDebug.Log($"Converted vanilla Sterilized to SterilizedCarry for {pawn.Name}", 2);
 				}
 			}
-			
+
 			if (shouldSterilizeSire)
 			{
 				var sterilizedSireDef = DefDatabase<HediffDef>.GetNamedSilentFail("SterilizedSire");
@@ -1203,7 +1203,7 @@ public static class SimpleTransPregnancyUtility
 					SimpleTransDebug.Log($"Converted vanilla Sterilized to SterilizedSire for {pawn.Name}", 2);
 				}
 			}
-			
+
 			return true;
 		}
 		catch (System.Exception ex)
@@ -1233,6 +1233,181 @@ public static class SimpleTransPregnancyUtility
 		// Use the core conversion function with AGAB-based logic
 		ConvertVanillaSterilizedHediffCore(pawn, useOppositeCapabilityLogic: false);
 	}
-	
+
+	/// <summary>
+	/// Unified pregnancy logic that handles capability-based role assignment and chance calculation
+	/// </summary>
+	/// <param name="pawn1">First pawn in the interaction</param>
+	/// <param name="pawn2">Second pawn in the interaction (can be null for single-pawn scenarios)</param>
+	/// <param name="baseChance">Base pregnancy chance (e.g., 0.05f for lovin')</param>
+	/// <param name="findRandomFather">If true and no valid sirer found, attempts to find father from relations</param>
+	/// <param name="progressOverride">Specific pregnancy progress (null for immediate pregnancy)</param>
+	/// <param name="showIncompatibilityMessage">If true, shows user message when genes are incompatible</param>
+	/// <returns>True if pregnancy was successfully created</returns>
+	public static bool TryCreatePregnancy(Pawn pawn1, Pawn pawn2 = null, float baseChance = 1.0f, bool findRandomFather = false, float? progressOverride = null, bool showIncompatibilityMessage = false)
+	{
+		try
+		{
+			if (pawn1?.health == null)
+			{
+				Log.Error("[Simple Trans] TryCreatePregnancy called with null pawn1 or missing health data");
+				return false;
+			}
+
+			// Determine reproductive roles based on capabilities
+			Pawn sirer = null;
+			Pawn carrier = null;
+
+			if (pawn2 != null)
+			{
+				// Two-pawn scenario: determine roles from capabilities
+				sirer = CanSire(pawn1) ? pawn1 : (CanSire(pawn2) ? pawn2 : null);
+				carrier = CanCarry(pawn1) ? pawn1 : (CanCarry(pawn2) ? pawn2 : null);
+			}
+			else
+			{
+				// Single-pawn scenario: pawn1 must be the carrier
+				if (CanCarry(pawn1))
+				{
+					carrier = pawn1;
+					// sirer will be found randomly if findRandomFather is true
+				}
+			}
+
+			// Validate we have a viable carrier
+			if (carrier == null)
+			{
+				if (SimpleTrans.debugMode)
+				{
+					Log.Message($"[Simple Trans DEBUG] No viable carrier found");
+				}
+				return false;
+			}
+
+			// Find random father if requested and no sirer found
+			if (sirer == null && findRandomFather)
+			{
+				if (carrier.relations?.DirectRelations != null &&
+					!Rand.Chance(SimpleTransConstants.RandomFatherlessChance) &&
+					GenCollection.TryRandomElementByWeight<DirectPawnRelation>(
+						carrier.relations.DirectRelations.Where((DirectPawnRelation r) => PregnancyUtility.BeingFatherWeightPerRelation.ContainsKey(r.def)),
+						(Func<DirectPawnRelation, float>)((DirectPawnRelation r) => PregnancyUtility.BeingFatherWeightPerRelation[r.def]),
+						out DirectPawnRelation fatherRelation))
+				{
+					sirer = fatherRelation.otherPawn;
+				}
+			}
+
+			// For two-pawn scenarios, check if we have viable reproductive pair
+			if (pawn2 != null && sirer == null)
+			{
+				if (SimpleTrans.debugMode)
+				{
+					Log.Message($"[Simple Trans DEBUG] No viable sirer found for two-pawn pregnancy");
+				}
+				return false;
+			}
+
+			// Calculate pregnancy chance (skip for single-pawn background pregnancies)
+			if (pawn2 != null)
+			{
+				float pregnancyChance = baseChance * PregnancyUtility.PregnancyChanceForPartners(carrier, sirer);
+
+				if (!Rand.Chance(pregnancyChance))
+				{
+					if (SimpleTrans.debugMode)
+					{
+						Log.Message($"[Simple Trans DEBUG] Pregnancy chance failed: {pregnancyChance:F3}");
+					}
+					return false;
+				}
+			}
+
+			// Create the actual pregnancy
+			return CreatePregnancyHediff(carrier, sirer, progressOverride, findRandomFather, showIncompatibilityMessage);
+		}
+		catch (System.Exception ex)
+		{
+			Log.Error($"[Simple Trans] Error in TryCreatePregnancy: {ex}");
+			return false;
+		}
+	}
+
+	/// <summary>
+	/// Internal method that creates the actual pregnancy hediff
+	/// </summary>
+	private static bool CreatePregnancyHediff(Pawn carrier, Pawn sirer, float? progressOverride, bool isBackgroundPregnancy, bool showIncompatibilityMessage)
+	{
+		try
+		{
+			if (carrier?.health == null)
+			{
+				Log.Error("[Simple Trans] CreatePregnancyHediff called with null carrier or missing health data");
+				return false;
+			}
+
+			// Create pregnancy hediff
+			Hediff_Pregnant pregnancy = (Hediff_Pregnant)HediffMaker.MakeHediff(HediffDefOf.PregnantHuman, carrier, (BodyPartRecord)null);
+			if (pregnancy == null)
+			{
+				Log.Error("[Simple Trans] Failed to create pregnancy hediff");
+				return false;
+			}
+
+			// Set pregnancy progress
+			if (progressOverride.HasValue)
+			{
+				pregnancy.Severity = progressOverride.Value;
+			}
+			else if (isBackgroundPregnancy)
+			{
+				// Background pregnancy - use random progress
+				FloatRange generatedPawnPregnancyProgressRange = PregnancyUtility.GeneratedPawnPregnancyProgressRange;
+				pregnancy.Severity = generatedPawnPregnancyProgressRange.RandomInRange;
+			}
+			// else: immediate pregnancy (severity defaults to 0)
+
+			// Check gene compatibility
+			bool genesCompatible;
+			GeneSet inheritedGeneSet = PregnancyUtility.GetInheritedGeneSet(sirer, carrier, out genesCompatible);
+
+			if (genesCompatible)
+			{
+				pregnancy.SetParents(null, sirer, inheritedGeneSet);
+				carrier.health.AddHediff(pregnancy);
+
+				if (SimpleTrans.debugMode)
+				{
+					Log.Message($"[Simple Trans DEBUG] Created pregnancy for {carrier.Name?.ToStringShort ?? "unknown"} with father {sirer?.Name?.ToStringShort ?? "none"}");
+				}
+
+				return true;
+			}
+			else
+			{
+				// Gene incompatibility
+				if (showIncompatibilityMessage && sirer != null &&
+					(PawnUtility.ShouldSendNotificationAbout(sirer) || PawnUtility.ShouldSendNotificationAbout(carrier)))
+				{
+					var message = "MessagePregnancyFailed".Translate(sirer.Named("FATHER"), carrier.Named("MOTHER")) +
+								 ": " + "CombinedGenesExceedMetabolismLimits".Translate();
+					Messages.Message(message, new LookTargets(sirer, carrier), MessageTypeDefOf.NegativeEvent);
+				}
+
+				if (SimpleTrans.debugMode)
+				{
+					Log.Message($"[Simple Trans DEBUG] Pregnancy failed due to gene incompatibility between {carrier.Name?.ToStringShort ?? "unknown"} and {sirer?.Name?.ToStringShort ?? "none"}");
+				}
+
+				return false;
+			}
+		}
+		catch (System.Exception ex)
+		{
+			Log.Error($"[Simple Trans] Error creating pregnancy hediff for {carrier?.Name?.ToStringShort ?? "unknown"}: {ex}");
+			return false;
+		}
+	}
+
 	#endregion
 }
