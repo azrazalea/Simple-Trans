@@ -44,35 +44,33 @@ public class PawnGenerator_GenerateInitialHediffs_Patch
 		try
 		{
 			request.AllowPregnant = __state;
-			
+
 			if (pawn == null)
 			{
 				Log.Error("[Simple Trans] GenerateInitialHediffs Postfix called with null pawn");
 				return;
 			}
-			
-			SimpleTransPregnancyUtility.ValidateOrSetGender(pawn);
-			
+
 			// Early exit if pregnancy is not applicable
 			if (!ModsConfig.BiotechActive || pawn.Dead || !request.AllowPregnant || !SimpleTransPregnancyUtility.CanCarry(pawn))
 			{
 				return;
 			}
-			
+
 			// Validate required objects exist
 			if (pawn.kindDef == null || pawn.ageTracker == null || Find.Storyteller?.difficulty == null)
 			{
 				SimpleTransDebug.Log("Missing required objects for pregnancy generation", 2);
 				return;
 			}
-			
+
 			// Calculate pregnancy chance
 			float pregnancyChance = pawn.kindDef.humanPregnancyChance * PregnancyUtility.PregnancyChanceForWoman(pawn);
-			
+
 			// Check if pregnancy should be generated
-			if (Find.Storyteller.difficulty.ChildrenAllowed && 
-				pawn.ageTracker.AgeBiologicalYears >= SimpleTransConstants.MinimumReproductiveAge && 
-				request.AllowPregnant && 
+			if (Find.Storyteller.difficulty.ChildrenAllowed &&
+				pawn.ageTracker.AgeBiologicalYears >= SimpleTransConstants.MinimumReproductiveAge &&
+				request.AllowPregnant &&
 				Rand.Chance(pregnancyChance))
 			{
 				TryCreatePregnancy(pawn);
@@ -83,7 +81,7 @@ public class PawnGenerator_GenerateInitialHediffs_Patch
 			Log.Error($"[Simple Trans] Error in GenerateInitialHediffs Postfix for {pawn?.Name?.ToStringShort ?? "unknown"}: {ex}");
 		}
 	}
-	
+
 	/// <summary>
 	/// Safely attempts to create a pregnancy for the given pawn
 	/// </summary>
@@ -99,24 +97,24 @@ public class PawnGenerator_GenerateInitialHediffs_Patch
 				Log.Error("[Simple Trans] Failed to create pregnancy hediff");
 				return;
 			}
-			
+
 			FloatRange generatedPawnPregnancyProgressRange = PregnancyUtility.GeneratedPawnPregnancyProgressRange;
 			((Hediff)pregnancy).Severity = generatedPawnPregnancyProgressRange.RandomInRange;
-			
+
 			// Determine father (if any)
 			Pawn father = null;
 			DirectPawnRelation fatherRelation = default(DirectPawnRelation);
-			
-			if (pawn.relations?.DirectRelations != null && 
-				!Rand.Chance(SimpleTransConstants.RandomFatherlessChance) && 
+
+			if (pawn.relations?.DirectRelations != null &&
+				!Rand.Chance(SimpleTransConstants.RandomFatherlessChance) &&
 				GenCollection.TryRandomElementByWeight<DirectPawnRelation>(
-					pawn.relations.DirectRelations.Where((DirectPawnRelation r) => PregnancyUtility.BeingFatherWeightPerRelation.ContainsKey(r.def)), 
-					(Func<DirectPawnRelation, float>)((DirectPawnRelation r) => PregnancyUtility.BeingFatherWeightPerRelation[r.def]), 
+					pawn.relations.DirectRelations.Where((DirectPawnRelation r) => PregnancyUtility.BeingFatherWeightPerRelation.ContainsKey(r.def)),
+					(Func<DirectPawnRelation, float>)((DirectPawnRelation r) => PregnancyUtility.BeingFatherWeightPerRelation[r.def]),
 					out fatherRelation))
 			{
 				father = fatherRelation.otherPawn;
 			}
-			
+
 			// Generate gene set and apply pregnancy if compatible
 			bool genesCompatible = default(bool);
 			GeneSet inheritedGeneSet = PregnancyUtility.GetInheritedGeneSet(father, pawn, out genesCompatible);
