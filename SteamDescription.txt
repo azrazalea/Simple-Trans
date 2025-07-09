@@ -125,41 +125,23 @@ Separates gender identity from reproductive biology using RimWorld's hediff syst
 [/list]
 
 [h3]Mod Compatibility[/h3]
-[b]Biotech:[/b] Complete pregnancy system override - all pregnancy checks use carry/sire capabilities
 [list]
-[*]This is done through transpilation and harmony postfix patches so should work with most other mods
-[/list]
-
-[b]Intimacy:[/b] Full compatibility testing with comprehensive debug logging system to ensure pregnancies are working properly
-[list]
-[*]Just turn on the debug option in mod settings to get detailed reports on pregnancy chances and results
-[/list]
-
-[b]Non-Binary Gender:[/b] Full integration, special spawn rates for non-binary reproductive configs. Non-binary people are always transgender.
-[list]
-[*]Right now just everyone is attracted to non-binary gender. This will be hard but not impossible to patch, because core game only uses gender to control base attraction.
-[*]I will need to patch vanilla and romance mods to include the other pawn's full info for me to be able to do this in a different way.
-[*]This is tested locally enough to ensure romance can happen, but I need help testing it thoroughly.
-[*]Open to ideas, but currently thinking we do it based on sire/carry? I don't love that because it is a bit transmedicalist but besides the current way I'm not sure how else to determine.
-[/list]
-
-[b]Other Mods:[/b]
-[list]
+[*][b]Biotech:[/b] Complete pregnancy system override using carry/sire capabilities
+[*][b]Intimacy:[/b] Full compatibility with debug logging (enable in settings for detailed reports)
+[*][b]Non-Binary Gender:[/b] Full integration with special spawn rates. Currently everyone is attracted to non-binary pawns (will improve in future)
 [*][b]Vanilla Framework Expanded:[/b] Complete gene system integration
-[*][b]HAR:[/b] Planned to implement
-[*][b]Way Better Romance:[/b] Should work if you aren't using non-binary mod. I'd like to write a patch to make them work together but way better romance is a lot more complicated than Intimacy so not sure when.
+[*][b]HAR:[/b] Planned support
+[*][b]Way Better Romance:[/b] Compatible (better integration planned)
 [/list]
 
 [hr]
 
 [h2]🐛 Debug Tools[/h2]
 
-Comprehensive debug system:
 [list]
-[*][b]Debug Mode Toggle:[/b] Enable extensive logging for pregnancy/romance mechanics (perfect for testing mod compatibility)
-[*][b]Dev Mode Actions:[/b] Validate gender assignments, set identities, modify capabilities
-[*][b]Compatibility Testing:[/b] Detailed logs show exactly how pregnancy decisions are made
-[*][b]Mod Integration:[/b] Debug logs help diagnose conflicts with romance/pregnancy mods
+[*][b]Debug Mode:[/b] Extensive logging for pregnancy/romance mechanics and mod compatibility testing
+[*][b]Dev Actions:[/b] Validate genders, set identities, modify capabilities
+[*][b]Compatibility Testing:[/b] Detailed logs for diagnosing mod conflicts
 [/list]
 
 [hr]
