@@ -84,9 +84,6 @@
       <!-- About folder -->
       <AboutFiles Include="$(MSBuildProjectDirectory)\..\About\**\*.*" />
       
-      <!-- Languages folder -->
-      <LanguagesFiles Include="$(MSBuildProjectDirectory)\..\Languages\**\*.*" />
-      
       <!-- ModSupport folder -->
       <ModSupportFiles Include="$(MSBuildProjectDirectory)\..\ModSupport\**\*.*" />
       
@@ -103,7 +100,6 @@
     <Copy SourceFiles="@(SourceFiles)" DestinationFiles="@(SourceFiles->'$(RimWorldPath)\Mods\$(ModName)\Source\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(SixteenFiles)" DestinationFiles="@(SixteenFiles->'$(RimWorldPath)\Mods\$(ModName)\1.6\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(AboutFiles)" DestinationFiles="@(AboutFiles->'$(RimWorldPath)\Mods\$(ModName)\About\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(LanguagesFiles)" DestinationFiles="@(LanguagesFiles->'$(RimWorldPath)\Mods\$(ModName)\Languages\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(ModSupportFiles)" DestinationFiles="@(ModSupportFiles->'$(RimWorldPath)\Mods\$(ModName)\ModSupport\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(RootFiles)" DestinationFiles="@(RootFiles->'$(RimWorldPath)\Mods\$(ModName)\%(Filename)%(Extension)')" />
     
