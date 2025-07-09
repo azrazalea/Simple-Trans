@@ -59,6 +59,46 @@
       <description>An extracted, unfertilized human ovum cell stored in a protective capsule. Once fertilized by a sire, it becomes an embryo which can then be implanted into a carrier or growth vat.</description>
     </value>
   </Operation>
+
+  <!-- Update PregnantHuman hediff description to use carrier terminology -->
+  <Operation Class="XmlExtensions.PatchOperationReplace">
+    <xpath>Defs/HediffDef[defName="PregnantHuman"]/description</xpath>
+    <value>
+      <description>A baby growing inside a carrier, preparing to be born. In humans, pregnancy lasts for 18 days and is divided into 3 trimesters. As the pregnancy grows it will reduce the carrier's mobility. For some carriers, pregnancy may induce nausea or mood swings that can be hard to deal with.</description>
+    </value>
+  </Operation>
+
+  <!-- Update PregnancyLaborPushing hediff description to use carrier terminology -->
+  <Operation Class="XmlExtensions.PatchOperationReplace">
+    <xpath>Defs/HediffDef[defName="PregnancyLaborPushing"]/description</xpath>
+    <value>
+      <description>The baby is descending the birth canal and the carrier has a strong urge to push. The birth is imminent.</description>
+    </value>
+  </Operation>
+
+  <!-- Update PostpartumExhaustion hediff description to use carrier terminology -->
+  <Operation Class="XmlExtensions.PatchOperationReplace">
+    <xpath>Defs/HediffDef[defName="PostpartumExhaustion"]/description</xpath>
+    <value>
+      <description>General after-effects of giving birth. This carrier needs some time to physically recover.</description>
+    </value>
+  </Operation>
+
+  <!-- Update Lactating hediff description to use carrier terminology -->
+  <Operation Class="XmlExtensions.PatchOperationReplace">
+    <xpath>Defs/HediffDef[defName="Lactating"]/description</xpath>
+    <value>
+      <description>The condition of being able to breastfeed a baby. The breasts are actively producing and storing milk. The lactating state begins when a carrier gives birth, and continues indefinitely as long as they breastfeed a baby at least once every 10 days.\n\nPeople who are lactating will have a harder time becoming pregnant.</description>
+    </value>
+  </Operation>
+
+  <!-- Update OvumExtracted hediff description to use carrier terminology -->
+  <Operation Class="XmlExtensions.PatchOperationReplace">
+    <xpath>Defs/HediffDef[defName="OvumExtracted"]/description</xpath>
+    <value>
+      <description>This carrier recently underwent an ovum extraction procedure. No more ova can be extracted until some time has passed.</description>
+    </value>
+  </Operation>
   
   <!-- Replace vanilla hediffs with our capability-specific ones -->
   <!-- TubalLigation = permanent, Vasectomy = reversible, IUD = reversible -->

@@ -115,16 +115,17 @@ namespace Simple_Trans.Patches
 
         /// <summary>
         /// Simple Trans replacement for HumanOvum.CanFertilizeReport
-        /// Checks sirer capability instead of vanilla gender/sterility
+        /// Checks sirer capability instead of vanilla gender/sterility with specific error messages
         /// </summary>
         /// <param name="pawn">The pawn to check</param>
         /// <returns>AcceptanceReport indicating if pawn can fertilize</returns>
         private static AcceptanceReport CanFertilizeReport_SimpleTrans(Pawn pawn)
         {
-            // Check if pawn can sire (this handles both capability and sterility checks)
-            if (!SimpleTransPregnancyUtility.CanSire(pawn))
+            // Check if pawn can sire (this handles both capability and sterility checks with specific reasons)
+            AcceptanceReport sireReport = SimpleTransPregnancyUtility.CanSireReport(pawn);
+            if (!sireReport.Accepted)
             {
-                return "CannotSterile".Translate();
+                return sireReport;
             }
 
             // Check if pawn is quest lodger

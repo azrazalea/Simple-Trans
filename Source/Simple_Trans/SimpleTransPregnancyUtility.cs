@@ -140,28 +140,44 @@ public static class SimpleTransPregnancyUtility
 	/// <returns>True if the pawn can carry pregnancies</returns>
 	public static bool CanCarry(Pawn pawn)
 	{
+		return CanCarryReport(pawn).Accepted;
+	}
+
+	/// <summary>
+	/// Determines if a pawn can carry pregnancies with detailed reason
+	/// </summary>
+	/// <param name="pawn">The pawn to check</param>
+	/// <returns>AcceptanceReport with reason if unable to carry</returns>
+	public static AcceptanceReport CanCarryReport(Pawn pawn)
+	{
 		if (pawn?.health?.hediffSet == null)
 		{
-			SimpleTransDebug.Log("CanCarry called with null pawn or missing health data", 1);
-			return false;
+			SimpleTransDebug.Log("CanCarryReport called with null pawn or missing health data", 1);
+			return "CannotNoAbility".Translate();
 		}
 
 		// Check if pawn has carry capability
 		if (!pawn.health.hediffSet.HasHediff(canCarryDef, false))
 		{
-			return false;
+			return "CannotNoAbility".Translate();
 		}
 
 		// Check for sterilization that blocks carrying
 		if (pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Sterilized) != null)
 		{
-			return false; // Vanilla sterilized blocks all reproduction
+			return "CannotSterile".Translate();
 		}
 
 		var sterilizedCarryDef = DefDatabase<HediffDef>.GetNamedSilentFail("SterilizedCarry");
 		if (sterilizedCarryDef != null && pawn.health.hediffSet.HasHediff(sterilizedCarryDef, false))
 		{
-			return false; // Specifically sterilized for carrying
+			return "CannotSterile".Translate();
+		}
+
+		var reversibleSterilizedCarryDef = DefDatabase<HediffDef>.GetNamedSilentFail("ReversibleSterilizedCarry");
+		if (reversibleSterilizedCarryDef != null && pawn.health.hediffSet.HasHediff(reversibleSterilizedCarryDef, false))
+		{
+			return "CannotSterile".Translate();
 		}
 
 		return true;
@@ -174,28 +190,44 @@ public static class SimpleTransPregnancyUtility
 	/// <returns>True if the pawn can sire offspring</returns>
 	public static bool CanSire(Pawn pawn)
 	{
+		return CanSireReport(pawn).Accepted;
+	}
+
+	/// <summary>
+	/// Determines if a pawn can sire offspring with detailed reason
+	/// </summary>
+	/// <param name="pawn">The pawn to check</param>
+	/// <returns>AcceptanceReport with reason if unable to sire</returns>
+	public static AcceptanceReport CanSireReport(Pawn pawn)
+	{
 		if (pawn?.health?.hediffSet == null)
 		{
-			SimpleTransDebug.Log("CanSire called with null pawn or missing health data", 1);
-			return false;
+			SimpleTransDebug.Log("CanSireReport called with null pawn or missing health data", 1);
+			return "CannotNoAbility".Translate();
 		}
 
 		// Check if pawn has sire capability
 		if (!pawn.health.hediffSet.HasHediff(canSireDef, false))
 		{
-			return false;
+			return "CannotNoAbility".Translate();
 		}
 
 		// Check for sterilization that blocks siring
 		if (pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Sterilized) != null)
 		{
-			return false; // Vanilla sterilized blocks all reproduction
+			return "CannotSterile".Translate();
 		}
 
 		var sterilizedSireDef = DefDatabase<HediffDef>.GetNamedSilentFail("SterilizedSire");
 		if (sterilizedSireDef != null && pawn.health.hediffSet.HasHediff(sterilizedSireDef, false))
 		{
-			return false; // Specifically sterilized for siring
+			return "CannotSterile".Translate();
+		}
+
+		var reversibleSterilizedSireDef = DefDatabase<HediffDef>.GetNamedSilentFail("ReversibleSterilizedSire");
+		if (reversibleSterilizedSireDef != null && pawn.health.hediffSet.HasHediff(reversibleSterilizedSireDef, false))
+		{
+			return "CannotSterile".Translate();
 		}
 
 		return true;
@@ -537,8 +569,19 @@ public static class SimpleTransPregnancyUtility
 				return;
 			}
 
+			// Check if pawn is pregnant - if so, skip capability clearing to preserve pregnancy
+			bool isPregnant = pawn.health.hediffSet.HasHediff(HediffDefOf.PregnantHuman);
+			
 			// Clear any existing gender and capability hediffs to start fresh
-			ClearGender(pawn, clearIdentity: true, clearCapabilities: true);
+			// BUT preserve capabilities if pregnant to avoid terminating pregnancy
+			ClearGender(pawn, clearIdentity: true, clearCapabilities: !isPregnant);
+
+			// If pregnant, ensure they have carry ability (they must have it to be pregnant)
+			if (isPregnant && !CanCarry(pawn))
+			{
+				SetCarry(pawn, false, clearSterilization: true);
+				SimpleTransDebug.Log($"Added carry ability to pregnant pawn {pawn.Name?.ToStringShort}", 2);
+			}
 
 			// Use unified determination logic
 			var (isTransgender, canCarry, canSire) = DetermineGenderAndCapabilities(pawn);
@@ -554,7 +597,11 @@ public static class SimpleTransPregnancyUtility
 			}
 
 			// Apply reproductive capabilities with prosthetics and sterilization
-			ApplyReproductiveCapabilities(pawn, canCarry, canSire);
+			// BUT skip if pregnant to avoid interfering with ongoing pregnancy
+			if (!isPregnant)
+			{
+				ApplyReproductiveCapabilities(pawn, canCarry, canSire);
+			}
 
 			// Handle backwards compatibility: convert vanilla Sterilized to capability-specific sterilization
 			ConvertVanillaSterilizedHediff(pawn, isTransgender);
@@ -749,7 +796,7 @@ public static class SimpleTransPregnancyUtility
 	/// </summary>
 	/// <param name="pawn">The pawn to modify</param>
 	/// <param name="removeSire">Whether to remove siring ability (for exclusive reproductive roles)</param>
-	public static void SetCarry(Pawn pawn, bool removeSire = false)
+	public static void SetCarry(Pawn pawn, bool removeSire = false, bool clearSterilization = false)
 	{
 		if (pawn?.health?.hediffSet == null)
 		{
@@ -767,6 +814,31 @@ public static class SimpleTransPregnancyUtility
 					pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(canSireDef));
 				}
 			}
+
+			// Optionally clear carry-related sterilization
+			if (clearSterilization)
+			{
+				var sterilizedCarryDef = DefDatabase<HediffDef>.GetNamedSilentFail("SterilizedCarry");
+				if (sterilizedCarryDef != null && pawn.health.hediffSet.HasHediff(sterilizedCarryDef, false))
+				{
+					pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(sterilizedCarryDef));
+					SimpleTransDebug.Log($"Cleared carry sterilization for {pawn.Name?.ToStringShort}", 2);
+				}
+
+				var reversibleSterilizedCarryDef = DefDatabase<HediffDef>.GetNamedSilentFail("ReversibleSterilizedCarry");
+				if (reversibleSterilizedCarryDef != null && pawn.health.hediffSet.HasHediff(reversibleSterilizedCarryDef, false))
+				{
+					pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(reversibleSterilizedCarryDef));
+					SimpleTransDebug.Log($"Cleared reversible carry sterilization for {pawn.Name?.ToStringShort}", 2);
+				}
+
+				// Also clear vanilla sterilization since it blocks all reproduction
+				if (pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Sterilized) != null)
+				{
+					pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(HediffDefOf.Sterilized));
+					SimpleTransDebug.Log($"Cleared vanilla sterilization for {pawn.Name?.ToStringShort}", 2);
+				}
+			}
 		}
 		catch (System.Exception ex)
 		{
@@ -779,7 +851,7 @@ public static class SimpleTransPregnancyUtility
 	/// </summary>
 	/// <param name="pawn">The pawn to modify</param>
 	/// <param name="removeCarry">Whether to remove carrying ability (for exclusive reproductive roles)</param>
-	public static void SetSire(Pawn pawn, bool removeCarry = false)
+	public static void SetSire(Pawn pawn, bool removeCarry = false, bool clearSterilization = false)
 	{
 		if (pawn?.health?.hediffSet == null)
 		{
@@ -795,6 +867,31 @@ public static class SimpleTransPregnancyUtility
 				if ((removeCarry || pawn.gender == Gender.Male) && pawn.health.hediffSet.HasHediff(canCarryDef, false))
 				{
 					pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(canCarryDef));
+				}
+			}
+
+			// Optionally clear sire-related sterilization
+			if (clearSterilization)
+			{
+				var sterilizedSireDef = DefDatabase<HediffDef>.GetNamedSilentFail("SterilizedSire");
+				if (sterilizedSireDef != null && pawn.health.hediffSet.HasHediff(sterilizedSireDef, false))
+				{
+					pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(sterilizedSireDef));
+					SimpleTransDebug.Log($"Cleared sire sterilization for {pawn.Name?.ToStringShort}", 2);
+				}
+
+				var reversibleSterilizedSireDef = DefDatabase<HediffDef>.GetNamedSilentFail("ReversibleSterilizedSire");
+				if (reversibleSterilizedSireDef != null && pawn.health.hediffSet.HasHediff(reversibleSterilizedSireDef, false))
+				{
+					pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(reversibleSterilizedSireDef));
+					SimpleTransDebug.Log($"Cleared reversible sire sterilization for {pawn.Name?.ToStringShort}", 2);
+				}
+
+				// Also clear vanilla sterilization since it blocks all reproduction
+				if (pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Sterilized) != null)
+				{
+					pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(HediffDefOf.Sterilized));
+					SimpleTransDebug.Log($"Cleared vanilla sterilization for {pawn.Name?.ToStringShort}", 2);
 				}
 			}
 		}

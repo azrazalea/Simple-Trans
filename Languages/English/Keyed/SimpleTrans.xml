@@ -105,4 +105,19 @@
   <SimpleTrans.Change.SetBodyType>Change body type to {0}</SimpleTrans.Change.SetBodyType>
   <SimpleTrans.Change.SetIdentity>Change identity to {0}</SimpleTrans.Change.SetIdentity>
 
+  <!-- Vanilla Translation Overrides for Inclusive Language -->
+  <!-- Fertility and Pregnancy Terms -->
+  <FertilizeGizmoDescription>Choose a sire to fertilize this ovum to create an embryo. The embryo can then be implanted in a carrier to start a pregnancy, or in a growth vat. The biological parents of the resulting child will be the person who provided the ovum and the sire who fertilized it.</FertilizeGizmoDescription>
+  <FertilizeDisabledNoMales>No sires can fertilize this ovum.</FertilizeDisabledNoMales>
+  <ImplantDisabledNoWomen>No carrier can be a surrogate.</ImplantDisabledNoWomen>
+  <ImplantDescription>Implant this embryo in a surrogate carrier to begin a pregnancy.</ImplantDescription>
+  <ImplantSurgeryConfirm>The implantation success chance for the {0} in {1} is {2}.\n\nThe implantation success chance is dependent on the fertility of the surrogate carrier. It will be lower if the carrier is too old or too young.</ImplantSurgeryConfirm>
+  <IvfPregnancyLetterParents>The baby will have the genetic makeup of {0} and {1}.</IvfPregnancyLetterParents>
+  <ChildBirthAlwaysHealthy_Desc>Gather to help a carrier give birth. A doctor can help deliver the baby.</ChildBirthAlwaysHealthy_Desc>
+  <FatherTip>Sire</FatherTip>
+  <MotherTip>Genetic carrier</MotherTip>
+
+  <!-- New translation key for lack of reproductive ability -->
+  <CannotNoAbility>lacks reproductive ability</CannotNoAbility>
+
 </LanguageData>

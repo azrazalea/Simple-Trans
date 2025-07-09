@@ -1,18 +1,56 @@
-🏥 **Major Medical System Update**
-- Complete surgery system: organ transplantation, basic/bionic prosthetics, with ideology(if present) gender affirming biosculpter cycle
-- Capability-specific sterilization (carry vs sire) with backwards compatibility that tries to cover vanilla sterilization
-- Updated pawn generation to be able to generate all possiblities, and added more settings.
-- Comprehensive safety features: informed consent dialogs, pregnancy preservation/termination warnings
-- Enhanced vanilla surgery integration (vasectomy, IUD, embryo implantation now work with carry/sire system)
-- **PREGNANCY SYSTEM OVERHAUL**: All pregnancy compatibility checks now use carry/sire capabilities instead of gender
-- **COMPREHENSIVE DEBUG LOGGING**: Extensive debug mode for testing pregnancy/romance mod compatibility
-- Full gene system compatibility and improved mod integration with Intimacy and Non-Binary Gender. Patches Intimacy and non-binary gender to work together.
-  - Non-binary people are just attractive to everyone in current implementation. I hope to improve this in the future.
-  - I've done basic tests on this but more extensive testing is needed.
-- See updated steam workshop page for more details
+[h1]🏥 Major Medical System Update[/h1]
 
-⚠️ **Important:** This update involved extensive code changes including a complete pregnancy system rewrite. The mod now overrides ALL vanilla pregnancy logic to support trans individuals and prosthetics properly.
+[h2]🔬 Core Medical Systems[/h2]
+[list]
+[*]Complete surgery system: organ transplantation, basic/bionic prosthetics, with ideology (if present) gender affirming biosculpter cycle
+[*]Capability-specific sterilization (carry vs sire) with backwards compatibility that tries to cover vanilla sterilization
+[*]Updated pawn generation to be able to generate all possibilities, and added more settings
+[*]Comprehensive safety features: informed consent dialogs, pregnancy preservation/termination warnings
+[*]Enhanced vanilla surgery integration (vasectomy, IUD, embryo implantation now work with carry/sire system)
+[/list]
 
-🔧 **For Mod Compatibility Testing:** Enable debug mode in mod settings to get detailed logs of all pregnancy/romance decisions - essential for testing compatibility with mods like Intimacy, Way Better Romance, etc.
+[h2]🤰 Pregnancy System Overhaul[/h2]
+[b]ALL pregnancy compatibility checks now use carry/sire capabilities instead of gender[/b]
+[list]
+[*]Complete rewrite of vanilla pregnancy logic
+[*]Full support for trans individuals and prosthetics
+[*]Maintains compatibility with existing saves
+[/list]
+
+[h2]🐛 Debug & Compatibility[/h2]
+[b]COMPREHENSIVE DEBUG LOGGING:[/b] Extensive debug mode for testing pregnancy/romance mod compatibility
+[list]
+[*]Enable debug mode in mod settings to get detailed logs of all pregnancy/romance decisions
+[*]Essential for testing compatibility with mods like Intimacy, Way Better Romance, etc.
+[*]Detailed reports on pregnancy chances and results
+[/list]
+
+[h2]🤝 Mod Integration[/h2]
+Full gene system compatibility and improved mod integration:
+[list]
+[*][b]Intimacy:[/b] Full compatibility with comprehensive testing
+[*][b]Non-Binary Gender:[/b] Full integration and patches to work together with Intimacy
+[*][b]Vanilla Framework Expanded:[/b] Complete gene system integration
+[/list]
+
+[b]Current Limitations:[/b]
+[list]
+[*]Non-binary people are just attractive to everyone in current implementation. I hope to improve this in the future.
+[*]I've done basic tests on this but more extensive testing is needed.
+[/list]
+
+[hr]
+
+[h2]⚠️ Important Notes[/h2]
+
+[b][u]This update involved extensive code changes including a complete pregnancy system rewrite.[/u][/b] The mod now overrides ALL vanilla pregnancy logic to support trans individuals and prosthetics properly.
+
+[b]For Mod Compatibility Testing:[/b] Enable debug mode in mod settings to get detailed logs of all pregnancy/romance decisions - essential for testing compatibility with mods like Intimacy, Way Better Romance, etc.
+
+[hr]
+
+[h2]📋 Summary[/h2]
 
 This update transforms Simple Trans from a basic gender identity mod into a comprehensive medical system for reproductive healthcare in RimWorld.
+
+See updated Steam Workshop page for complete details and compatibility information.
