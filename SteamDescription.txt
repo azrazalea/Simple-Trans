@@ -1,6 +1,7 @@
 [h1]🏳️‍⚧️ Simple Trans (Expanded) - Gender Identity & Reproductive Biology System[/h1]
 
-[i]Continued from Runaway's original mod, completely rebuilt for RimWorld 1.6[/i]
+[i]Continued from Runaway's original mod, completely rebuilt for RimWorld 1.6+ ONLY[/i]
+[i]⚠️ If you are on Rimworld 1.5 please use [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3345402828]the original Simple Trans mod[/url]![/i]
 
 [b][u]⚠️ I CHANGED NEARLY ALL OF THE CODE, PLEASE EXPECT BUGS AND REPORT THEM WITH LOGS AND/OR SAVE FILES[/u][/b]
 
@@ -27,7 +28,7 @@
 [*]❌ [b]Same Sex IVF[/b] - No longer recommended (Simple Trans handles IVF independently via carry/sire system)
 [/list]
 
-[h2] If you are adding mid-save, go to development mode and Debug Tools and click "Validate All Genders" to get reproductive capability and gender identity set for existing pawns. Then there are debug tools to customize further if you want specific pawns to be setup certain ways![/h2]
+[h2]⚠️ If you are adding mid-save, go to development mode and Debug Tools and click "Validate All Genders" to get reproductive capability and gender identity set for existing pawns. Then there are debug tools to customize further if you want specific pawns to be setup certain ways![/h2]
 
 [hr]
 
@@ -148,7 +149,7 @@ Separates gender identity from reproductive biology using RimWorld's hediff syst
 
 [h2]📖 About This Version[/h2]
 
-Originally by Runaway for RimWorld 1.5, this continuation was completely decompiled and rebuilt with:
+Originally by Runaway, this continuation was completely decompiled and rebuilt with:
 [list]
 [*]Modern C# practices and comprehensive error handling
 [*]Extensive new medical systems (surgery, prosthetics, biosculpter integration)
@@ -157,6 +158,13 @@ Originally by Runaway for RimWorld 1.5, this continuation was completely decompi
 [/list]
 
 The original philosophy remains: providing meaningful representation for transgender colonists in RimWorld through detailed, respectful gameplay mechanics.
+
+[hr]
+
+[h2]🔗 Links & Resources[/h2]
+
+📁 [url=https://github.com/azrazalea/Simple-Trans]GitHub Repository[/url] - Source code, issues, and contributions
+🔗 [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3345402828]Original Simple Trans Mod[/url] - By Runaway (for RimWorld 1.5)
 
 [hr]
 

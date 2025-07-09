@@ -1,3 +1,6 @@
+[h1] July 9th, 2025 [/h1]
+Removed support for RimWorld 1.5, please use original simple trans mod if you are on 1.5.
+
 [h1] July 7th, 2025 #2 [/h1]
 Made sure Validate All Genders will never terminate a pre-existing pregnancy.
 

@@ -1,10 +1,10 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI coding assistants (Claude Code, GitHub Copilot, etc.) when working with code in this repository. It contains project-specific context to help AI tools understand the codebase structure and development workflow.
 
 ## Project Overview
 
-Simple Trans is a RimWorld mod that adds a system for differentiating how pawns interact with pregnancy and AGAR (Assigned Gender at Rimworld). The mod was originally created for RimWorld 1.5 and has been decompiled and updated for 1.6 compatibility.
+Simple Trans is a RimWorld mod that adds a system for differentiating how pawns interact with pregnancy and AGAR (Assigned Gender at Rimworld). The mod was originally created for RimWorld 1.5 and has been decompiled and updated for 1.6 ONLY.
 
 ## Development Commands
 
@@ -41,10 +41,10 @@ Simple Trans/
 │   │   ├── VECore_*.cs        # Vanilla Expanded Framework patches
 │   │   └── Pregnancy*.cs      # RimWorld pregnancy system patches
 │   └── Properties/            # Assembly metadata
-├── 1.5/                       # Original 1.5 version (reference)
 ├── 1.6/                       # Updated 1.6 version
 │   └── Assemblies/            # Compiled DLLs (auto-generated)
-├── About/                     # Mod metadata
+|   ModSupport/Ideology/      # Ideology specific defs and patches 
+├── About/                    # Mod metadata
 │   ├── About.xml             # Mod info, dependencies, versions
 │   ├── Preview.png           # Steam Workshop preview
 │   └── PublishedFileId.txt   # Steam Workshop ID
@@ -117,3 +117,61 @@ Currently set up for RimWorld 1.6, but the structure supports multi-version buil
 - Update `About.xml` supported versions
 - Create version-specific folders (1.5/, 1.6/, etc.)
 - Modify project file OutputPath for different versions
+
+## Important Guidelines for AI Assistants
+
+### Common Pitfalls to Avoid
+
+1. **Never modify pawn generation randomness** - The maintainer handles all random pawn generation logic personally
+2. **Avoid breaking save compatibility** - Always preserve existing hediff names and structures
+3. **Don't change mod load order** - The current load order is carefully tested
+4. **Respect the original philosophy** - This mod focuses on respectful transgender representation
+
+### Key Files for Specific Tasks
+
+- **Gender assignment logic**: `SimpleTransPregnancyUtility.cs` - `ValidateOrSetGender()`
+- **Pregnancy patches**: Files in `Simple_Trans.Patches/` starting with `Pregnancy`
+- **Settings**: `1.6/Defs/Settings.xml` (XML Extensions format)
+- **Surgery definitions**: `1.6/Defs/Surgery_SimpleTrans.xml`
+- **Ritual definitions**: `ModSupport/Ideology/` folder
+
+### Code Style Preferences
+
+1. **Use comprehensive logging** in debug mode - see `SimpleTransDebug.cs` for examples
+2. **Null-check everything** - RimWorld mods must be defensive
+3. **Preserve original comments** when refactoring
+4. **Use explicit type declarations** over `var` for clarity
+5. **Add XML documentation** to all public methods
+
+### Testing Guidelines
+
+1. **Always test with debug mode enabled** in mod settings
+2. **Check compatibility with**: Vanilla Expanded Framework, Non-Binary Gender, Intimacy
+3. **Test save/load compatibility** after any hediff changes
+4. **Verify pregnancy system** works for all gender/capability combinations
+
+### Common Development Tasks
+
+#### Adding a new surgery:
+1. Define in `Surgery_SimpleTrans.xml`
+2. Create Recipe class in `Surgery/` folder
+3. Add dialog if user choice is needed
+4. Update localization in `SimpleTrans.xml`
+
+#### Adding mod compatibility:
+1. Check mod detection in `SimpleTrans.cs` constructor
+2. Add patches in `Simple_Trans.Patches/`
+3. Use `[HarmonyPatch]` attributes appropriately
+4. Test load order requirements
+
+#### Debugging pregnancy issues:
+1. Enable debug mode in settings
+2. Check `SimpleTransDebug.DebugPregnancyChance()` output
+3. Verify hediffs with dev mode "Simple Trans: Show Gender" action
+
+### Important Context
+
+- This mod was decompiled from a compiled DLL, so some code patterns may seem unusual
+- The maintainer is actively developing this mod with AI assistance
+- User feedback is important - check GitHub issues before making major changes
+- The mod philosophy is inclusive and respectful - maintain this tone in all additions

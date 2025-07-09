@@ -4,7 +4,7 @@ A RimWorld mod that adds a comprehensive system for differentiating how pawns in
 
 ## About This Version
 
-This is a **continued version** of the original Simple Trans mod by **Runaway**. The original mod was created for RimWorld 1.5 and this version has been **completely decompiled, modernized, and updated for RimWorld 1.6** compatibility.
+This is a **continued version** of the original Simple Trans mod by **Runaway**. This version has been **completely decompiled, modernized, and updated for RimWorld 1.6+** compatibility.
 
 **Original Author:** Runaway  
 **Current Maintainer:** azrazalea  
@@ -67,17 +67,41 @@ Must be loaded **after** Vanilla Social Interactions Expanded to ensure proper p
 
 ### Development
 This version was created by:
-1. **Decompiling** the original 1.5 mod using ILSpy
+1. **Decompiling** the original mod using ILSpy
 2. **Modernizing** the codebase with C# best practices
 3. **Updating** for RimWorld 1.6 compatibility
 4. **Adding** comprehensive error handling and documentation
 5. **Enhancing** with improved debugging tools
+
+**AI Assistance Disclosure:** This continuation makes extensive use of AI coding assistants (Claude Opus 4 and Sonnet 4) for code modernization, documentation, and implementation of new features. The maintainer reviews all AI-generated code, handles complex logic (particularly random pawn generation), and ensures code quality and correctness. AI assistance has been instrumental in rapidly modernizing and expanding this mod while maintaining its original philosophy.
 
 ### Architecture
 - **Harmony Patches:** Integrates with RimWorld's core systems
 - **Hediff System:** Uses health conditions to track gender identity and reproductive capabilities
 - **Gene Integration:** Works with Biotech genes and VEF extensions
 - **Settings System:** XML Extensions-powered configuration
+
+### Building from Source
+
+To compile this mod from source, you'll need:
+
+1. **.NET Framework 4.8** or higher
+2. **RimWorld installation** (the project references game assemblies)
+3. **Required mod dependencies** in adjacent directories:
+   - `../VanillaExpandedFramework/1.6/Assemblies/VEF.dll`
+   - `../XML Extensions/1.6/Assemblies/XmlExtensions.dll`
+   - `../Non-Binary Gender/1.6/Assemblies/NonBinaryGender.dll` (optional)
+
+The project expects these mods to be installed in directories parallel to this mod. If your mod directory structure differs, update the paths in `Source/Simple-Trans.csproj`.
+
+To build:
+```bash
+dotnet build Source/Simple-Trans.csproj
+```
+
+The build process will automatically:
+- Compile the mod to `1.6/Assemblies/`
+- Deploy the entire mod to your RimWorld Mods folder
 
 ## Contributing
 

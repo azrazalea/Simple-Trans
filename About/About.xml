@@ -2,7 +2,7 @@
 
 <ModMetaData>
     <name>Simple Trans (Expanded)</name>
-    <description>Simple Trans (Expanded) is a major expansion of the original Simple Trans Continued mod, providing a comprehensive gender identity and reproductive capability system for RimWorld.
+    <description>Simple Trans (Expanded) is a 1.6-only major expansion of the original Simple Trans Continued mod, providing a comprehensive gender identity and reproductive capability system for RimWorld.
 
 **Core Features:**
 • Separates gender identity from reproductive biology using hediff system
@@ -25,7 +25,6 @@
 This expansion adds extensive medical systems, safety features, and enhanced mod compatibility while maintaining the original philosophy of providing meaningful transgender representation in RimWorld through detailed, respectful gameplay mechanics.</description>
     <author>Original author Runaway, Current azrazalea</author>
     <supportedVersions>
-        <li>1.5</li>
         <li>1.6</li>
     </supportedVersions>
     <packageId>runaway.simpletrans</packageId>
