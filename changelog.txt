@@ -3,6 +3,7 @@ Removed support for RimWorld 1.5, please use original simple trans mod if you ar
 Conslidated and cleaned up debug messages to make them a bit less noisy while still providing good information.
 Updated XML Extensions settings to apply on close of settings menu, should allow pawn generation settings to immediately take affect.
 Updated preview image for workshop.
+Rewrote settings xml to better use XML Extensions features and fix some weird slider UI bugs. I don't like the layout as much, but it works now.
 
 [h1] July 7th, 2025 #2 [/h1]
 Made sure Validate All Genders will never terminate a pre-existing pregnancy.
