@@ -231,10 +231,7 @@ namespace Simple_Trans
 
                 anyChanges = true;
 
-                if (SimpleTrans.debugMode)
-                {
-                    Log.Message($"[Simple Trans DEBUG] Changed name from '{oldName}' to '{celebrant.Name?.ToStringFull ?? "unknown"}'");
-                }
+                SimpleTransDebug.Log($"Gender affirmation ritual: Changed name from '{oldName}' to '{celebrant.Name?.ToStringFull ?? "unknown"}'", 1);
             }
 
             // Apply gender change if different
@@ -243,10 +240,7 @@ namespace Simple_Trans
                 celebrant.gender = selectedGender;
                 anyChanges = true;
 
-                if (SimpleTrans.debugMode)
-                {
-                    Log.Message($"[Simple Trans DEBUG] Changed {celebrant.Name?.ToStringShort ?? "unknown"}'s gender to {selectedGender}");
-                }
+                SimpleTransDebug.Log($"Gender affirmation ritual: Changed {celebrant.Name?.ToStringShort ?? "unknown"}'s gender to {selectedGender}", 1);
             }
 
             // Apply identity change if different
@@ -268,10 +262,7 @@ namespace Simple_Trans
 
                 anyChanges = true;
 
-                if (SimpleTrans.debugMode)
-                {
-                    Log.Message($"[Simple Trans DEBUG] Changed {celebrant.Name?.ToStringShort ?? "unknown"}'s identity to {selectedIdentity}");
-                }
+                SimpleTransDebug.Log($"Gender affirmation ritual: Changed {celebrant.Name?.ToStringShort ?? "unknown"}'s identity from {currentIdentity} to {selectedIdentity}", 1);
             }
 
             if (anyChanges)

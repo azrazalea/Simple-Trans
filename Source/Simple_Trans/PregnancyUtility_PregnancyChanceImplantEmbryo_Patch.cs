@@ -18,18 +18,10 @@ public class PregnancyUtility_PregnancyChanceImplantEmbryo_Patch
 	/// <param name="surrogate">The pawn receiving the embryo</param>
 	public static void Postfix(ref float __result, Pawn surrogate)
 	{
-		if (SimpleTrans.debugMode)
-		{
-			Log.Message($"[Simple Trans DEBUG] PregnancyChanceImplantEmbryo called - Surrogate: {surrogate?.Name?.ToStringShort ?? "null"}, Original result: {__result:F3}");
-		}
-		
 		// Check if surrogate can actually carry pregnancies
 		if (!SimpleTransPregnancyUtility.CanCarry(surrogate))
 		{
-			if (SimpleTrans.debugMode)
-			{
-				Log.Message($"[Simple Trans DEBUG] Surrogate {surrogate?.Name?.ToStringShort ?? "null"} cannot carry - setting implantation chance to 0");
-			}
+			SimpleTransDebug.Log($"Embryo implantation failed: {surrogate?.Name?.ToStringShort ?? "null"} cannot carry", 2);
 			__result = 0f;
 			return;
 		}
@@ -45,19 +37,12 @@ public class PregnancyUtility_PregnancyChanceImplantEmbryo_Patch
 		{
 			// Bionic prosthetic guarantees higher success rate
 			implantationChance = UnityEngine.Mathf.Clamp01(implantationChance * 1.5f);
-			
-			if (SimpleTrans.debugMode)
-			{
-				Log.Message($"[Simple Trans DEBUG] Bionic carry prosthetic bonus applied - new chance: {implantationChance:F3}");
-			}
+			SimpleTransDebug.Log($"Bionic carry prosthetic bonus applied: {implantationChance:F3}", 2);
 		}
 		
 		__result = implantationChance;
 		
-		if (SimpleTrans.debugMode)
-		{
-			Log.Message($"[Simple Trans DEBUG] Final implantation chance for {surrogate?.Name?.ToStringShort ?? "null"}: {__result:F3} (base fertility: {baseFertility:F3})");
-		}
+		SimpleTransDebug.Log($"Embryo implantation chance: {surrogate?.Name?.ToStringShort ?? "null"} = {__result:F3} (base: {baseFertility:F3})", 2);
 	}
 	
 	/// <summary>

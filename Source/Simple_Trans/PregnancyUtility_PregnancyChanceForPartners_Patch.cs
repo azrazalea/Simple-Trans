@@ -23,38 +23,19 @@ public class PregnancyUtility_PregnancyChanceForPartners_Patch
 		Pawn first = woman;
 		Pawn second = man;
 
-		if (SimpleTrans.debugMode)
-		{
-			Log.Message($"[Simple Trans DEBUG] PregnancyChanceForPartners called - Original result: {__result:F3}");
-			Log.Message($"[Simple Trans DEBUG] Input pawns - First: {first?.Name?.ToStringShort ?? "null"} (Gender: {first?.gender}), Second: {second?.Name?.ToStringShort ?? "null"} (Gender: {second?.gender})");
-		}
-
 		// Determine actual carrier and sirer based on Simple Trans capabilities
 		bool firstCanCarry = SimpleTransPregnancyUtility.CanCarry(first);
 		bool firstCanSire = SimpleTransPregnancyUtility.CanSire(first);
 		bool secondCanCarry = SimpleTransPregnancyUtility.CanCarry(second);
 		bool secondCanSire = SimpleTransPregnancyUtility.CanSire(second);
 
-		if (SimpleTrans.debugMode)
-		{
-			Log.Message($"[Simple Trans DEBUG] Reproductive capabilities - First can carry: {firstCanCarry}, can sire: {firstCanSire}");
-			Log.Message($"[Simple Trans DEBUG] Reproductive capabilities - Second can carry: {secondCanCarry}, can sire: {secondCanSire}");
-		}
-
 		Pawn carrier = (firstCanCarry ? first : (secondCanCarry ? second : null));
 		Pawn sirer = (secondCanSire ? second : (firstCanSire ? first : null));
 
-		if (SimpleTrans.debugMode)
-		{
-			Log.Message($"[Simple Trans DEBUG] Assigned roles - Carrier: {carrier?.Name?.ToStringShort ?? "null"}, Sirer: {sirer?.Name?.ToStringShort ?? "null"}");
-		}
+		SimpleTransDebug.Log($"Pregnancy chance calculation: {first?.Name?.ToStringShort} + {second?.Name?.ToStringShort} -> Carrier: {carrier?.Name?.ToStringShort ?? "none"}, Sirer: {sirer?.Name?.ToStringShort ?? "none"} (base: {__result:F3})", 2);
 
 		if (carrier == null || sirer == null)
 		{
-			if (SimpleTrans.debugMode)
-			{
-				Log.Message($"[Simple Trans DEBUG] Missing reproductive capability - setting result to 0. Carrier null: {carrier == null}, Sirer null: {sirer == null}");
-			}
 			__result = 0f;
 			return;
 		}
@@ -63,28 +44,15 @@ public class PregnancyUtility_PregnancyChanceForPartners_Patch
 		PregnancyApproach carrierApproach = carrier.relations.GetPregnancyApproachForPartner(sirer);
 		PregnancyApproach sirerApproach = sirer.relations.GetPregnancyApproachForPartner(carrier);
 
-		if (SimpleTrans.debugMode)
-		{
-			Log.Message($"[Simple Trans DEBUG] Pregnancy approaches - Carrier: {carrierApproach}, Sirer: {sirerApproach}");
-		}
-
 		// Check for bionic prosthetics
 		bool carrierHasBionic = HasBionicReproductiveProsthetic(carrier, false);
 		bool sirerHasBionic = HasBionicReproductiveProsthetic(sirer, true);
-
-		if (SimpleTrans.debugMode)
-		{
-			Log.Message($"[Simple Trans DEBUG] Bionic prosthetics - Carrier has bionic: {carrierHasBionic}, Sirer has bionic: {sirerHasBionic}");
-		}
 
 		// BIONIC PREVENTION: If either has bionic and is avoiding pregnancy -> 0% chance
 		if ((carrierHasBionic && carrierApproach == PregnancyApproach.AvoidPregnancy) ||
 			(sirerHasBionic && sirerApproach == PregnancyApproach.AvoidPregnancy))
 		{
-			if (SimpleTrans.debugMode)
-			{
-				Log.Message($"[Simple Trans DEBUG] BIONIC PREVENTION: Setting result to 0 due to bionic contraception");
-			}
+			SimpleTransDebug.Log($"Bionic contraception active - pregnancy prevented", 2);
 			__result = 0f;
 			return;
 		}
@@ -94,10 +62,7 @@ public class PregnancyUtility_PregnancyChanceForPartners_Patch
 			carrierApproach == PregnancyApproach.TryForBaby &&
 			sirerApproach == PregnancyApproach.TryForBaby)
 		{
-			if (SimpleTrans.debugMode)
-			{
-				Log.Message($"[Simple Trans DEBUG] BIONIC GUARANTEE: Setting result to 20.0 for 100% chance (0.05 * 20 = 1.0)");
-			}
+			SimpleTransDebug.Log($"Bionic fertility enhancement active - pregnancy guaranteed", 2);
 			__result = 20f;
 			return;
 		}
@@ -109,11 +74,7 @@ public class PregnancyUtility_PregnancyChanceForPartners_Patch
 		{
 			// Base system thinks pregnancy is impossible - calculate our own realistic base chance
 			baseChance = CalculateRealisticBaseChance(carrier, sirer);
-
-			if (SimpleTrans.debugMode)
-			{
-				Log.Message($"[Simple Trans DEBUG] Base system returned zero ({__result:F3}) - using our calculated base: {baseChance:F3}");
-			}
+			SimpleTransDebug.Log($"Base system confusion - recalculated chance: {baseChance:F3}", 2);
 		}
 		else
 		{
@@ -130,10 +91,9 @@ public class PregnancyUtility_PregnancyChanceForPartners_Patch
 		float originalResult = __result;
 		__result = baseChance * combinedModifier;
 
-		if (SimpleTrans.debugMode)
+		if (combinedModifier != 1.0f)
 		{
-			Log.Message($"[Simple Trans DEBUG] Capability modifiers - Sirer: {sirerModifier:F3}, Carrier: {carrierModifier:F3}, Combined: {combinedModifier:F3}");
-			Log.Message($"[Simple Trans DEBUG] Base chance: {baseChance:F3}, Final result: {__result:F3} (was {originalResult:F3})");
+			SimpleTransDebug.Log($"Capability modifiers applied: {baseChance:F3} * {combinedModifier:F3} = {__result:F3}", 2);
 		}
 	}
 
@@ -215,10 +175,7 @@ public class PregnancyUtility_PregnancyChanceForPartners_Patch
 
 			float result = combinedChance * approachFactor;
 
-			if (SimpleTrans.debugMode)
-			{
-				Log.Message($"[Simple Trans DEBUG] Realistic calculation - Carrier fertility: {carrierFertility:F3}, Sirer fertility: {sirerFertility:F3}, Combined: {combinedChance:F3}, Approach factor: {approachFactor:F3}, Final: {result:F3}");
-			}
+			SimpleTransDebug.Log($"Realistic pregnancy chance calculation: {result:F3} (fertility: {combinedChance:F3}, approach: {approachFactor:F3})", 3);
 
 			return result;
 		}

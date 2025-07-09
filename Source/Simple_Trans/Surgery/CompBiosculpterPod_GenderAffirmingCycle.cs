@@ -89,10 +89,7 @@ namespace Simple_Trans
             {
                 pawn.story.bodyType = selectedChoices.BodyType;
 
-                if (SimpleTrans.debugMode)
-                {
-                    Log.Message($"[Simple Trans DEBUG] Changed {pawn.Name?.ToStringShort ?? "unknown"}'s body type to {selectedChoices.BodyType.label}");
-                }
+                SimpleTransDebug.Log($"Gender affirming cycle: Changed {pawn.Name?.ToStringShort ?? "unknown"}'s body type to {selectedChoices.BodyType.label}", 1);
             }
         }
 
@@ -123,10 +120,7 @@ namespace Simple_Trans
                         break;
                 }
 
-                if (SimpleTrans.debugMode)
-                {
-                    Log.Message($"[Simple Trans DEBUG] Changed {pawn.Name?.ToStringShort ?? "unknown"}'s reproductive capability to {selectedChoices.ReproductiveCapability}");
-                }
+                SimpleTransDebug.Log($"Gender affirming cycle: Changed {pawn.Name?.ToStringShort ?? "unknown"}'s reproductive capability to {selectedChoices.ReproductiveCapability}", 1);
             }
         }
 

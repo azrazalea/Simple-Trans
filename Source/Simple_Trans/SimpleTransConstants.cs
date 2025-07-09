@@ -15,7 +15,7 @@ public static class SimpleTransConstants
     /// <summary>
     /// Default rate for trans man carrying pregnancy (100%)
     /// </summary>
-    public const float DefaultTransManCarryRate = 1.0f;
+    public const float DefaultTransManCarryPercent = 1.0f;
 
     /// <summary>
     /// Default rate for trans woman siring (100%)

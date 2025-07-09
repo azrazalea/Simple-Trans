@@ -23,10 +23,7 @@ namespace Simple_Trans.Patches
                 if (SimpleTransPregnancyUtility.CanCarry(pawn))
                 {
                     // Re-run all the checks except gender
-                    if (SimpleTrans.debugMode)
-                    {
-                        Log.Message($"[Simple Trans DEBUG] HumanEmbryo.CanImplantReport: Overriding gender rejection for {pawn?.Name?.ToStringShort ?? "unknown"} - checking carry capability");
-                    }
+                    SimpleTransDebug.Log($"Embryo implantation override: {pawn?.Name?.ToStringShort ?? "unknown"} - checking carry capability", 2);
                     
                     // Perform all the same checks as the original method, but skip gender
                     if (pawn.IsQuestLodger())
@@ -72,15 +69,8 @@ namespace Simple_Trans.Patches
                     // All checks passed - accept the implantation
                     __result = true;
                     
-                    if (SimpleTrans.debugMode)
-                    {
-                        Log.Message($"[Simple Trans DEBUG] HumanEmbryo.CanImplantReport: ACCEPTED {pawn?.Name?.ToStringShort ?? "unknown"} for embryo implantation based on carry capability");
-                    }
+                    SimpleTransDebug.Log($"Embryo implantation accepted: {pawn?.Name?.ToStringShort ?? "unknown"} (carry capability)", 1);
                 }
-            }
-            else if (SimpleTrans.debugMode)
-            {
-                Log.Message($"[Simple Trans DEBUG] HumanEmbryo.CanImplantReport: {pawn?.Name?.ToStringShort ?? "unknown"} - original result: ACCEPTED");
             }
         }
         

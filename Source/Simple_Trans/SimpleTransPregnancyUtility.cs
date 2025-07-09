@@ -23,7 +23,7 @@ public static class SimpleTransPregnancyUtility
 	/// <summary>
 	/// Rate at which trans men can carry pregnancies
 	/// </summary>
-	public static float transManCarryRate;
+	public static float transManCarryPercent;
 
 	/// <summary>
 	/// Rate at which trans women can sire offspring
@@ -257,11 +257,6 @@ public static class SimpleTransPregnancyUtility
 		bool canCarry = false;
 		bool canSire = false;
 
-		// Debug log the cisRate to diagnose the issue
-		if (SimpleTrans.debugMode || Find.TickManager?.TicksGame < 1000) // Log for first few ticks
-		{
-			Log.Message($"[Simple Trans DEBUG] DetermineGenderAndCapabilities: cisRate={cisRate} (should be ~0.9 for 90% cis)");
-		}
 
 		// Non-binary pawns are always considered transgender
 		if (pawn.gender != Gender.Male && pawn.gender != Gender.Female)
@@ -325,7 +320,7 @@ public static class SimpleTransPregnancyUtility
 					float abilityRoll = Rand.Range(0f, 1f);
 					if (pawn.gender == Gender.Male)
 					{
-						canCarry = abilityRoll < transManCarryRate;
+						canCarry = abilityRoll < transManCarryPercent;
 						canSire = !canCarry;
 					}
 					else if (pawn.gender == Gender.Female)
@@ -362,11 +357,7 @@ public static class SimpleTransPregnancyUtility
 			}
 		}
 
-		if (SimpleTrans.debugMode)
-		{
-			Log.Message($"[Simple Trans DEBUG] DetermineGenderAndCapabilities for {pawn.Name?.ToStringShort ?? "unknown"}: " +
-						$"isTransgender={isTransgender}, canCarry={canCarry}, canSire={canSire}");
-		}
+		SimpleTransDebug.Log($"Generated pawn: {pawn.Name?.ToStringShort ?? "unknown"} - Trans: {isTransgender}, Carry: {canCarry}, Sire: {canSire}", 1);
 
 		return (isTransgender, canCarry, canSire);
 	}
@@ -403,10 +394,6 @@ public static class SimpleTransPregnancyUtility
 						if (hediffDef != null)
 						{
 							pawn.health.AddHediff(hediffDef);
-							if (SimpleTrans.debugMode)
-							{
-								Log.Message($"[Simple Trans DEBUG] Applied bionic carry prosthetic to {pawn.Name?.ToStringShort ?? "unknown"}");
-							}
 						}
 						else
 						{
@@ -419,10 +406,6 @@ public static class SimpleTransPregnancyUtility
 						if (hediffDef != null)
 						{
 							pawn.health.AddHediff(hediffDef);
-							if (SimpleTrans.debugMode)
-							{
-								Log.Message($"[Simple Trans DEBUG] Applied basic carry prosthetic to {pawn.Name?.ToStringShort ?? "unknown"}");
-							}
 						}
 						else
 						{
@@ -441,10 +424,6 @@ public static class SimpleTransPregnancyUtility
 							if (hediffDef != null)
 							{
 								pawn.health.AddHediff(hediffDef);
-								if (SimpleTrans.debugMode)
-								{
-									Log.Message($"[Simple Trans DEBUG] Applied reversible carry sterilization to {pawn.Name?.ToStringShort ?? "unknown"}");
-								}
 							}
 						}
 						else
@@ -453,10 +432,6 @@ public static class SimpleTransPregnancyUtility
 							if (hediffDef != null)
 							{
 								pawn.health.AddHediff(hediffDef);
-								if (SimpleTrans.debugMode)
-								{
-									Log.Message($"[Simple Trans DEBUG] Applied permanent carry sterilization to {pawn.Name?.ToStringShort ?? "unknown"}");
-								}
 							}
 						}
 					}
@@ -478,10 +453,6 @@ public static class SimpleTransPregnancyUtility
 						if (hediffDef != null)
 						{
 							pawn.health.AddHediff(hediffDef);
-							if (SimpleTrans.debugMode)
-							{
-								Log.Message($"[Simple Trans DEBUG] Applied bionic sire prosthetic to {pawn.Name?.ToStringShort ?? "unknown"}");
-							}
 						}
 						else
 						{
@@ -494,10 +465,6 @@ public static class SimpleTransPregnancyUtility
 						if (hediffDef != null)
 						{
 							pawn.health.AddHediff(hediffDef);
-							if (SimpleTrans.debugMode)
-							{
-								Log.Message($"[Simple Trans DEBUG] Applied basic sire prosthetic to {pawn.Name?.ToStringShort ?? "unknown"}");
-							}
 						}
 						else
 						{
@@ -516,10 +483,6 @@ public static class SimpleTransPregnancyUtility
 							if (hediffDef != null)
 							{
 								pawn.health.AddHediff(hediffDef);
-								if (SimpleTrans.debugMode)
-								{
-									Log.Message($"[Simple Trans DEBUG] Applied reversible sire sterilization to {pawn.Name?.ToStringShort ?? "unknown"}");
-								}
 							}
 						}
 						else
@@ -528,10 +491,6 @@ public static class SimpleTransPregnancyUtility
 							if (hediffDef != null)
 							{
 								pawn.health.AddHediff(hediffDef);
-								if (SimpleTrans.debugMode)
-								{
-									Log.Message($"[Simple Trans DEBUG] Applied permanent sire sterilization to {pawn.Name?.ToStringShort ?? "unknown"}");
-								}
 							}
 						}
 					}
@@ -571,7 +530,7 @@ public static class SimpleTransPregnancyUtility
 
 			// Check if pawn is pregnant - if so, skip capability clearing to preserve pregnancy
 			bool isPregnant = pawn.health.hediffSet.HasHediff(HediffDefOf.PregnantHuman);
-			
+
 			// Clear any existing gender and capability hediffs to start fresh
 			// BUT preserve capabilities if pregnant to avoid terminating pregnancy
 			ClearGender(pawn, clearIdentity: true, clearCapabilities: !isPregnant);
@@ -633,6 +592,7 @@ public static class SimpleTransPregnancyUtility
 	/// </summary>
 	public static bool enableProsthetics;
 
+
 	/// <summary>
 	/// Checks if a pawn is non-binary
 	/// Default implementation returns false, but NBG mod patches this to return EnbyUtility.IsEnby(pawn)
@@ -654,7 +614,6 @@ public static class SimpleTransPregnancyUtility
 		{
 			// Load settings with null safety
 			string cisPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "cisPercent");
-			Log.Message($"[Simple Trans DEBUG] LoadSettings: raw cisPercentSetting='{cisPercentSetting}'");
 			string transManCarryPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "transManCarryPercent");
 			string transWomanSirePercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "transWomanSirePercent");
 			string enbyCarryPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "enbyCarryPercent");
@@ -677,8 +636,8 @@ public static class SimpleTransPregnancyUtility
 
 			// Parse settings with error handling and defaults
 			cisRate = TryParseFloat(cisPercentSetting, SimpleTransConstants.DefaultCisRate * SimpleTransConstants.PercentageToDecimal) / SimpleTransConstants.PercentageToDecimal;
-			Log.Message($"[Simple Trans DEBUG] LoadSettings: parsed cisRate={cisRate} (should be ~0.9 for 90% cis)");
-			transManCarryRate = TryParseFloat(transManCarryPercentSetting, SimpleTransConstants.DefaultTransManCarryRate * SimpleTransConstants.PercentageToDecimal) / SimpleTransConstants.PercentageToDecimal;
+			transManCarryPercent = TryParseFloat(transManCarryPercentSetting, SimpleTransConstants.DefaultTransManCarryPercent * SimpleTransConstants.PercentageToDecimal) / SimpleTransConstants.PercentageToDecimal;
+			SimpleTransDebug.Log($"Settings loaded - cisRate: {cisRate:F3}, transManCarryPercent: {transManCarryPercent:F3}", 2);
 			transWomanSireRate = TryParseFloat(transWomanSirePercentSetting, SimpleTransConstants.DefaultTransWomanSireRate * SimpleTransConstants.PercentageToDecimal) / SimpleTransConstants.PercentageToDecimal;
 			genesAreAgab = TryParseBool(genesAreAgabSetting, true);
 			enableOrganTransplants = TryParseBool(enableOrganTransplantsSetting, true);
@@ -703,7 +662,7 @@ public static class SimpleTransPregnancyUtility
 			Log.Error($"[Simple Trans] Error loading settings, using defaults: {ex}");
 			// Set all defaults
 			cisRate = SimpleTransConstants.DefaultCisRate;
-			transManCarryRate = SimpleTransConstants.DefaultTransManCarryRate;
+			transManCarryPercent = SimpleTransConstants.DefaultTransManCarryPercent;
 			transWomanSireRate = SimpleTransConstants.DefaultTransWomanSireRate;
 			genesAreAgab = true;
 			enableOrganTransplants = true;
@@ -1374,10 +1333,7 @@ public static class SimpleTransPregnancyUtility
 			// Validate we have a viable carrier
 			if (carrier == null)
 			{
-				if (SimpleTrans.debugMode)
-				{
-					Log.Message($"[Simple Trans DEBUG] No viable carrier found");
-				}
+				SimpleTransDebug.Log($"No viable carrier found for pregnancy", 2);
 				return false;
 			}
 
@@ -1398,10 +1354,7 @@ public static class SimpleTransPregnancyUtility
 			// For two-pawn scenarios, check if we have viable reproductive pair
 			if (pawn2 != null && sirer == null)
 			{
-				if (SimpleTrans.debugMode)
-				{
-					Log.Message($"[Simple Trans DEBUG] No viable sirer found for two-pawn pregnancy");
-				}
+				SimpleTransDebug.Log($"No viable sirer found for two-pawn pregnancy", 2);
 				return false;
 			}
 
@@ -1412,10 +1365,7 @@ public static class SimpleTransPregnancyUtility
 
 				if (!Rand.Chance(pregnancyChance))
 				{
-					if (SimpleTrans.debugMode)
-					{
-						Log.Message($"[Simple Trans DEBUG] Pregnancy chance failed: {pregnancyChance:F3}");
-					}
+					SimpleTransDebug.Log($"Pregnancy chance failed: {pregnancyChance:F3}", 2);
 					return false;
 				}
 			}
@@ -1480,10 +1430,7 @@ public static class SimpleTransPregnancyUtility
 				pregnancy.SetParents(null, sirer, inheritedGeneSet);
 				carrier.health.AddHediff(pregnancy);
 
-				if (SimpleTrans.debugMode)
-				{
-					Log.Message($"[Simple Trans DEBUG] Created pregnancy for {carrier.Name?.ToStringShort ?? "unknown"} with father {sirer?.Name?.ToStringShort ?? "none"}");
-				}
+				SimpleTransDebug.Log($"Pregnancy created: {carrier.Name?.ToStringShort ?? "unknown"} + {sirer?.Name?.ToStringShort ?? "none"}", 1);
 
 				return true;
 			}
@@ -1498,10 +1445,7 @@ public static class SimpleTransPregnancyUtility
 					Messages.Message(message, new LookTargets(sirer, carrier), MessageTypeDefOf.NegativeEvent);
 				}
 
-				if (SimpleTrans.debugMode)
-				{
-					Log.Message($"[Simple Trans DEBUG] Pregnancy failed due to gene incompatibility between {carrier.Name?.ToStringShort ?? "unknown"} and {sirer?.Name?.ToStringShort ?? "none"}");
-				}
+				SimpleTransDebug.Log($"Pregnancy failed - gene incompatibility: {carrier.Name?.ToStringShort ?? "unknown"} + {sirer?.Name?.ToStringShort ?? "none"}", 1);
 
 				return false;
 			}

@@ -28,7 +28,7 @@
           <li Class="XmlExtensions.Setting.Text">
             <text>Percent of trans men who can carry: {transManCarryPercent}%</text>
             <keys>
-              <li>tranManCarryPercent</li>
+              <li>transManCarryPercent</li>
             </keys>
             <tooltip>The rest will be able to sire.</tooltip>
           </li>
@@ -56,7 +56,7 @@
         </leftCol>
         <rightCol>
           <li Class="XmlExtensions.Setting.Slider">
-            <key>tranManCarryPercent</key>
+            <key>transManCarryPercent</key>
             <defaultValue>75</defaultValue>
             <min>0</min>
             <max>100</max>
@@ -333,5 +333,8 @@
       </li>
       <li Class="XmlExtensions.Setting.ResetSettings" />
     </settings>
+    <postCloseActions>
+      <li Class="Simple_Trans.SimpleTransSettingsReloader" />
+    </postCloseActions>
   </XmlExtensions.SettingsMenuDef>
 </Defs>

@@ -32,7 +32,7 @@ public static class SimpleTrans
 	/// <summary>
 	/// True if debug mode is enabled in mod settings
 	/// </summary>
-	public static bool debugMode { get; private set; }
+	public static bool debugMode { get; set; }
 
 	#endregion
 

@@ -40,23 +40,11 @@ public static class PregnancyApplicationPatches
 				.Where(m => m.Name.Contains("<MakeNewToils>") && m.ReturnType == typeof(void))
 				.ToList();
 
-			if (SimpleTrans.debugMode)
-			{
-				Log.Message($"[Simple Trans DEBUG] Found {lovinMethods.Count} JobDriver_Lovin methods containing '<MakeNewToils>'");
-				foreach (var method in lovinMethods)
-				{
-					Log.Message($"[Simple Trans DEBUG] Method: {method.Name}, Return type: {method.ReturnType}");
-				}
-			}
+			SimpleTransDebug.Log($"Patching {lovinMethods.Count} JobDriver_Lovin methods for pregnancy capability", 2);
 
 			foreach (var method in lovinMethods)
 			{
 				harmony.Patch(method, transpiler: new HarmonyMethod(typeof(PregnancyApplicationPatches), nameof(TranspileVanillaMakeNewToils)));
-
-				if (SimpleTrans.debugMode)
-				{
-					Log.Message($"[Simple Trans DEBUG] Patched method: {method.Name}");
-				}
 			}
 		}
 		catch (Exception ex)
@@ -76,11 +64,6 @@ public static class PregnancyApplicationPatches
 
 		try
 		{
-			if (SimpleTrans.debugMode)
-			{
-				Log.Message($"[Simple Trans DEBUG] Vanilla MakeNewToils transpiler called with {codes.Count} instructions");
-			}
-
 			// First, check if this method contains pregnancy code
 			bool hasPregnancyCode = false;
 			for (int i = 0; i < codes.Count; i++)
@@ -97,10 +80,6 @@ public static class PregnancyApplicationPatches
 
 			if (!hasPregnancyCode)
 			{
-				if (SimpleTrans.debugMode)
-				{
-					Log.Message($"[Simple Trans DEBUG] No Biotech pregnancy code found in this method, skipping");
-				}
 				return codes.AsEnumerable();
 			}
 
@@ -112,11 +91,6 @@ public static class PregnancyApplicationPatches
 					// Find the ModsConfig.BiotechActive call
 					if (method.Name == "get_BiotechActive" && method.DeclaringType?.Name == "ModsConfig")
 					{
-						if (SimpleTrans.debugMode)
-						{
-							Log.Message($"[Simple Trans DEBUG] Found ModsConfig.BiotechActive at instruction {i}");
-						}
-
 						// Find the start of the if block (after the branch instruction)
 						int blockStart = -1;
 						for (int j = i + 1; j < Math.Min(i + 10, codes.Count); j++)
@@ -130,10 +104,6 @@ public static class PregnancyApplicationPatches
 
 						if (blockStart == -1)
 						{
-							if (SimpleTrans.debugMode)
-							{
-								Log.Message($"[Simple Trans DEBUG] Could not find start of Biotech block");
-							}
 							continue;
 						}
 
@@ -187,11 +157,6 @@ public static class PregnancyApplicationPatches
 							blockEnd = Math.Min(blockStart + 50, codes.Count - 1);
 						}
 
-						if (SimpleTrans.debugMode)
-						{
-							Log.Message($"[Simple Trans DEBUG] Found Biotech block from {blockStart} to {blockEnd}, replacing with capability-based pregnancy logic");
-						}
-
 						// Replace the entire block with our capability-based pregnancy logic
 						var replacementMethod = AccessTools.Method(typeof(PregnancyApplicationPatches), nameof(HandleCapabilityBasedPregnancyFromJobDriver));
 						var replacementInstructions = new List<CodeInstruction>
@@ -206,20 +171,7 @@ public static class PregnancyApplicationPatches
 						{
 							codes.RemoveRange(blockStart, removeCount);
 							codes.InsertRange(blockStart, replacementInstructions);
-
-							if (SimpleTrans.debugMode)
-							{
-								Log.Message($"[Simple Trans DEBUG] Successfully replaced {removeCount} instructions with {replacementInstructions.Count} new ones");
-							}
-
 							patched = true;
-						}
-						else
-						{
-							if (SimpleTrans.debugMode)
-							{
-								Log.Message($"[Simple Trans DEBUG] Block range invalid - Start: {blockStart}, Count: {removeCount}, Total: {codes.Count}");
-							}
 						}
 
 						break; // Only replace the first Biotech block we find
@@ -227,10 +179,7 @@ public static class PregnancyApplicationPatches
 				}
 			}
 
-			if (SimpleTrans.debugMode)
-			{
-				Log.Message($"[Simple Trans DEBUG] Vanilla transpiler patched: {patched}");
-			}
+			SimpleTransDebug.Log($"Vanilla pregnancy transpiler applied: {patched}", 2);
 		}
 		catch (Exception ex)
 		{
@@ -250,38 +199,17 @@ public static class PregnancyApplicationPatches
 		{
 			if (jobDriver?.pawn == null)
 			{
-				if (SimpleTrans.debugMode)
-				{
-					Log.Message($"[Simple Trans DEBUG] JobDriver or pawn is null, skipping pregnancy");
-				}
 				return;
 			}
 
 			// Extract partner using the same method as vanilla
 			Pawn partner = jobDriver.job?.GetTarget(TargetIndex.A).Pawn;
-			if (partner == null)
+			if (partner == null || !ModsConfig.BiotechActive)
 			{
-				if (SimpleTrans.debugMode)
-				{
-					Log.Message($"[Simple Trans DEBUG] Partner is null, skipping pregnancy");
-				}
 				return;
 			}
 
-			if (SimpleTrans.debugMode)
-			{
-				Log.Message($"[Simple Trans DEBUG] Capability-based pregnancy handler called - {jobDriver.pawn.Name?.ToStringShort} + {partner.Name?.ToStringShort}");
-			}
-
-			// Check if Biotech is active (since we're replacing the entire Biotech block)
-			if (!ModsConfig.BiotechActive)
-			{
-				if (SimpleTrans.debugMode)
-				{
-					Log.Message($"[Simple Trans DEBUG] Biotech not active, skipping pregnancy");
-				}
-				return;
-			}
+			SimpleTransDebug.Log($"Lovin pregnancy attempt: {jobDriver.pawn.Name?.ToStringShort} + {partner.Name?.ToStringShort}", 2);
 
 			// Use shared capability-based pregnancy logic with vanilla's pregnancy chance
 			HandleCapabilityBasedPregnancy(jobDriver.pawn, partner, 0.05f);
@@ -300,33 +228,17 @@ public static class PregnancyApplicationPatches
 	{
 		try
 		{
-			if (SimpleTrans.debugMode)
-			{
-				Log.Message($"[Simple Trans DEBUG] TRANSPILER: Capability-based pregnancy called - {pawn1?.Name?.ToStringShort} + {pawn2?.Name?.ToStringShort}, base chance: {baseChance:F3}");
-			}
-
 			if (!ModsConfig.BiotechActive)
 			{
-				if (SimpleTrans.debugMode)
-				{
-					Log.Message($"[Simple Trans DEBUG] TRANSPILER: Biotech not active, skipping");
-				}
 				return;
 			}
 
 			// Use unified pregnancy method that handles capability-based role assignment and chance calculation
 			bool success = SimpleTransPregnancyUtility.TryCreatePregnancy(pawn1, pawn2, baseChance, showIncompatibilityMessage: true);
 			
-			if (SimpleTrans.debugMode)
+			if (success)
 			{
-				if (success)
-				{
-					Log.Message($"[Simple Trans DEBUG] PREGNANCY CREATED");
-				}
-				else
-				{
-					Log.Message($"[Simple Trans DEBUG] Pregnancy creation failed");
-				}
+				SimpleTransDebug.Log($"Pregnancy created: {pawn1?.Name?.ToStringShort} + {pawn2?.Name?.ToStringShort}", 1);
 			}
 		}
 		catch (Exception ex)
@@ -349,10 +261,6 @@ public static class IntimacyModTranspilers
 	{
 		if (!ModsConfig.IsActive("LovelyDovey.Sex.WithEuterpe"))
 		{
-			if (SimpleTrans.debugMode)
-			{
-				Log.Message("[Simple Trans DEBUG] Intimacy mod not detected - skipping Intimacy patches");
-			}
 			return;
 		}
 
@@ -366,10 +274,7 @@ public static class IntimacyModTranspilers
 				{
 					harmony.Patch(method, prefix: new HarmonyMethod(typeof(IntimacyModTranspilers), nameof(PrefixIntimacyPregnancy)));
 
-					if (SimpleTrans.debugMode)
-					{
-						Log.Message("[Simple Trans DEBUG] Successfully patched Intimacy mod TryHandlePregnancy method with prefix");
-					}
+					SimpleTransDebug.Log("Intimacy mod pregnancy patched successfully", 2);
 				}
 				else
 				{
@@ -393,11 +298,6 @@ public static class IntimacyModTranspilers
 	/// </summary>
 	public static bool PrefixIntimacyPregnancy(Pawn initiator, Pawn partner)
 	{
-		if (SimpleTrans.debugMode)
-		{
-			Log.Message($"[Simple Trans DEBUG] Intimacy prefix patch called - {initiator?.Name?.ToStringShort} + {partner?.Name?.ToStringShort}");
-		}
-
 		// Run our capability-based pregnancy logic
 		HandleIntimacyCapabilityBasedPregnancy(initiator, partner);
 
@@ -410,10 +310,7 @@ public static class IntimacyModTranspilers
 	/// </summary>
 	public static void HandleIntimacyCapabilityBasedPregnancy(Pawn initiator, Pawn partner)
 	{
-		if (SimpleTrans.debugMode)
-		{
-			Log.Message($"[Simple Trans DEBUG] Intimacy pregnancy handler called - {initiator?.Name?.ToStringShort} + {partner?.Name?.ToStringShort}");
-		}
+		SimpleTransDebug.Log($"Intimacy pregnancy attempt: {initiator?.Name?.ToStringShort} + {partner?.Name?.ToStringShort}", 2);
 
 		// Use the same shared logic as vanilla, with Intimacy's base chance
 		PregnancyApplicationPatches.HandleCapabilityBasedPregnancy(initiator, partner, 0.05f);
