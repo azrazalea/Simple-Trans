@@ -26,16 +26,16 @@
       <li Class="XmlExtensions.Setting.SplitColumn">
         <leftCol>
           <li Class="XmlExtensions.Setting.Text">
-            <text>Percent of trans men who can carry: {mCarryPercent}%</text>
+            <text>Percent of trans men who can carry: {transManCarryPercent}%</text>
             <keys>
-              <li>mCarryPercent</li>
+              <li>tranManCarryPercent</li>
             </keys>
             <tooltip>The rest will be able to sire.</tooltip>
           </li>
           <li Class="XmlExtensions.Setting.Text">
-            <text>Percent of trans women who can sire: {fSirePercent}%</text>
+            <text>Percent of trans women who can sire: {transWomanSirePercent}%</text>
             <keys>
-              <li>fSirePercent</li>
+              <li>transWomanSirePercent</li>
             </keys>
             <tooltip>The rest will be able to carry.</tooltip>
           </li>
@@ -56,15 +56,15 @@
         </leftCol>
         <rightCol>
           <li Class="XmlExtensions.Setting.Slider">
-            <key>mCarryPercent</key>
-            <defaultValue>100</defaultValue>
+            <key>tranManCarryPercent</key>
+            <defaultValue>75</defaultValue>
             <min>0</min>
             <max>100</max>
             <decimals>0</decimals>
           </li>
           <li Class="XmlExtensions.Setting.Slider">
-            <key>fSirePercent</key>
-            <defaultValue>100</defaultValue>
+            <key>transWomanSirePercent</key>
+            <defaultValue>75</defaultValue>
             <min>0</min>
             <max>100</max>
             <decimals>0</decimals>
@@ -94,16 +94,16 @@
       <li Class="XmlExtensions.Setting.SplitColumn">
         <leftCol>
           <li Class="XmlExtensions.Setting.Text">
-            <text>Percent of cis men who can carry: {cisMCarryPercent}%</text>
+            <text>Percent of cis men who can carry: {cisManCarryPercent}%</text>
             <keys>
-              <li>cisMCarryPercent</li>
+              <li>cisManCarryPercent</li>
             </keys>
             <tooltip>Rare intersex variation.</tooltip>
           </li>
           <li Class="XmlExtensions.Setting.Text">
-            <text>Percent of cis women who can sire: {cisFSirePercent}%</text>
+            <text>Percent of cis women who can sire: {cisWomanSirePercent}%</text>
             <keys>
-              <li>cisFSirePercent</li>
+              <li>cisWomanSirePercent</li>
             </keys>
             <tooltip>Rare intersex variation.</tooltip>
           </li>
@@ -117,14 +117,14 @@
         </leftCol>
         <rightCol>
           <li Class="XmlExtensions.Setting.Slider">
-            <key>cisMCarryPercent</key>
+            <key>cisManCarryPercent</key>
             <defaultValue>1</defaultValue>
             <min>0</min>
             <max>100</max>
             <decimals>0</decimals>
           </li>
           <li Class="XmlExtensions.Setting.Slider">
-            <key>cisFSirePercent</key>
+            <key>cisWomanSirePercent</key>
             <defaultValue>1</defaultValue>
             <min>0</min>
             <max>100</max>
@@ -148,44 +148,44 @@
       <li Class="XmlExtensions.Setting.SplitColumn">
         <leftCol>
           <li Class="XmlExtensions.Setting.Text">
-            <text>Percent of non-binary people with both abilities: {nBothPercent}%</text>
+            <text>Percent of non-binary people with both abilities: {enbyBothPercent}%</text>
             <keys>
-              <li>nBothPercent</li>
+              <li>enbyBothPercent</li>
             </keys>
             <tooltip>Non-binary pawns who can both carry and sire children.</tooltip>
           </li>
           <li Class="XmlExtensions.Setting.Text">
-            <text>Percent of non-binary people with no abilities: {nNeitherPercent}%</text>
+            <text>Percent of non-binary people with no abilities: {enbyNeitherPercent}%</text>
             <keys>
-              <li>nNeitherPercent</li>
+              <li>enbyNeitherPercent</li>
             </keys>
             <tooltip>Non-binary pawns who cannot carry or sire children.</tooltip>
           </li>
           <li Class="XmlExtensions.Setting.Text">
-            <text>Percent of nonbinary people who can carry: {nCarryPercent}%</text>
+            <text>Percent of nonbinary people who can carry: {enbyCarryPercent}%</text>
             <keys>
-              <li>nCarryPercent</li>
+              <li>enbyCarryPercent</li>
             </keys>
             <tooltip>For single-ability non-binary pawns, the rest will be able to sire.</tooltip>
           </li>
         </leftCol>
         <rightCol>
           <li Class="XmlExtensions.Setting.Slider">
-            <key>nBothPercent</key>
+            <key>enbyBothPercent</key>
             <defaultValue>10</defaultValue>
             <min>0</min>
             <max>100</max>
             <decimals>0</decimals>
           </li>
           <li Class="XmlExtensions.Setting.Slider">
-            <key>nNeitherPercent</key>
+            <key>enbyNeitherPercent</key>
             <defaultValue>15</defaultValue>
             <min>0</min>
             <max>100</max>
             <decimals>0</decimals>
           </li>
           <li Class="XmlExtensions.Setting.Slider">
-            <key>nCarryPercent</key>
+            <key>enbyCarryPercent</key>
             <defaultValue>50</defaultValue>
             <min>0</min>
             <max>100</max>

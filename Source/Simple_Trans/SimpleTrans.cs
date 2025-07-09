@@ -13,7 +13,7 @@ namespace Simple_Trans;
 public static class SimpleTrans
 {
 	#region Mod Detection Properties
-	
+
 	/// <summary>
 	/// True if Non-Binary Gender mod is active
 	/// </summary>
@@ -28,16 +28,16 @@ public static class SimpleTrans
 	/// True if Ideology DLC is active
 	/// </summary>
 	public static bool IdeologyActive { get; private set; }
-	
+
 	/// <summary>
 	/// True if debug mode is enabled in mod settings
 	/// </summary>
 	public static bool debugMode { get; private set; }
-	
+
 	#endregion
 
 	#region Initialization
-	
+
 	/// <summary>
 	/// Static constructor - called automatically when the class is first accessed
 	/// Performs mod initialization and Harmony patching
@@ -49,29 +49,30 @@ public static class SimpleTrans
 			// Initialize Harmony and apply patches
 			Harmony harmony = new Harmony("runaway.simple_trans");
 			harmony.PatchAll();
-			
+
 			// Detect active mods
 			DetectActiveMods();
-			
+
 			// Load debug mode setting
 			LoadDebugMode();
-			
+
 			// Apply Non-Binary Gender patches if mod is active
 			if (NBGenderActive)
 			{
 				harmony.PatchNBG();
 			}
-			
+
 			// Apply biosculpter patches if Ideology DLC is active
 			if (IdeologyActive)
 			{
 				TryPatchBiosculpter(harmony);
 				TryInitializeRitualSystem();
 			}
-			
+
 			// Apply pregnancy system patches for all compatible mods
 			PregnancyApplicationPatches.TryPatchAllPregnancySystems(harmony);
-			
+
+			SimpleTransPregnancyUtility.LoadSettings();
 			Log.Message("[Simple Trans] Mod initialized successfully");
 		}
 		catch (System.Exception ex)
@@ -79,7 +80,7 @@ public static class SimpleTrans
 			Log.Error($"[Simple Trans] Critical error during mod initialization: {ex}");
 		}
 	}
-	
+
 	/// <summary>
 	/// Detects which compatible mods are currently active
 	/// </summary>
@@ -90,7 +91,7 @@ public static class SimpleTrans
 			HARActive = ModsConfig.IsActive("erdelf.humanoidalienraces") || ModsConfig.IsActive("erdelf.humanoidalienraces.dev");
 			NBGenderActive = ModsConfig.IsActive("divinederivative.nonbinarygender");
 			IdeologyActive = ModsConfig.IdeologyActive;
-			
+
 			if (debugMode)
 			{
 				Log.Message($"[Simple Trans] Mod detection - HAR: {HARActive}, NBG: {NBGenderActive}, Ideology: {IdeologyActive}");
@@ -105,7 +106,7 @@ public static class SimpleTrans
 			IdeologyActive = false;
 		}
 	}
-	
+
 	/// <summary>
 	/// Loads the debug mode setting from mod configuration
 	/// </summary>
@@ -114,7 +115,7 @@ public static class SimpleTrans
 		try
 		{
 			string debugSetting = SettingsManager.GetSetting("runaway.simpletrans", "debugMode");
-			
+
 			if (string.IsNullOrEmpty(debugSetting))
 			{
 				debugMode = false;
@@ -135,7 +136,7 @@ public static class SimpleTrans
 			debugMode = false;
 		}
 	}
-	
+
 	/// <summary>
 	/// Conditionally applies biosculpter pod patches when Ideology DLC is active
 	/// </summary>
@@ -147,11 +148,11 @@ public static class SimpleTrans
 			// Manually patch the biosculpter class since we removed the [HarmonyPatch] attribute
 			var originalMethod = AccessTools.Method(typeof(RimWorld.CompBiosculpterPod), "OrderToPod");
 			var prefixMethod = AccessTools.Method(typeof(SimpleTransBiosculpterPatch), "OrderToPod_Prefix");
-			
+
 			if (originalMethod != null && prefixMethod != null)
 			{
 				harmony.Patch(originalMethod, prefix: new HarmonyMethod(prefixMethod));
-				
+
 				if (debugMode)
 				{
 					Log.Message("[Simple Trans] Successfully patched biosculpter pod system");
@@ -167,7 +168,7 @@ public static class SimpleTrans
 			Log.Error($"[Simple Trans] Error patching biosculpter system: {ex}");
 		}
 	}
-	
+
 	/// <summary>
 	/// Conditionally initializes ritual system when Ideology DLC is active
 	/// </summary>
@@ -178,7 +179,7 @@ public static class SimpleTrans
 			// The ritual system classes (RitualBehaviorWorker_GenderAffirmParty, RitualOutcomeEffectWorker_GenderAffirmParty)
 			// are automatically registered when the mod loads, and the XML definitions are conditionally loaded
 			// via PatchOperationFindMod. No additional initialization is required.
-			
+
 			if (debugMode)
 			{
 				Log.Message("[Simple Trans] Ritual system initialized successfully");
@@ -189,6 +190,6 @@ public static class SimpleTrans
 			Log.Error($"[Simple Trans] Error initializing ritual system: {ex}");
 		}
 	}
-	
+
 	#endregion
 }
