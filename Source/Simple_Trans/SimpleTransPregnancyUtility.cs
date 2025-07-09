@@ -1443,6 +1443,13 @@ public static class SimpleTransPregnancyUtility
 				return false;
 			}
 
+			// Check if already pregnant to avoid duplicates
+			if (carrier.health.hediffSet.HasHediff(HediffDefOf.PregnantHuman))
+			{
+				SimpleTransDebug.Log($"Carrier {carrier.Name?.ToStringShort} is already pregnant, skipping pregnancy creation", 1);
+				return false;
+			}
+
 			// Create pregnancy hediff
 			Hediff_Pregnant pregnancy = (Hediff_Pregnant)HediffMaker.MakeHediff(HediffDefOf.PregnantHuman, carrier, (BodyPartRecord)null);
 			if (pregnancy == null)
