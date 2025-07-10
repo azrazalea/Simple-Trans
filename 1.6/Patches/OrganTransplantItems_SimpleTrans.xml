@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Patch>
+  <Operation Class="XmlExtensions.OptionalPatch">
+    <modId>runaway.simpletrans</modId>
+    <key>enableOrganTransplants</key>
+    <defaultValue>true</defaultValue>
+    <caseTrue>
+      <Operation Class="PatchOperationAdd">
+        <xpath>Defs</xpath>
+        <value>
+          <!-- Harvestable Organs -->
+          <ThingDef ParentName="BodyPartNaturalBase">
+            <defName>CarryingOrgans</defName>
+            <label>reproductive anatomy (carrying)</label>
+            <description>Reproductive anatomy that enables carrying pregnancies. Can be surgically transplanted.</description>
+            <statBases>
+              <MarketValue>1500</MarketValue>
+              <Mass>1</Mass>
+            </statBases>
+          </ThingDef>
+
+          <ThingDef ParentName="BodyPartNaturalBase">
+            <defName>SiringOrgans</defName>
+            <label>reproductive anatomy (siring)</label>
+            <description>Reproductive anatomy that enables siring offspring. Can be surgically transplanted.</description>
+            <statBases>
+              <MarketValue>1500</MarketValue>
+              <Mass>1</Mass>
+            </statBases>
+          </ThingDef>
+        </value>
+      </Operation>
+      <!-- Add spawnThingOnRemoved to BodyPartDefs -->
+      <Operation Class="PatchOperationAdd">
+        <xpath>Defs/BodyPartDef[defName="ReproductiveOrgans_Carry"]</xpath>
+        <value>
+          <spawnThingOnRemoved>CarryingOrgans</spawnThingOnRemoved>
+        </value>
+      </Operation>
+      <Operation Class="PatchOperationAdd">
+        <xpath>Defs/BodyPartDef[defName="ReproductiveOrgans_Sire"]</xpath>
+        <value>
+          <spawnThingOnRemoved>SiringOrgans</spawnThingOnRemoved>
+        </value>
+      </Operation>
+    </caseTrue>
+  </Operation>
+</Patch>

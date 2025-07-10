@@ -84,13 +84,9 @@
       <!-- About folder -->
       <AboutFiles Include="$(MSBuildProjectDirectory)\..\About\**\*.*" />
       
-      <!-- ModSupport folder -->
-      <ModSupportFiles Include="$(MSBuildProjectDirectory)\..\ModSupport\**\*.*" />
-      
       <!-- Root files -->
       <RootFiles Include="$(MSBuildProjectDirectory)\..\changelog.txt" />
       <RootFiles Include="$(MSBuildProjectDirectory)\..\LICENSE" />
-      <RootFiles Include="$(MSBuildProjectDirectory)\..\LoadFolders.xml" />
       <RootFiles Include="$(MSBuildProjectDirectory)\..\README.md" />
       <RootFiles Include="$(MSBuildProjectDirectory)\..\Simple Trans.sln" />
       <RootFiles Include="$(MSBuildProjectDirectory)\..\SteamDescription.txt" />
@@ -100,7 +96,6 @@
     <Copy SourceFiles="@(SourceFiles)" DestinationFiles="@(SourceFiles->'$(RimWorldPath)\Mods\$(ModName)\Source\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(SixteenFiles)" DestinationFiles="@(SixteenFiles->'$(RimWorldPath)\Mods\$(ModName)\1.6\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(AboutFiles)" DestinationFiles="@(AboutFiles->'$(RimWorldPath)\Mods\$(ModName)\About\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(ModSupportFiles)" DestinationFiles="@(ModSupportFiles->'$(RimWorldPath)\Mods\$(ModName)\ModSupport\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(RootFiles)" DestinationFiles="@(RootFiles->'$(RimWorldPath)\Mods\$(ModName)\%(Filename)%(Extension)')" />
     
     <Message Text="Simple Trans deployed successfully to $(RimWorldPath)\Mods\$(ModName)" Importance="high" />

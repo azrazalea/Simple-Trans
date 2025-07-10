@@ -177,7 +177,7 @@
       </li>
       <li Class="XmlExtensions.Setting.GapLine" />
       <li Class="XmlExtensions.Setting.Text">
-        <text>Surgery System Options</text>
+        <text>Surgery System Options (requires game reload)</text>
         <anchor>Middle</anchor>
         <font>Medium</font>
       </li>
@@ -192,6 +192,18 @@
         <label>Enable reproductive prosthetics</label>
         <defaultValue>true</defaultValue>
         <tooltip>Allows crafting and installation of basic and advanced reproductive prosthetics.</tooltip>
+      </li>
+      <li Class="XmlExtensions.Setting.Checkbox">
+        <key>enableIdeologyRitual</key>
+        <label>Enable gender affirming ritual</label>
+        <defaultValue>true</defaultValue>
+        <tooltip>Adds a gender affirming party ritual for ideology systems.</tooltip>
+      </li>
+      <li Class="XmlExtensions.Setting.Checkbox">
+        <key>enableIdeologyBiosculpter</key>
+        <label>Enable biosculpter gender affirming cycle</label>
+        <defaultValue>true</defaultValue>
+        <tooltip>Adds a gender affirming cycle to biosculpter pods.</tooltip>
       </li>
       <li Class="XmlExtensions.Setting.GapLine" />
       <li Class="XmlExtensions.Setting.Text">

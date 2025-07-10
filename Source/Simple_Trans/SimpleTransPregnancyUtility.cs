@@ -357,7 +357,15 @@ public static class SimpleTransPregnancyUtility
 			}
 		}
 
-		SimpleTransDebug.Log($"Generated pawn: {pawn.Name?.ToStringShort ?? "unknown"} - Trans: {isTransgender}, Carry: {canCarry}, Sire: {canSire}", 1);
+		string genderString = pawn.gender switch
+		{
+			Gender.Male => "male",
+			Gender.Female => "female",
+			_ when (int)pawn.gender == 3 => "enby",
+			_ => $"unknown({(int)pawn.gender})"
+		};
+		
+		SimpleTransDebug.Log($"Generated pawn: {pawn.Name?.ToStringShort ?? "unknown"} - Gender: {genderString}, Trans: {isTransgender}, Carry: {canCarry}, Sire: {canSire}", 1);
 
 		return (isTransgender, canCarry, canSire);
 	}
@@ -592,6 +600,16 @@ public static class SimpleTransPregnancyUtility
 	/// </summary>
 	public static bool enableProsthetics;
 
+	/// <summary>
+	/// Whether ideology ritual system is enabled
+	/// </summary>
+	public static bool enableIdeologyRitual;
+
+	/// <summary>
+	/// Whether ideology biosculpter cycle is enabled
+	/// </summary>
+	public static bool enableIdeologyBiosculpter;
+
 
 	/// <summary>
 	/// Checks if a pawn is non-binary
@@ -620,6 +638,8 @@ public static class SimpleTransPregnancyUtility
 			string genesAreAgabSetting = SettingsManager.GetSetting("runaway.simpletrans", "genesAreAgab");
 			string enableOrganTransplantsSetting = SettingsManager.GetSetting("runaway.simpletrans", "enableOrganTransplants");
 			string enableProstheticsSetting = SettingsManager.GetSetting("runaway.simpletrans", "enableProsthetics");
+			string enableIdeologyRitualSetting = SettingsManager.GetSetting("runaway.simpletrans", "enableIdeologyRitual");
+			string enableIdeologyBiosculpterSetting = SettingsManager.GetSetting("runaway.simpletrans", "enableIdeologyBiosculpter");
 			string transBothPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "transBothPercent");
 			string transNeitherPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "transNeitherPercent");
 			string cisManCarryPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "cisManCarryPercent");
@@ -642,6 +662,8 @@ public static class SimpleTransPregnancyUtility
 			genesAreAgab = TryParseBool(genesAreAgabSetting, true);
 			enableOrganTransplants = TryParseBool(enableOrganTransplantsSetting, true);
 			enableProsthetics = TryParseBool(enableProstheticsSetting, true);
+			enableIdeologyRitual = TryParseBool(enableIdeologyRitualSetting, true);
+			enableIdeologyBiosculpter = TryParseBool(enableIdeologyBiosculpterSetting, true);
 			transBothRate = TryParseFloat(transBothPercentSetting, 5f) / SimpleTransConstants.PercentageToDecimal;
 			transNeitherRate = TryParseFloat(transNeitherPercentSetting, 5f) / SimpleTransConstants.PercentageToDecimal;
 			cisManCarryRate = TryParseFloat(cisManCarryPercentSetting, 1f) / SimpleTransConstants.PercentageToDecimal;
@@ -667,6 +689,8 @@ public static class SimpleTransPregnancyUtility
 			genesAreAgab = true;
 			enableOrganTransplants = true;
 			enableProsthetics = true;
+			enableIdeologyRitual = true;
+			enableIdeologyBiosculpter = true;
 			transBothRate = 0.05f;
 			transNeitherRate = 0.05f;
 			cisManCarryRate = 0.01f;

@@ -14,12 +14,8 @@ namespace Simple_Trans
         {
             if (!(thing is Pawn pawn)) return "SimpleTrans.Surgery.MustBePawn".Translate();
 
-            Log.Message($"[Simple Trans] AvailableReport called for {pawn.Name}");
-
             bool hasCarry = SimpleTransPregnancyUtility.CanCarry(pawn);
             bool hasSire = SimpleTransPregnancyUtility.CanSire(pawn);
-
-            Log.Message($"[Simple Trans] Pawn abilities: hasCarry={hasCarry}, hasSire={hasSire}");
 
             // Must have at least one ability to replace
             if (!hasCarry && !hasSire) 
@@ -27,13 +23,9 @@ namespace Simple_Trans
 
             // Use recipe name to determine ingredient type
             var recipeName = recipe?.defName ?? "";
-            Log.Message($"[Simple Trans] Recipe name: {recipeName}");
-            
             var ingredientDefName = GetIngredientTypeFromRecipeName(recipeName);
             if (ingredientDefName == null)
                 return "SimpleTrans.Surgery.InvalidRecipeType".Translate();
-                
-            Log.Message($"[Simple Trans] Mapped to ingredient: {ingredientDefName}");
 
             // Check if trying to replace with exact same type
             if (HasMatchingHediff(pawn, ingredientDefName))
@@ -97,15 +89,6 @@ namespace Simple_Trans
         {
             var hediffs = pawn.health.hediffSet.hediffs;
             
-            Log.Message($"[Simple Trans] HasMatchingHediff checking {ingredientDefName} for {pawn.Name}");
-            foreach (var hediff in hediffs)
-            {
-                if (hediff.def.defName.Contains("Pregnancy") || hediff.def.defName.Contains("Prosthetic"))
-                {
-                    Log.Message($"[Simple Trans] Found hediff: {hediff.def.defName}");
-                }
-            }
-            
             // Check for exact matches
             switch (ingredientDefName)
             {
@@ -113,9 +96,7 @@ namespace Simple_Trans
                     // Natural carry - check if they have natural (no prosthetic modifiers)
                     bool hasCarry = hediffs.Any(h => h.def.defName == "PregnancyCarry");
                     bool hasProsthetic = hediffs.Any(h => h.def.defName == "BasicProstheticCarry" || h.def.defName == "BionicProstheticCarry");
-                    bool result = hasCarry && !hasProsthetic;
-                    Log.Message($"[Simple Trans] CarryingOrgans check: hasCarry={hasCarry}, hasProsthetic={hasProsthetic}, result={result}");
-                    return result;
+                    return hasCarry && !hasProsthetic;
                 
                 case "SiringOrgans":
                     // Natural sire - check if they have natural (no prosthetic modifiers)
@@ -140,22 +121,22 @@ namespace Simple_Trans
 
         public override void ApplyOnPawn(Pawn pawn, BodyPartRecord part, Pawn billDoer, List<Thing> ingredients, Bill bill)
         {
-            Log.Message($"[Simple Trans] ReplaceReproductiveAbility.ApplyOnPawn called for {pawn.Name}");
-            
             var ingredient = GetReproductiveIngredient(ingredients);
             if (ingredient == null)
             {
-                Log.Warning($"[Simple Trans] No reproductive ingredient found!");
+                // This happens during world generation when PawnTechHediffsGenerator tries to install our "part"
+                // Our surgery is designed for manual replacement, not automatic installation, so we safely ignore this
+                SimpleTransDebug.Log($"ReplaceReproductiveAbility called without ingredients during world generation for {pawn.Name} - ignoring (this is normal)", 2);
                 return;
             }
+
+            SimpleTransDebug.Log($"ReplaceReproductiveAbility.ApplyOnPawn called for {pawn.Name} with ingredient {ingredient.Label}", 2);
 
             if (billDoer != null && !CheckSurgeryFail(billDoer, pawn, ingredients, part, bill))
             {
                 var ingredientType = GetIngredientType(ingredients);
                 var ingredientAbility = GetIngredientAbilityType(ingredients);
                 
-                Log.Message($"[Simple Trans] Ingredient: {ingredient.Label}, Type: {ingredientType}, Ability: {ingredientAbility}");
-
                 bool hasCarry = SimpleTransPregnancyUtility.CanCarry(pawn);
                 bool hasSire = SimpleTransPregnancyUtility.CanSire(pawn);
 
@@ -182,7 +163,7 @@ namespace Simple_Trans
                 }
                 else
                 {
-                    Log.Warning($"[Simple Trans] Could not determine what to replace!");
+                    SimpleTransDebug.Log($"Could not determine what to replace for {pawn.Name}!", 1);
                     return;
                 }
 
@@ -211,14 +192,13 @@ namespace Simple_Trans
                         var hediffDef = DefDatabase<HediffDef>.GetNamed(hediffName);
                         var hediff = HediffMaker.MakeHediff(hediffDef, pawn);
                         pawn.health.AddHediff(hediff);
-                        Log.Message($"[Simple Trans] Added hediff: {hediffName}");
                     }
                 }
 
                 // Record tale for surgery
                 TaleRecorder.RecordTale(TaleDefOf.DidSurgery, billDoer, pawn);
 
-                Log.Message($"[Simple Trans] After surgery - CanCarry: {SimpleTransPregnancyUtility.CanCarry(pawn)}, CanSire: {SimpleTransPregnancyUtility.CanSire(pawn)}");
+                SimpleTransDebug.Log($"Surgery completed for {pawn.Name} - CanCarry: {SimpleTransPregnancyUtility.CanCarry(pawn)}, CanSire: {SimpleTransPregnancyUtility.CanSire(pawn)}", 2);
                 
                 Messages.Message("SimpleTransOrganTransplanted".Translate(pawn.Named("PAWN"), ingredient.Label), 
                     pawn, MessageTypeDefOf.PositiveEvent);
@@ -227,9 +207,20 @@ namespace Simple_Trans
 
         private Thing GetReproductiveIngredient(List<Thing> ingredients)
         {
-            return ingredients.FirstOrDefault(x => 
+            var ingredient = ingredients.FirstOrDefault(x => 
                 x.def.defName.Contains("Organs") || 
                 x.def.defName.Contains("ReproductiveProsthetic"));
+            
+            if (ingredient == null)
+            {
+                SimpleTransDebug.Log($"GetReproductiveIngredient failed. Available ingredients:", 2);
+                foreach (var item in ingredients)
+                {
+                    SimpleTransDebug.Log($"  - {item.def.defName} (contains Organs: {item.def.defName.Contains("Organs")}, contains ReproductiveProsthetic: {item.def.defName.Contains("ReproductiveProsthetic")})", 2);
+                }
+            }
+            
+            return ingredient;
         }
 
         private PartType? GetIngredientType(List<Thing> ingredients)

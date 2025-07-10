@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Patch>
+  <Operation Class="PatchOperationFindMod">
+    <mods>
+      <li>Ideology</li>
+    </mods>
+    <match Class="XmlExtensions.OptionalPatch">
+      <modId>runaway.simpletrans</modId>
+      <key>enableIdeologyRitual</key>
+      <defaultValue>true</defaultValue>
+      <caseTrue>
+        <Operation Class="PatchOperationSequence">
+          <operations>
+            <!-- Add InteractionDefs -->
+            <li Class="PatchOperationAdd">
+              <xpath>Defs</xpath>
+              <value>
+                <InteractionDef>
+                  <defName>GenderAffirmSpeech</defName>
+                  <label>gender affirmation speech</label>
+                  <workerClass>InteractionWorker_RecruitAttempt</workerClass>
+                  <symbol>Things/Mote/SpeechSymbols/Speech</symbol>
+                  <logRulesInitiator>
+                    <rulesStrings>
+                      <li>logentry->[INITIATOR_nameDef] shared [INITIATOR_possessive] authentic self with the community.</li>
+                      <li>logentry->[INITIATOR_nameDef] spoke about [INITIATOR_possessive] gender identity.</li>
+                      <li>logentry->[INITIATOR_nameDef] celebrated [INITIATOR_possessive] true name and identity.</li>
+                    </rulesStrings>
+                  </logRulesInitiator>
+                </InteractionDef>
+              </value>
+            </li>
+            <!-- Add PreceptDefs -->
+            <li Class="PatchOperationAdd">
+              <xpath>Defs</xpath>
+              <value>
+                <PreceptDef Name="SimpleTrans_RitualBase" Abstract="True">
+                  <issue>Ritual</issue>
+                  <preceptClass>Precept_Ritual</preceptClass>
+                  <visible>false</visible>
+                  <classic>true</classic>
+                  <showRitualFloatMenuOption>true</showRitualFloatMenuOption>
+                  <useRepeatPenalty>false</useRepeatPenalty>
+                  <usesIdeoVisualEffects>true</usesIdeoVisualEffects>
+                  <mergeRitualGizmosFromAllIdeos>true</mergeRitualGizmosFromAllIdeos>
+                  <countsTowardsPreceptLimit>false</countsTowardsPreceptLimit>
+                  <selectionWeight>1.0</selectionWeight>
+                  <notifyPlayerOnOpportunity>false</notifyPlayerOnOpportunity>
+                </PreceptDef>
+
+                <PreceptDef ParentName="SimpleTrans_RitualBase">
+                  <defName>SimpleTrans_GenderAffirmParty</defName>
+                  <label>Gender Affirm Party</label>
+                  <iconPath>UI/Icons/Rituals/RoleChange</iconPath>
+                  <ritualPatternBase>SimpleTrans_GenderAffirmParty_Pattern</ritualPatternBase>
+                </PreceptDef>
+              </value>
+            </li>
+            <!-- Add RitualPatternDef -->
+            <li Class="PatchOperationAdd">
+              <xpath>Defs</xpath>
+              <value>
+                <RitualPatternDef>
+                  <defName>SimpleTrans_GenderAffirmParty_Pattern</defName>
+                  <descOverride>A celebration where someone can affirm their gender identity and chosen name. The community gathers to witness and support their authentic self. The person being celebrated leads the ritual.</descOverride>
+                  <ritualOnlyForIdeoMembers>false</ritualOnlyForIdeoMembers>
+                  <ritualObligationTargetFilter>GatheringSpotOrAltar</ritualObligationTargetFilter>
+                  <ritualBehavior>SimpleTrans_GenderAffirmParty_Behavior</ritualBehavior>
+                  <ritualOutcomeEffect>SimpleTrans_GenderAffirmParty_Outcome</ritualOutcomeEffect>
+                  <alwaysStartAnytime>true</alwaysStartAnytime>
+                  <playsIdeoMusic>true</playsIdeoMusic>
+                  <canStartAnytime>true</canStartAnytime>
+                </RitualPatternDef>
+              </value>
+            </li>
+            <!-- Add RitualBehaviorDef -->
+            <li Class="PatchOperationAdd">
+              <xpath>Defs</xpath>
+              <value>
+                <RitualBehaviorDef>
+                  <defName>SimpleTrans_GenderAffirmParty_Behavior</defName>
+                  <workerClass>Simple_Trans.RitualBehaviorWorker_GenderAffirmParty</workerClass>
+                  <durationTicks>2500</durationTicks>
+                  <letterTitle>Gender affirm party underway</letterTitle>
+                  <letterText>{ORGANIZER_labelShort} is leading a gender affirm party for themself.</letterText>
+                  <roles>
+                    <li Class="RitualRoleColonist">
+                      <label>Celebrant</label>
+                      <id>Celebrant</id>
+                      <maxCount>1</maxCount>
+                      <required>True</required>
+                      <countsAsParticipant>False</countsAsParticipant>
+                      <mustBeAbleToReachTarget>True</mustBeAbleToReachTarget>
+                    </li>
+                  </roles>
+                  <stages>
+                    <li>
+                      <defaultDuty>Spectate</defaultDuty>
+                      <spectatorsRequired>true</spectatorsRequired>
+                      <allowedSpectateSidesOverride>All</allowedSpectateSidesOverride>
+                      <spectateDistanceOverride>3~4</spectateDistanceOverride>
+                      <endTriggers>
+                        <li Class="StageEndTrigger_DurationPercentage">
+                          <percentage>1.0</percentage>
+                        </li>
+                      </endTriggers>
+                      <roleBehaviors>
+                        <li>
+                          <roleId>Celebrant</roleId>
+                          <dutyDef>SpeakOnCellFacingSpectators</dutyDef>
+                          <speakerInteraction>GenderAffirmSpeech</speakerInteraction>
+                          <customPositions>
+                            <li Class="RitualPosition_InFrontThingCenter" />
+                          </customPositions>
+                        </li>
+                      </roleBehaviors>
+                    </li>
+                  </stages>
+                </RitualBehaviorDef>
+              </value>
+            </li>
+            <!-- Add RitualOutcomeEffectDef -->
+            <li Class="PatchOperationAdd">
+              <xpath>Defs</xpath>
+              <value>
+                <RitualOutcomeEffectDef>
+                  <defName>SimpleTrans_GenderAffirmParty_Outcome</defName>
+                  <description>A gender affirm party was held.</description>
+                  <workerClass>Simple_Trans.RitualOutcomeEffectWorker_GenderAffirmParty</workerClass>
+                  <comps>
+                    <li Class="RitualOutcomeComp_ParticipantCount">
+                      <label>participant count</label>
+                      <curve>
+                        <points>
+                          <li>(1,  0.1)</li>
+                          <li>(5,  0.2)</li>
+                          <li>(10, 0.4)</li>
+                        </points>
+                      </curve>
+                    </li>
+                    <li Class="RitualOutcomeComp_RoomStat">
+                      <label>room impressiveness</label>
+                      <statDef>Impressiveness</statDef>
+                      <curve>
+                        <points>
+                          <li>0,  0.1</li>
+                          <li>50,  0.2</li>
+                          <li>120, 0.3</li>
+                        </points>
+                      </curve>
+                    </li>
+                    <li Class="RitualOutcomeComp_PawnStatScaled">
+                      <label>Celebrant's social impact</label>
+                      <statDef>SocialImpact</statDef>
+                      <roleId>Celebrant</roleId>
+                      <curve>
+                        <points>
+                          <li>(0.2, 0.0)</li>
+                          <li>(0.4, 0.1)</li>
+                          <li>(0.6, 0.2)</li>
+                          <li>(1.0, 0.3)</li>
+                        </points>
+                      </curve>
+                    </li>
+                  </comps>
+                  <outcomeChances>
+                    <li>
+                      <label>Terrible</label>
+                      <chance>0.00</chance>
+                      <memory>SimpleTrans_AttendedGenderAffirmParty</memory>
+                      <positivityIndex>-2</positivityIndex>
+                      <description>The party was awkward and uncomfortable. People seemed confused or unsupportive.</description>
+                    </li>
+                    <li>
+                      <label>Disappointing</label>
+                      <chance>0.10</chance>
+                      <memory>SimpleTrans_AttendedGenderAffirmParty</memory>
+                      <positivityIndex>-1</positivityIndex>
+                      <description>The party didn't go very well. Some people seemed uncomfortable.</description>
+                    </li>
+                    <li>
+                      <label>Satisfying</label>
+                      <chance>0.60</chance>
+                      <memory>SimpleTrans_AttendedGenderAffirmParty</memory>
+                      <positivityIndex>1</positivityIndex>
+                      <description>The party was warm and supportive. The community came together nicely.</description>
+                    </li>
+                    <li>
+                      <label>Inspiring</label>
+                      <chance>0.30</chance>
+                      <memory>SimpleTrans_AttendedGenderAffirmParty</memory>
+                      <positivityIndex>2</positivityIndex>
+                      <description>The party was deeply moving. Everyone felt the joy and authenticity of the moment.</description>
+                    </li>
+                  </outcomeChances>
+                </RitualOutcomeEffectDef>
+              </value>
+            </li>
+            <!-- Add ThoughtDefs -->
+            <li Class="PatchOperationAdd">
+              <xpath>Defs</xpath>
+              <value>
+                <ThoughtDef>
+                  <defName>SimpleTrans_AttendedGenderAffirmParty</defName>
+                  <thoughtClass>Thought_Memory</thoughtClass>
+                  <durationDays>6</durationDays>
+                  <stackLimit>3</stackLimit>
+                  <stackLimitForSameOtherPawn>1</stackLimitForSameOtherPawn>
+                  <stages>
+                    <li>
+                      <label>awful gender affirm party</label>
+                      <description>The gender affirm party was terrible. It was so awkward and uncomfortable.</description>
+                      <baseMoodEffect>-4</baseMoodEffect>
+                    </li>
+                    <li>
+                      <label>disappointing gender affirm party</label>
+                      <description>The gender affirm party didn't go well. Some people seemed uncomfortable.</description>
+                      <baseMoodEffect>-2</baseMoodEffect>
+                    </li>
+                    <li>
+                      <label>satisfying gender affirm party</label>
+                      <description>I attended a nice gender affirm party. The community came together to support someone.</description>
+                      <baseMoodEffect>3</baseMoodEffect>
+                    </li>
+                    <li>
+                      <label>inspiring gender affirm party</label>
+                      <description>I attended an amazing gender affirm party. It was deeply moving to witness someone's authentic joy.</description>
+                      <baseMoodEffect>6</baseMoodEffect>
+                    </li>
+                  </stages>
+                </ThoughtDef>
+
+                <ThoughtDef>
+                  <defName>SimpleTrans_CelebrantGenderAffirmParty</defName>
+                  <thoughtClass>Thought_Memory</thoughtClass>
+                  <durationDays>12</durationDays>
+                  <stackLimit>1</stackLimit>
+                  <stages>
+                    <li>
+                      <label>awful gender affirm party (celebrant)</label>
+                      <description>My gender affirm party was terrible. People seemed unsupportive of who I really am.</description>
+                      <baseMoodEffect>-8</baseMoodEffect>
+                    </li>
+                    <li>
+                      <label>disappointing gender affirm party (celebrant)</label>
+                      <description>My gender affirm party didn't go well. Some people seemed uncomfortable with my identity.</description>
+                      <baseMoodEffect>-4</baseMoodEffect>
+                    </li>
+                    <li>
+                      <label>satisfying gender affirm party (celebrant)</label>
+                      <description>I had a nice gender affirm party. The community supported me being my authentic self.</description>
+                      <baseMoodEffect>8</baseMoodEffect>
+                    </li>
+                    <li>
+                      <label>inspiring gender affirm party (celebrant)</label>
+                      <description>I had an amazing gender affirm party. I feel deeply accepted and celebrated for who I truly am.</description>
+                      <baseMoodEffect>15</baseMoodEffect>
+                    </li>
+                  </stages>
+                </ThoughtDef>
+              </value>
+            </li>
+          </operations>
+        </Operation>
+      </caseTrue>
+    </match>
+  </Operation>
+</Patch>

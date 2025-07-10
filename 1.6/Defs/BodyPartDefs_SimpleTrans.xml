@@ -5,7 +5,6 @@
     <label>reproductive organs (carry)</label>
     <labelShort>carry organs</labelShort>
     <hitPoints>15</hitPoints>
-    <spawnThingOnRemoved>CarryingOrgans</spawnThingOnRemoved>
     <canSuggestAmputation>false</canSuggestAmputation>
     <skinCovered>false</skinCovered>
     <solid>false</solid>
@@ -17,7 +16,6 @@
     <label>reproductive organs (sire)</label>
     <labelShort>sire organs</labelShort>
     <hitPoints>15</hitPoints>
-    <spawnThingOnRemoved>SiringOrgans</spawnThingOnRemoved>
     <canSuggestAmputation>false</canSuggestAmputation>
     <skinCovered>false</skinCovered>
     <solid>false</solid>
