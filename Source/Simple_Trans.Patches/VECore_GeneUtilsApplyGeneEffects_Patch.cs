@@ -11,104 +11,47 @@ using Verse;
 namespace Simple_Trans.Patches;
 
 /// <summary>
-/// Harmony transpiler patch for VEF GeneUtils.ApplyGeneEffects
-/// Modifies gene effect application to respect cisgender status for body type changes
+/// Harmony prefix patch for VEF GeneUtils.ApplyGeneEffects
+/// Prevents gender-forcing genes from affecting transgender pawns
 /// </summary>
 [HarmonyPatch(typeof(GeneUtils), "ApplyGeneEffects")]
 public static class VECore_GeneUtilsApplyGeneEffects_Patch
 {
 	/// <summary>
-	/// Transpiler that modifies GeneUtils.ApplyGeneEffects to check for cisgender status
-	/// This prevents body type changes from affecting transgender pawns
+	/// Prefix patch that prevents gender-forcing gene effects on transgender pawns
 	/// </summary>
-	/// <param name="instructions">The original IL instructions</param>
-	/// <param name="il">The IL generator for creating labels</param>
-	/// <returns>Modified IL instructions</returns>
-	public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il)
+	/// <param name="gene">The gene being processed</param>
+	/// <returns>True to continue to original method, false to skip it</returns>
+	[HarmonyPrefix]
+	public static bool Prefix(Gene gene)
 	{
-		int insertionIndex = -1;
-		bool foundFemaleCheck = false;
-		List<CodeInstruction> instructionList = new List<CodeInstruction>(instructions);
-		Label? branchLabel = il.DefineLabel();
-		
-		// Find the appropriate insertion point by locating the female body type check
-		for (int i = 0; i < instructionList.Count; i++)
+		try
 		{
-			// Look for forceFemale field access
-			if (instructionList[i].opcode == OpCodes.Ldloc_0 && 
-				i + 1 < instructionList.Count && 
-				(FieldInfo)instructionList[i + 1].operand == AccessTools.Field(typeof(GeneExtension), "forceFemale"))
+			// If gene or pawn is null, let original method handle it
+			if (gene?.pawn == null) return true;
+			
+			// Check if this gene has gender-forcing effects
+			var extension = gene.def.GetModExtension<GeneExtension>();
+			if (extension == null) return true; // No extension, proceed normally
+			
+			// If gene forces gender changes and pawn is not cisgender, skip the effects
+			if ((extension.forceFemale == true || extension.forceMale == true))
 			{
-				insertionIndex = i;
+				bool isCisgender = SimpleTransPregnancyUtility.IsCisgender(gene.pawn);
+				if (!isCisgender)
+				{
+					SimpleTransDebug.Log($"Skipping gender-forcing gene effects for transgender pawn {gene.pawn.Name}", 3);
+					return false; // Skip original method entirely
+				}
 			}
 			
-			// Look for Female body type comparison
-			if (insertionIndex > -1 && 
-				instructionList[i].opcode == OpCodes.Ldsfld && 
-				i + 1 < instructionList.Count && 
-				(FieldInfo)instructionList[i].operand == AccessTools.Field(typeof(BodyTypeDefOf), "Female") && 
-				instructionList[i + 1].opcode == OpCodes.Ceq)
-			{
-				foundFemaleCheck = true;
-			}
-			
-			// Find the branch instruction to get the target label
-			if (foundFemaleCheck && instructionList[i].opcode == OpCodes.Brfalse_S)
-			{
-				CodeInstructionExtensions.Branches(instructionList[i], out branchLabel);
-				break;
-			}
+			// For cisgender pawns or non-gender-forcing genes, proceed normally
+			return true;
 		}
-		
-		// Apply the modifications if we found the insertion point
-		if (insertionIndex > -1 && branchLabel.HasValue)
+		catch (System.Exception ex)
 		{
-			ApplyGeneEffectsModifications(instructionList, insertionIndex, branchLabel.Value);
+			SimpleTransDebug.Log($"Error in VECore GeneUtils prefix: {ex.Message}", 1);
+			return true; // Let original method run on error
 		}
-		else
-		{
-			Log.Error("[Simple Trans] Failed to transpile VECore GeneUtils.ApplyGeneEffects() - could not find insertion point");
-		}
-		
-		return instructionList.AsEnumerable();
-	}
-	
-	/// <summary>
-	/// Applies the actual IL code modifications for the gene effects transpiler
-	/// </summary>
-	/// <param name="instructionList">The instruction list to modify</param>
-	/// <param name="insertionIndex">The index where to insert new instructions</param>
-	/// <param name="branchLabel">The label to branch to if cisgender check fails</param>
-	private static void ApplyGeneEffectsModifications(List<CodeInstruction> instructionList, int insertionIndex, Label branchLabel)
-	{
-		// Create instructions to check for cisgender hediff
-		List<CodeInstruction> injectedInstructions = new List<CodeInstruction>
-		{
-			// Load 'this' (the gene)
-			new CodeInstruction(OpCodes.Ldarg_0, null),
-			// Load pawn field
-			new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Gene), "pawn")),
-			// Load health field
-			new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Pawn), "health")),
-			// Load hediffSet field
-			new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Pawn_HealthTracker), "hediffSet")),
-			// Load "Cisgender" string
-			new CodeInstruction(OpCodes.Ldstr, "Cisgender"),
-			// Call HediffDef.Named
-			new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(HediffDef), "Named", null, null)),
-			// Load false boolean
-			new CodeInstruction(OpCodes.Ldc_I4_0, null),
-			// Call HasHediff method
-			new CodeInstruction(OpCodes.Callvirt, AccessTools.Method(typeof(HediffSet), "HasHediff", new Type[2]
-			{
-				typeof(HediffDef),
-				typeof(bool)
-			}, null)),
-			// Branch if not cisgender (skip the body type change)
-			new CodeInstruction(OpCodes.Brfalse_S, branchLabel)
-		};
-		
-		// Insert the new instructions
-		instructionList.InsertRange(insertionIndex, injectedInstructions);
 	}
 }

@@ -233,6 +233,21 @@ public static class SimpleTransPregnancyUtility
 		return true;
 	}
 
+	/// <summary>
+	/// Determines if a pawn is cisgender (has the Cisgender hediff)
+	/// </summary>
+	/// <param name="pawn">The pawn to check</param>
+	/// <returns>True if the pawn is cisgender</returns>
+	public static bool IsCisgender(Pawn pawn)
+	{
+		if (pawn?.health?.hediffSet == null)
+		{
+			return false;
+		}
+		
+		return pawn.health.hediffSet.HasHediff(cisDef, false);
+	}
+
 	#endregion
 
 	#region Unified Generation Logic

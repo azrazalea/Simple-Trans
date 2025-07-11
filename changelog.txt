@@ -1,3 +1,7 @@
+[h1] July 10th, 2025 #2 [/h1]
+[*] Hotfix VEF gender gene patch due to crash at initialize
+  [*] This also was fixed to be simpler, prefix patch instead of transpiler, but I haven't had time to completely test it so keep an eye on it.
+
 [h1] July 10th, 2025 [/h1]
 [*]Revamped xml loading to actually completely remove objects when toggles are off
 [*]Added settings to toggle ideology ritual and biosculpter cycle
