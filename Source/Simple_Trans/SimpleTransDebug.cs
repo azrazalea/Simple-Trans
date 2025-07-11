@@ -76,7 +76,6 @@ internal class SimpleTransDebug
 			SimpleTransPregnancyUtility.SetTrans(pawn);
 		}
 		
-		// Enable both reproductive abilities
 		SimpleTransPregnancyUtility.SetCarry(pawn, removeSire: false);
 		SimpleTransPregnancyUtility.SetSire(pawn, removeCarry: false);
 	}
@@ -113,7 +112,6 @@ internal class SimpleTransDebug
 	/// <param name="level">The log level (1-3, lower is more important)</param>
 	public static void Log(string message, int level = 1)
 	{
-		// Only log if debug mode is enabled
 		if (SimpleTrans.debugMode && level <= 3)
 		{
 			Verse.Log.Message($"[SimpleTrans] {message}");

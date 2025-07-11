@@ -14,10 +14,8 @@ namespace Simple_Trans.Patches
         [HarmonyPostfix]
         public static void Recipe_Surgery_AvailableOnNow_Postfix(Recipe_Surgery __instance, Thing thing, ref bool __result, BodyPartRecord part)
         {
-            // Only process if surgery was initially available and for pawns
             if (!__result || !(thing is Pawn pawn)) return;
 
-            // Check if this is one of our capability-based surgeries
             if (__instance?.recipe == null) return;
 
             string defName = __instance.recipe.defName;
@@ -82,7 +80,6 @@ namespace Simple_Trans.Patches
         {
             if (!__result) return;
 
-            // Override with carry ability check
             if (!SimpleTransPregnancyUtility.CanCarry(surgeryTarget))
             {
                 __result = false;
@@ -96,7 +93,6 @@ namespace Simple_Trans.Patches
         {
             if (!__result) return;
 
-            // Override with carry ability check
             if (!SimpleTransPregnancyUtility.CanCarry(surgeryTarget))
             {
                 __result = false;
@@ -108,7 +104,6 @@ namespace Simple_Trans.Patches
         [HarmonyPrefix]
         public static bool HumanOvum_CanFertilizeReport_Prefix(Pawn pawn, ref AcceptanceReport __result)
         {
-            // Replace the entire method with our implementation
             __result = CanFertilizeReport_SimpleTrans(pawn);
             return false; // Skip original method
         }
@@ -128,7 +123,6 @@ namespace Simple_Trans.Patches
                 return sireReport;
             }
 
-            // Check if pawn is quest lodger
             if (pawn.IsQuestLodger())
             {
                 return false;
@@ -137,13 +131,11 @@ namespace Simple_Trans.Patches
             // Check if pawn can reach the ovum (this requires the ovum instance, but we'll skip path check in prefix)
             // The path check will be handled by the gizmo/float menu system
 
-            // Check age requirement
             if ((float)pawn.ageTracker.AgeBiologicalYears < 14f)
             {
                 return "CannotMustBeAge".Translate(14f).CapitalizeFirst();
             }
 
-            // Check if pawn is incapacitated
             if (pawn.Downed || !pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
             {
                 return "Incapacitated".Translate().ToLower();

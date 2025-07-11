@@ -17,10 +17,8 @@ namespace Simple_Trans
         private readonly CompBiosculpterPod_GenderAffirmingCycle cycle;
         private readonly Action proceedAction;
 
-        // Choice parameters
         private GenderAffirmingChoices choices;
 
-        // UI state
         private Vector2 scrollPosition = Vector2.zero;
         private int currentTab = 0;
         private readonly string[] tabLabels = { "BodyType", "Reproduction" };
@@ -200,10 +198,8 @@ namespace Simple_Trans
         {
             bool clicked = Widgets.ButtonInvisible(rect);
 
-            // Radio button
             Widgets.RadioButton(rect.x, rect.y + rect.height / 2f - 12f, selected);
 
-            // Label
             Widgets.Label(new Rect(rect.x + 30f, rect.y, rect.width - 30f, rect.height), label);
 
             return clicked && !selected;

@@ -39,37 +39,29 @@ public static class SimpleTrans
 	#region Initialization
 
 	/// <summary>
-	/// Static constructor - called automatically when the class is first accessed
-	/// Performs mod initialization and Harmony patching
+	/// Static constructor - performs mod initialization and Harmony patching
 	/// </summary>
 	static SimpleTrans()
 	{
 		try
 		{
-			// Initialize Harmony and apply patches
 			Harmony harmony = new Harmony("runaway.simple_trans");
 			harmony.PatchAll();
 
-			// Detect active mods
 			DetectActiveMods();
-
-			// Load debug mode setting
 			LoadDebugMode();
 
-			// Apply Non-Binary Gender patches if mod is active
 			if (NBGenderActive)
 			{
 				harmony.PatchNBG();
 			}
 
-			// Apply biosculpter patches if Ideology DLC is active
 			if (IdeologyActive)
 			{
 				TryPatchBiosculpter(harmony);
 				TryInitializeRitualSystem();
 			}
 
-			// Apply pregnancy system patches for all compatible mods
 			PregnancyApplicationPatches.TryPatchAllPregnancySystems(harmony);
 
 			SimpleTransPregnancyUtility.LoadSettings();
@@ -82,7 +74,7 @@ public static class SimpleTrans
 	}
 
 	/// <summary>
-	/// Detects which compatible mods are currently active
+	/// Detects compatible mod dependencies
 	/// </summary>
 	private static void DetectActiveMods()
 	{
@@ -100,7 +92,7 @@ public static class SimpleTrans
 		catch (System.Exception ex)
 		{
 			Log.Error($"[Simple Trans] Error detecting active mods: {ex}");
-			// Set safe defaults
+			// Set safe defaults on error
 			HARActive = false;
 			NBGenderActive = false;
 			IdeologyActive = false;
@@ -108,7 +100,7 @@ public static class SimpleTrans
 	}
 
 	/// <summary>
-	/// Loads the debug mode setting from mod configuration
+	/// Loads debug mode setting from XML Extensions
 	/// </summary>
 	private static void LoadDebugMode()
 	{
@@ -140,12 +132,11 @@ public static class SimpleTrans
 	/// <summary>
 	/// Conditionally applies biosculpter pod patches when Ideology DLC is active
 	/// </summary>
-	/// <param name="harmony">The Harmony instance to use for patching</param>
 	private static void TryPatchBiosculpter(Harmony harmony)
 	{
 		try
 		{
-			// Manually patch the biosculpter class since we removed the [HarmonyPatch] attribute
+			// Manual patch required since [HarmonyPatch] attribute conflicts with conditional loading
 			var originalMethod = AccessTools.Method(typeof(RimWorld.CompBiosculpterPod), "OrderToPod");
 			var prefixMethod = AccessTools.Method(typeof(SimpleTransBiosculpterPatch), "OrderToPod_Prefix");
 
