@@ -8,6 +8,17 @@ using Verse;
 namespace Simple_Trans.Patches
 {
     /// <summary>
+    /// Constants used in non-binary attraction patches
+    /// </summary>
+    public static class NonBinaryAttractionConstants
+    {
+        /// <summary>
+        /// Gender.Enby enum value (3) - used for non-binary gender detection
+        /// </summary>
+        public const int GENDER_ENBY_VALUE = 3;
+    }
+
+    /// <summary>
     /// Shared logic for non-binary attraction across different mods
     /// </summary>
     public static class NonBinaryAttractionUtility
@@ -18,8 +29,8 @@ namespace Simple_Trans.Patches
         /// </summary>
         public static bool ShouldBeAttractedToNonBinary(Pawn pawn, Gender targetGender, out bool attractionResult)
         {
-            // If target is non-binary (Gender value 3), everyone except aromantic pawns is attracted
-            if ((int)targetGender == 3)
+            // If target is non-binary (Gender.Enby), everyone except aromantic pawns is attracted
+            if ((int)targetGender == NonBinaryAttractionConstants.GENDER_ENBY_VALUE)
             {
                 attractionResult = !IsAromantic(pawn);
                 return true;
@@ -40,7 +51,7 @@ namespace Simple_Trans.Patches
         /// <summary>
         /// Checks if a pawn is aromantic (uses different methods depending on active mods)
         /// </summary>
-        private static bool IsAromantic(Pawn pawn)
+        public static bool IsAromantic(Pawn pawn)
         {
             // Check for WayBetterRomance aromantic detection
             if (ModsConfig.IsActive("divineDerivative.Romance"))
@@ -87,16 +98,16 @@ namespace Simple_Trans.Patches
         {
             bool nonBinaryActive = ModsConfig.IsActive("divineDerivative.NonBinaryGender");
 
-            // Don't apply if WayBetterRomance is active - use WayBetterRomance patch instead
-            bool wayBetterRomanceActive = ModsConfig.IsActive("divineDerivative.Romance");
-
-            return nonBinaryActive && !wayBetterRomanceActive;
+            // Always apply when NBG is active - needed for vanilla romance button functionality
+            // Must apply even when WayBetterRomance is active since vanilla methods can still be called
+            return nonBinaryActive;
         }
 
         /// <summary>
         /// Prefix patch that handles non-binary attraction for vanilla RelationsUtility
         /// </summary>
         [HarmonyPrefix]
+        [HarmonyPriority(Priority.High)]
         public static bool Prefix(Pawn pawn, Gender gender, ref bool __result)
         {
             if (NonBinaryAttractionUtility.ShouldBeAttractedToNonBinary(pawn, gender, out bool attractionResult))
@@ -159,6 +170,7 @@ namespace Simple_Trans.Patches
         /// Prefix patch that handles non-binary attraction before WayBetterRomance's logic
         /// </summary>
         [HarmonyPrefix]
+        [HarmonyPriority(Priority.High)]
         public static bool Prefix(Pawn pawn, Gender gender, ref bool __result)
         {
             if (NonBinaryAttractionUtility.ShouldBeAttractedToNonBinary(pawn, gender, out bool attractionResult))
@@ -201,7 +213,7 @@ namespace Simple_Trans.Patches
         {
             // Check if both NonBinary Gender mod AND Intimacy mod are active
             bool nonBinaryActive = ModsConfig.IsActive("divineDerivative.NonBinaryGender");
-            bool intimacyActive = ModsConfig.IsActive("LoveyDoveySexWithEuterpe");
+            bool intimacyActive = ModsConfig.IsActive("LovelyDovey.Sex.WithEuterpe");
 
             return nonBinaryActive && intimacyActive && TargetMethod() != null;
         }
@@ -210,6 +222,7 @@ namespace Simple_Trans.Patches
         /// Prefix patch that handles non-binary attraction for Intimacy mod
         /// </summary>
         [HarmonyPrefix]
+        [HarmonyPriority(Priority.High)]
         public static bool Prefix(Pawn pawn, Gender gender, ref bool __result)
         {
             if (NonBinaryAttractionUtility.ShouldBeAttractedToNonBinary(pawn, gender, out bool attractionResult))
@@ -223,4 +236,112 @@ namespace Simple_Trans.Patches
             return true;
         }
     }
+
+    /// <summary>
+    /// Harmony patch for Intimacy mod's CommonChecks.AreSameGender
+    /// Only applied when both NonBinary Gender mod and Intimacy mod are loaded
+    /// </summary>
+    [HarmonyPatch]
+    public static class IntimacyNonBinaryAreSameGenderPatch
+    {
+        /// <summary>
+        /// Dynamically targets CommonChecks.AreSameGender from Intimacy mod
+        /// </summary>
+        public static MethodBase TargetMethod()
+        {
+            Type commonChecksType = AccessTools.TypeByName("LoveyDoveySexWithEuterpe.CommonChecks");
+            if (commonChecksType != null)
+            {
+                return AccessTools.Method(commonChecksType, "AreSameGender");
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Determines if this patch should be applied
+        /// </summary>
+        public static bool Prepare()
+        {
+            bool nonBinaryActive = ModsConfig.IsActive("divineDerivative.NonBinaryGender");
+            bool intimacyActive = ModsConfig.IsActive("LovelyDovey.Sex.WithEuterpe");
+
+            return nonBinaryActive && intimacyActive && TargetMethod() != null;
+        }
+
+        /// <summary>
+        /// Prefix patch that handles non-binary gender comparison for Intimacy mod
+        /// </summary>
+        [HarmonyPrefix]
+        [HarmonyPriority(Priority.High)]
+        public static bool Prefix(Pawn a, Pawn b, ref bool __result)
+        {
+            // If either pawn is non-binary, they are never the same gender as anyone else
+            // Non-binary is a spectrum - each person's experience is unique
+            if (EnbyUtility.IsEnby(a) || EnbyUtility.IsEnby(b))
+            {
+                __result = false; // Non-binary pawns are never the same gender as anyone
+                SimpleTransDebug.Log($"Intimacy AreSameGender patch: {a.Name} and {b.Name} = {__result} (non-binary spectrum - never same gender)", 2);
+                return false; // Skip original method
+            }
+
+            // For binary genders, continue with original method
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// Harmony patch for Intimacy mod's CommonChecks.AreMutuallyAttracted
+    /// Only applied when both NonBinary Gender mod and Intimacy mod are loaded
+    /// </summary>
+    [HarmonyPatch]
+    public static class IntimacyNonBinaryAreMutuallyAttractedPatch
+    {
+        /// <summary>
+        /// Dynamically targets CommonChecks.AreMutuallyAttracted from Intimacy mod
+        /// </summary>
+        public static MethodBase TargetMethod()
+        {
+            Type commonChecksType = AccessTools.TypeByName("LoveyDoveySexWithEuterpe.CommonChecks");
+            if (commonChecksType != null)
+            {
+                return AccessTools.Method(commonChecksType, "AreMutuallyAttracted");
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Determines if this patch should be applied
+        /// </summary>
+        public static bool Prepare()
+        {
+            bool nonBinaryActive = ModsConfig.IsActive("divineDerivative.NonBinaryGender");
+            bool intimacyActive = ModsConfig.IsActive("LovelyDovey.Sex.WithEuterpe");
+
+            return nonBinaryActive && intimacyActive && TargetMethod() != null;
+        }
+
+        /// <summary>
+        /// Prefix patch that handles non-binary mutual attraction for Intimacy mod
+        /// </summary>
+        [HarmonyPrefix]
+        [HarmonyPriority(Priority.High)]
+        public static bool Prefix(Pawn a, Pawn b, ref bool __result)
+        {
+            // If either pawn is non-binary, use our custom mutual attraction logic
+            if (EnbyUtility.IsEnby(a) || EnbyUtility.IsEnby(b))
+            {
+                // Non-binary pawns are mutually attracted to everyone except aromantic pawns
+                bool aAttracted = !NonBinaryAttractionUtility.IsAromantic(a);
+                bool bAttracted = !NonBinaryAttractionUtility.IsAromantic(b);
+                
+                __result = aAttracted && bAttracted;
+                SimpleTransDebug.Log($"Intimacy AreMutuallyAttracted patch: {a.Name} and {b.Name} = {__result}", 2);
+                return false; // Skip original method
+            }
+
+            // For binary genders, continue with original method
+            return true;
+        }
+    }
+
 }
