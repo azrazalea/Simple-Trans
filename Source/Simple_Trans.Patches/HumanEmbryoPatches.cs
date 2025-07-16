@@ -66,7 +66,6 @@ namespace Simple_Trans.Patches
                         return;
                     }
                     
-                    // All checks passed - accept the implantation
                     __result = true;
                     
                     SimpleTransDebug.Log($"Embryo implantation accepted: {pawn?.Name?.ToStringShort ?? "unknown"} (carry capability)", 1);
