@@ -23,7 +23,7 @@
 [list]
 [*]✅ [b]Intimacy[/b] - Full compatibility 
 [*]✅ [b]Non-Binary Gender[/b] - Full integration. For now everyone thinks non-binary people are attractive. Reproduction handled as well.
-[*]✅ [b]Intimacy + Non Binary Gender[/b] - Full compatibility (these work together with Simple Trans thanks to a small patch to Intimacy mod)
+[*]✅ [b]Intimacy + Way Better Romance + Non Binary Gender[/b] - Full compatibility (these work together with Simple Trans thanks to a NASTY HACK making non-binary gender attractive to everyone)
 [*]✅ [b]Vanilla Framework Expanded[/b] - Full integration with gene systems
 [*]❌ [b]Same Sex IVF[/b] - No longer recommended (Simple Trans handles IVF independently via carry/sire system)
 [/list]
@@ -129,7 +129,7 @@ Separates gender identity from reproductive biology using RimWorld's hediff syst
 [list]
 [*][b]Biotech:[/b] Complete pregnancy system override using carry/sire capabilities
 [*][b]Intimacy:[/b] Full compatibility with debug logging (enable in settings for detailed reports)
-[*][b]Non-Binary Gender:[/b] Full integration with special spawn rates. Currently everyone is attracted to non-binary pawns (will improve in future)
+[*][b]Non-Binary Gender:[/b] Full integration with special spawn rates. Currently everyone is attracted to non-binary pawns (will improve in future in the future).
 [*][b]Vanilla Framework Expanded:[/b] Complete gene system integration
 [*][b]HAR:[/b] Planned support
 [*][b]Way Better Romance:[/b] Compatible (better integration planned)

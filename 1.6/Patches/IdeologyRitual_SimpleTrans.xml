@@ -132,8 +132,8 @@
                       <label>participant count</label>
                       <curve>
                         <points>
-                          <li>(1,  0.1)</li>
-                          <li>(5,  0.2)</li>
+                          <li>(1, 0.1)</li>
+                          <li>(5, 0.2)</li>
                           <li>(10, 0.4)</li>
                         </points>
                       </curve>
@@ -143,8 +143,8 @@
                       <statDef>Impressiveness</statDef>
                       <curve>
                         <points>
-                          <li>0,  0.1</li>
-                          <li>50,  0.2</li>
+                          <li>0, 0.1</li>
+                          <li>50, 0.2</li>
                           <li>120, 0.3</li>
                         </points>
                       </curve>
@@ -167,30 +167,30 @@
                     <li>
                       <label>Terrible</label>
                       <chance>0.00</chance>
-                      <memory>SimpleTrans_AttendedGenderAffirmParty</memory>
+                      <memory>TerribleGenderAffirmation</memory>
+                      <description>The {0} was deeply uncomfortable. Awkward silences, confused looks, and a lack of genuine support made the celebration feel hollow and hurtful.</description>
                       <positivityIndex>-2</positivityIndex>
-                      <description>The party was awkward and uncomfortable. People seemed confused or unsupportive.</description>
                     </li>
                     <li>
                       <label>Disappointing</label>
                       <chance>0.10</chance>
-                      <memory>SimpleTrans_AttendedGenderAffirmParty</memory>
+                      <memory>DisappointingGenderAffirmation</memory>
+                      <description>The {0} fell short of expectations. While some people tried to be supportive, others seemed uncomfortable or uncertain about how to participate.</description>
                       <positivityIndex>-1</positivityIndex>
-                      <description>The party didn't go very well. Some people seemed uncomfortable.</description>
                     </li>
                     <li>
-                      <label>Satisfying</label>
+                      <label>Meaningful</label>
                       <chance>0.60</chance>
-                      <memory>SimpleTrans_AttendedGenderAffirmParty</memory>
+                      <memory>MeaningfulGenderAffirmation</memory>
+                      <description>The {0} was heartwarming and supportive. The community came together to celebrate authenticity, creating a warm atmosphere of acceptance and joy.</description>
                       <positivityIndex>1</positivityIndex>
-                      <description>The party was warm and supportive. The community came together nicely.</description>
                     </li>
                     <li>
-                      <label>Inspiring</label>
+                      <label>Transformative</label>
                       <chance>0.30</chance>
-                      <memory>SimpleTrans_AttendedGenderAffirmParty</memory>
+                      <memory>TransformativeGenderAffirmation</memory>
+                      <description>The {0} was truly transformative! The celebration overflowed with love, acceptance, and authentic joy. Everyone felt the power of community and the beauty of living one's truth.</description>
                       <positivityIndex>2</positivityIndex>
-                      <description>The party was deeply moving. Everyone felt the joy and authenticity of the moment.</description>
                     </li>
                   </outcomeChances>
                 </RitualOutcomeEffectDef>
@@ -201,60 +201,57 @@
               <xpath>Defs</xpath>
               <value>
                 <ThoughtDef>
-                  <defName>SimpleTrans_AttendedGenderAffirmParty</defName>
-                  <thoughtClass>Thought_Memory</thoughtClass>
-                  <durationDays>6</durationDays>
+                  <defName>TerribleGenderAffirmation</defName>
+                  <thoughtClass>Thought_AttendedRitual</thoughtClass>
+                  <durationDays>7</durationDays>
                   <stackLimit>3</stackLimit>
-                  <stackLimitForSameOtherPawn>1</stackLimitForSameOtherPawn>
                   <stages>
                     <li>
-                      <label>awful gender affirm party</label>
-                      <description>The gender affirm party was terrible. It was so awkward and uncomfortable.</description>
+                      <label>terrible gender affirmation party</label>
+                      <description>That gender affirmation celebration was awful. So uncomfortable and awkward. Nobody seemed to understand or care.</description>
                       <baseMoodEffect>-4</baseMoodEffect>
-                    </li>
-                    <li>
-                      <label>disappointing gender affirm party</label>
-                      <description>The gender affirm party didn't go well. Some people seemed uncomfortable.</description>
-                      <baseMoodEffect>-2</baseMoodEffect>
-                    </li>
-                    <li>
-                      <label>satisfying gender affirm party</label>
-                      <description>I attended a nice gender affirm party. The community came together to support someone.</description>
-                      <baseMoodEffect>3</baseMoodEffect>
-                    </li>
-                    <li>
-                      <label>inspiring gender affirm party</label>
-                      <description>I attended an amazing gender affirm party. It was deeply moving to witness someone's authentic joy.</description>
-                      <baseMoodEffect>6</baseMoodEffect>
                     </li>
                   </stages>
                 </ThoughtDef>
 
                 <ThoughtDef>
-                  <defName>SimpleTrans_CelebrantGenderAffirmParty</defName>
-                  <thoughtClass>Thought_Memory</thoughtClass>
-                  <durationDays>12</durationDays>
-                  <stackLimit>1</stackLimit>
+                  <defName>DisappointingGenderAffirmation</defName>
+                  <thoughtClass>Thought_AttendedRitual</thoughtClass>
+                  <durationDays>7</durationDays>
+                  <stackLimit>3</stackLimit>
                   <stages>
                     <li>
-                      <label>awful gender affirm party (celebrant)</label>
-                      <description>My gender affirm party was terrible. People seemed unsupportive of who I really am.</description>
-                      <baseMoodEffect>-8</baseMoodEffect>
+                      <label>disappointing gender affirmation party</label>
+                      <description>That gender affirmation celebration didn't go well. Some people tried, but others seemed uncomfortable. Not what I hoped for.</description>
+                      <baseMoodEffect>-2</baseMoodEffect>
                     </li>
+                  </stages>
+                </ThoughtDef>
+
+                <ThoughtDef>
+                  <defName>MeaningfulGenderAffirmation</defName>
+                  <thoughtClass>Thought_AttendedRitual</thoughtClass>
+                  <durationDays>7</durationDays>
+                  <stackLimit>3</stackLimit>
+                  <stages>
                     <li>
-                      <label>disappointing gender affirm party (celebrant)</label>
-                      <description>My gender affirm party didn't go well. Some people seemed uncomfortable with my identity.</description>
-                      <baseMoodEffect>-4</baseMoodEffect>
+                      <label>meaningful gender affirmation party</label>
+                      <description>That gender affirmation celebration was really special. The community came together with such warmth and support. I felt truly accepted.</description>
+                      <baseMoodEffect>4</baseMoodEffect>
                     </li>
+                  </stages>
+                </ThoughtDef>
+
+                <ThoughtDef>
+                  <defName>TransformativeGenderAffirmation</defName>
+                  <thoughtClass>Thought_AttendedRitual</thoughtClass>
+                  <durationDays>7</durationDays>
+                  <stackLimit>3</stackLimit>
+                  <stages>
                     <li>
-                      <label>satisfying gender affirm party (celebrant)</label>
-                      <description>I had a nice gender affirm party. The community supported me being my authentic self.</description>
+                      <label>transformative gender affirmation party</label>
+                      <description>That gender affirmation celebration was absolutely beautiful! So much love, acceptance, and joy. I've never felt more supported and understood.</description>
                       <baseMoodEffect>8</baseMoodEffect>
-                    </li>
-                    <li>
-                      <label>inspiring gender affirm party (celebrant)</label>
-                      <description>I had an amazing gender affirm party. I feel deeply accepted and celebrated for who I truly am.</description>
-                      <baseMoodEffect>15</baseMoodEffect>
                     </li>
                   </stages>
                 </ThoughtDef>

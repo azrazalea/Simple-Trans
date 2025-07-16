@@ -1,3 +1,11 @@
+[h1] July 15th, 2025 [/h1]
+[*] Fixed bugs with ideology ritual making it not work correctly
+[*] Added a NASTY non-binary attraction hack to make it possible to run Non-Binary gender, simple trans, intimacy, and way better romance together.
+  [*] Only activates if Non-Binary gender is present.
+  [*] Probably has bugs, but I've been running it for days without issues in my personal colony. My non-binary pawn is very popular!
+  [*] NOT a long-term fix. What it does is makes everyone think non-binary people are attractive, and make non-binary people think everyone is attractive.
+  [*] Long term fix is going to be provide by colloboration with way better romance author, but may be some ways off.
+
 [h1] July 10th, 2025 #2 [/h1]
 [*] Hotfix VEF gender gene patch due to crash at initialize
   [*] This also was fixed to be simpler, prefix patch instead of transpiler, but I haven't had time to completely test it so keep an eye on it.

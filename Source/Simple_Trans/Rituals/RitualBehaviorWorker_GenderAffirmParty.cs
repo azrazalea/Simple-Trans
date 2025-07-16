@@ -23,7 +23,7 @@ namespace Simple_Trans
                 // Let the base method handle standard validation (including role assignment)
                 return base.CanStartRitualNow(target, ritual, selectedPawn, forcedForRole);
             }
-            
+
             return "No colonists available to celebrate.";
         }
     }
