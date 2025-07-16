@@ -17,5 +17,18 @@ namespace Simple_Trans
         }
 
         public override bool SupportsAttachableOutcomeEffect => false;
+
+
+        public override void Apply(float progress, Dictionary<Pawn, int> totalPresence, LordJob_Ritual jobRitual)
+        {
+            // Get the celebrant from the role assignments
+            Pawn celebrant = jobRitual.assignments?.FirstAssignedPawn("Celebrant");
+
+            if (celebrant != null)
+            {
+                // Show the gender affirmation dialog
+                Find.WindowStack.Add(new SimpleTransDialog_GenderAffirmationChoice(celebrant, jobRitual));
+            }
+        }
     }
 }
