@@ -26,6 +26,7 @@
 [*]✅ [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2877731755]Way Better Romance[/url][/b] - Full integration.
 [*]✅ [b]Intimacy + Way Better Romance + Non Binary Gender[/b] - Full compatibility (these work together with Simple Trans thanks to a NASTY HACK making non-binary gender attractive to everyone)
 [*]✅ [b]Vanilla Framework Expanded[/b] - Full integration with gene systems
+[*]❌ [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3282023834]Identity: Dysphoria[/url][/b] - Cool mod for those wanting a more gritty trans experience, check it out if you're more interested in managing colonist moods regarding gender! I may look into trying to make this compatible at some point.
 [*]❌ [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2878580643]Same Sex IVF[/url][/b] - No longer recommended (Simple Trans handles IVF independently via carry/sire system)
 [*]❌ [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3303758779]Universal Pregnancy[/url][/b] - We're patching the same things so even if they did work together it'd be weird, pick one!
 [*]❌ [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3534254491]Intimacy: Gender Works[/url][/b] - Very similar mod to this one, we're doing the same things so you'll just have to pick your favorite!
