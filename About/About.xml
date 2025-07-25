@@ -4,25 +4,25 @@
     <name>Simple Trans (Expanded)</name>
     <description>Simple Trans (Expanded) is a 1.6-only major expansion of the original Simple Trans Continued mod, providing a comprehensive gender identity and reproductive capability system for RimWorld.
 
-**Core Features:**
-• Separates gender identity from reproductive biology using hediff system
-• Individual reproductive capabilities (carrying/siring) independent of gender
-• Comprehensive medical transition systems with informed consent dialogs
-• Organ transplantation between pawns with genetic inheritance
-• Basic and bionic prosthetic systems with contraception control
-• Capability-specific sterilization and fertility surgeries
+        **Core Features:**
+        • Separates gender identity from reproductive biology using hediff system
+        • Individual reproductive capabilities (carrying/siring) independent of gender
+        • Comprehensive medical transition systems with informed consent dialogs
+        • Organ transplantation between pawns with genetic inheritance
+        • Basic and bionic prosthetic systems with contraception control
+        • Capability-specific sterilization and fertility surgeries
 
-**Ideology DLC Features:**
-• Gender Affirmation Party ritual for name and gender changes
-• Biosculpter Gender Affirming cycle for body type and reproductive modifications
+        **Ideology DLC Features:**
+        • Gender Affirmation Party ritual for name and gender changes
+        • Biosculpter Gender Affirming cycle for body type and reproductive modifications
 
-**Enhanced Compatibility:**
-• Full Biotech integration with pregnancy system overrides
-• Intimacy mod compatibility with attraction system patches
-• Non-Binary Gender mod support with specialized attraction handling
-• Vanilla Expanded Framework gene system integration
+        **Enhanced Compatibility:**
+        • Full Biotech integration with pregnancy system overrides
+        • Intimacy mod compatibility with attraction system patches
+        • Non-Binary Gender mod support with specialized attraction handling
+        • Vanilla Expanded Framework gene system integration
 
-This expansion adds extensive medical systems, safety features, and enhanced mod compatibility while maintaining the original philosophy of providing meaningful transgender representation in RimWorld through detailed, respectful gameplay mechanics.</description>
+        This expansion adds extensive medical systems, safety features, and enhanced mod compatibility while maintaining the original philosophy of providing meaningful transgender representation in RimWorld through detailed, respectful gameplay mechanics.</description>
     <author>Original author Runaway, Current azrazalea</author>
     <supportedVersions>
         <li>1.6</li>
@@ -55,11 +55,13 @@ This expansion adds extensive medical systems, safety features, and enhanced mod
         <li>brrainz.harmony</li>
         <li>OskarPotocki.VanillaFactionsExpanded.Core</li>
         <li>vanillaexpanded.vanillasocialinteractionsexpanded</li>
-        <li>divinederivative.nonbinarygender</li>
         <li>LovelyDovey.Sex.WithEuterpe</li>
+        <li>divinederivative.nonbinarygender</li>
     </loadAfter>
     <incompatibleWith>
         <li>rim.job.world</li>
         <li>stormshark.samesexivf</li>
+        <li>LovelyDovey.Sex.WithRosaline</li>
+        <li>universalpregnancy.1trickPwnyta</li>
     </incompatibleWith>
 </ModMetaData>

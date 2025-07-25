@@ -21,14 +21,18 @@
 
 [b]COMPATIBILITY:[/b]
 [list]
-[*]✅ [b]Intimacy[/b] - Full compatibility 
-[*]✅ [b]Non-Binary Gender[/b] - Full integration. For now everyone thinks non-binary people are attractive. Reproduction handled as well.
+[*]✅ [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3498422643]Intimacy[/url][/b] - Full compatibility.
+[*]✅ [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3109763692]Non-Binary Gender[/url][/b] - Full integration. For now everyone thinks non-binary people are attractive. Reproduction handled as well.
+[*]✅ [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2877731755]Way Better Romance[/url][/b] - Full integration.
 [*]✅ [b]Intimacy + Way Better Romance + Non Binary Gender[/b] - Full compatibility (these work together with Simple Trans thanks to a NASTY HACK making non-binary gender attractive to everyone)
 [*]✅ [b]Vanilla Framework Expanded[/b] - Full integration with gene systems
-[*]❌ [b]Same Sex IVF[/b] - No longer recommended (Simple Trans handles IVF independently via carry/sire system)
+[*]❌ [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2878580643]Same Sex IVF[/url][/b] - No longer recommended (Simple Trans handles IVF independently via carry/sire system)
+[*]❌ [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3303758779]Universal Pregnancy[/url][/b] - We're patching the same things so even if they did work together it'd be weird, pick one!
+[*]❌ [b][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3534254491]Intimacy: Gender Works[/url][/b] - Very similar mod to this one, we're doing the same things so you'll just have to pick your favorite!
 [/list]
 
 [h2]⚠️ If you are adding mid-save, go to development mode and Debug Tools and click "Validate All Genders" to get reproductive capability and gender identity set for existing pawns. Then there are debug tools to customize further if you want specific pawns to be setup certain ways![/h2]
+[b]Report bugs, lookat the code, submit patches here: https://github.com/azrazalea/Simple-Trans [/b] 
 
 [hr]
 
@@ -76,7 +80,6 @@ Separates gender identity from reproductive biology using RimWorld's hediff syst
 [hr]
 
 [h2]🎭 Ideology DLC Features[/h2]
-[i](optional, mod does not require ideology)[/i]
 
 [b]🎉 Gender Affirmation Party Ritual[/b] (Ideology DLC only)
 [list]
@@ -123,16 +126,6 @@ Separates gender identity from reproductive biology using RimWorld's hediff syst
 [*]Body type changes respect cisgender status (won't alter cis pawns' appearance)
 [*]Gene-gender conflicts handled intelligently
 [*]HAR support in the future
-[/list]
-
-[h3]Mod Compatibility[/h3]
-[list]
-[*][b]Biotech:[/b] Complete pregnancy system override using carry/sire capabilities
-[*][b]Intimacy:[/b] Full compatibility with debug logging (enable in settings for detailed reports)
-[*][b]Non-Binary Gender:[/b] Full integration with special spawn rates. Currently everyone is attracted to non-binary pawns (will improve in future in the future).
-[*][b]Vanilla Framework Expanded:[/b] Complete gene system integration
-[*][b]HAR:[/b] Planned support
-[*][b]Way Better Romance:[/b] Compatible (better integration planned)
 [/list]
 
 [hr]

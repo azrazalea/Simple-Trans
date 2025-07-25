@@ -1,3 +1,6 @@
+[h1]July 25th, 2025 [/h1]
+[*] Added incompatibility for the new [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3534254491]Intimacy Gender Works[/url] mod
+
 [h1] July 15th, 2025 [/h1]
 [*] Fixed bugs with ideology ritual making it not work correctly
 [*] Added a NASTY non-binary attraction hack to make it possible to run Non-Binary gender, simple trans, intimacy, and way better romance together.
