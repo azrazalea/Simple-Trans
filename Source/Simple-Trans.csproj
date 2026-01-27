@@ -6,16 +6,16 @@
     <LangVersion>latest</LangVersion>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    
+
     <!-- Output directly to mod folder for easy deployment -->
     <OutputPath>../1.6/Assemblies/</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    
+
     <!-- Debug symbols -->
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
-    
+
     <!-- Enable post-build events -->
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
@@ -44,10 +44,10 @@
       <HintPath>$(RimWorldPath)\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    
+
     <!-- Harmony -->
     <PackageReference Include="Lib.Harmony" Version="2.3.3" ExcludeAssets="runtime" />
-    
+
     <!-- Mod Dependencies - Look in parent directory -->
     <Reference Include="VEF">
       <HintPath>..\..\VanillaExpandedFramework\1.6\Assemblies\VEF.dll</HintPath>
@@ -57,7 +57,7 @@
       <HintPath>..\..\XML Extensions\1.6\Assemblies\XmlExtensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    
+
     <!-- Optional dependency -->
     <Reference Include="NonBinaryGender" Condition="Exists('..\..\Non-Binary Gender\1.6\Assemblies\NonBinaryGender.dll')">
       <HintPath>..\..\Non-Binary Gender\1.6\Assemblies\NonBinaryGender.dll</HintPath>
@@ -68,22 +68,22 @@
   <!-- Post-build deployment -->
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Message Text="Deploying Simple Trans to RimWorld..." Importance="high" />
-    
+
     <!-- Remove existing mod from RimWorld if it exists -->
     <RemoveDir Directories="$(RimWorldPath)\Mods\$(ModName)" Condition="Exists('$(RimWorldPath)\Mods\$(ModName)')" />
-    
+
     <!-- Define what to copy -->
     <ItemGroup>
       <!-- Source folder (excluding obj and bin) -->
-      <SourceFiles Include="$(MSBuildProjectDirectory)\**\*.*" 
-                   Exclude="$(MSBuildProjectDirectory)\obj\**\*.*;$(MSBuildProjectDirectory)\bin\**\*.*" />
-      
+      <SourceFiles Include="$(MSBuildProjectDirectory)\**\*.*"
+        Exclude="$(MSBuildProjectDirectory)\obj\**\*.*;$(MSBuildProjectDirectory)\bin\**\*.*" />
+
       <!-- 1.6 folder -->
       <SixteenFiles Include="$(MSBuildProjectDirectory)\..\1.6\**\*.*" />
-      
+
       <!-- About folder -->
       <AboutFiles Include="$(MSBuildProjectDirectory)\..\About\**\*.*" />
-      
+
       <!-- Root files -->
       <RootFiles Include="$(MSBuildProjectDirectory)\..\changelog.txt" />
       <RootFiles Include="$(MSBuildProjectDirectory)\..\LICENSE" />
@@ -91,13 +91,13 @@
       <RootFiles Include="$(MSBuildProjectDirectory)\..\Simple Trans.sln" />
       <RootFiles Include="$(MSBuildProjectDirectory)\..\SteamDescription.txt" />
     </ItemGroup>
-    
+
     <!-- Copy all defined files -->
     <Copy SourceFiles="@(SourceFiles)" DestinationFiles="@(SourceFiles->'$(RimWorldPath)\Mods\$(ModName)\Source\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(SixteenFiles)" DestinationFiles="@(SixteenFiles->'$(RimWorldPath)\Mods\$(ModName)\1.6\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(AboutFiles)" DestinationFiles="@(AboutFiles->'$(RimWorldPath)\Mods\$(ModName)\About\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(RootFiles)" DestinationFiles="@(RootFiles->'$(RimWorldPath)\Mods\$(ModName)\%(Filename)%(Extension)')" />
-    
+
     <Message Text="Simple Trans deployed successfully to $(RimWorldPath)\Mods\$(ModName)" Importance="high" />
   </Target>
 </Project>

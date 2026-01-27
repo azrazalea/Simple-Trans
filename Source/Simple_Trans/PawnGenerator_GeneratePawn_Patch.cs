@@ -18,6 +18,6 @@ public class PawnGenerator_GeneratePawn_Patch
 	/// <param name="__result">The generated pawn</param>
 	public static void Postfix(ref Pawn __result)
 	{
-		SimpleTransPregnancyUtility.ValidateOrSetGender(__result);
+		SimpleTransCore.ValidateOrSetGender(__result);
 	}
 }

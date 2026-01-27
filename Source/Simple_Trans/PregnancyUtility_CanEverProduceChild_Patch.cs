@@ -49,10 +49,10 @@ public class PregnancyUtility_CanEverProduceChild_Patch
 			return;
 		}
 
-		bool firstCanSire = SimpleTransPregnancyUtility.CanSire(first);
-		bool firstCanCarry = SimpleTransPregnancyUtility.CanCarry(first);
-		bool secondCanSire = SimpleTransPregnancyUtility.CanSire(second);
-		bool secondCanCarry = SimpleTransPregnancyUtility.CanCarry(second);
+		bool firstCanSire = SimpleTransHediffs.CanSire(first);
+		bool firstCanCarry = SimpleTransHediffs.CanCarry(first);
+		bool secondCanSire = SimpleTransHediffs.CanSire(second);
+		bool secondCanCarry = SimpleTransHediffs.CanCarry(second);
 
 		// Determine reproductive roles
 		Pawn sirer = (firstCanSire ? first : (secondCanSire ? second : null));

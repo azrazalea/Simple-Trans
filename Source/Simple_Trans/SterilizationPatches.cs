@@ -4,7 +4,7 @@ using Verse;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Simple_Trans.Patches
+namespace Simple_Trans
 {
     [HarmonyPatch]
     public static class SterilizationPatches
@@ -33,7 +33,7 @@ namespace Simple_Trans.Patches
             // Surgeries that require carry ability
             if (defName == "TerminatePregnancy" || defName == "TubalLigation" || defName == "ImplantIUD" || defName == "RemoveIUD" || defName == "ExtractOvum")
             {
-                if (!SimpleTransPregnancyUtility.CanCarry(pawn))
+                if (!SimpleTransHediffs.CanCarry(pawn))
                 {
                     __result = false;
                 }
@@ -41,7 +41,7 @@ namespace Simple_Trans.Patches
             // Surgeries that require sire ability  
             else if (defName == "Vasectomy" || defName == "ReverseVasectomy")
             {
-                if (!SimpleTransPregnancyUtility.CanSire(pawn))
+                if (!SimpleTransHediffs.CanSire(pawn))
                 {
                     __result = false;
                 }
@@ -80,7 +80,7 @@ namespace Simple_Trans.Patches
         {
             if (!__result) return;
 
-            if (!SimpleTransPregnancyUtility.CanCarry(surgeryTarget))
+            if (!SimpleTransHediffs.CanCarry(surgeryTarget))
             {
                 __result = false;
             }
@@ -93,7 +93,7 @@ namespace Simple_Trans.Patches
         {
             if (!__result) return;
 
-            if (!SimpleTransPregnancyUtility.CanCarry(surgeryTarget))
+            if (!SimpleTransHediffs.CanCarry(surgeryTarget))
             {
                 __result = false;
             }
@@ -117,7 +117,7 @@ namespace Simple_Trans.Patches
         private static AcceptanceReport CanFertilizeReport_SimpleTrans(Pawn pawn)
         {
             // Check if pawn can sire (this handles both capability and sterility checks with specific reasons)
-            AcceptanceReport sireReport = SimpleTransPregnancyUtility.CanSireReport(pawn);
+            AcceptanceReport sireReport = SimpleTransHediffs.CanSireReport(pawn);
             if (!sireReport.Accepted)
             {
                 return sireReport;

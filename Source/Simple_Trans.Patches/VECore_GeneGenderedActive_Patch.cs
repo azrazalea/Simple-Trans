@@ -39,7 +39,7 @@ public static class VECore_GeneGenderedActive_Patch
 			if (__instance?.pawn == null) return true;
 			
 			// Check if pawn is cisgender
-			bool isCisgender = SimpleTransPregnancyUtility.IsCisgender(__instance.pawn);
+			bool isCisgender = SimpleTransHediffs.IsCisgender(__instance.pawn);
 			
 			// If not cisgender, gene should not be active
 			if (!isCisgender)

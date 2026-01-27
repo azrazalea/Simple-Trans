@@ -96,11 +96,8 @@ namespace Simple_Trans.Patches
         /// </summary>
         public static bool Prepare()
         {
-            bool nonBinaryActive = ModsConfig.IsActive("divineDerivative.NonBinaryGender");
-
-            // Always apply when NBG is active - needed for vanilla romance button functionality
-            // Must apply even when WayBetterRomance is active since vanilla methods can still be called
-            return nonBinaryActive;
+            // Use the cached value from SimpleTrans initialization
+            return SimpleTrans.NBGenderActive;
         }
 
         /// <summary>
@@ -134,7 +131,7 @@ namespace Simple_Trans.Patches
         /// </summary>
         public static MethodBase TargetMethod()
         {
-            Type relationsUtilityPatchType = AccessTools.TypeByName("BetterRomance.RelationsUtility_AttractedToGender");
+            Type relationsUtilityPatchType = AccessTools.TypeByName("BetterRomance.HarmonyPatches.RelationsUtility_AttractedToGender");
             if (relationsUtilityPatchType != null)
             {
                 var method = AccessTools.Method(relationsUtilityPatchType, "Prefix");
@@ -160,10 +157,8 @@ namespace Simple_Trans.Patches
         /// </summary>
         public static bool Prepare()
         {
-            bool nonBinaryActive = ModsConfig.IsActive("divineDerivative.NonBinaryGender");
-            bool wayBetterRomanceActive = ModsConfig.IsActive("divineDerivative.Romance");
-
-            return nonBinaryActive && wayBetterRomanceActive && TargetMethod() != null;
+            // Use cached values from SimpleTrans initialization
+            return SimpleTrans.NBGenderActive && SimpleTrans.WBRActive && TargetMethod() != null;
         }
 
         /// <summary>
@@ -211,11 +206,8 @@ namespace Simple_Trans.Patches
         /// </summary>
         public static bool Prepare()
         {
-            // Check if both NonBinary Gender mod AND Intimacy mod are active
-            bool nonBinaryActive = ModsConfig.IsActive("divineDerivative.NonBinaryGender");
-            bool intimacyActive = ModsConfig.IsActive("LovelyDovey.Sex.WithEuterpe");
-
-            return nonBinaryActive && intimacyActive && TargetMethod() != null;
+            // Use cached values from SimpleTrans initialization
+            return SimpleTrans.NBGenderActive && SimpleTrans.IntimacyActive && TargetMethod() != null;
         }
 
         /// <summary>
@@ -262,10 +254,8 @@ namespace Simple_Trans.Patches
         /// </summary>
         public static bool Prepare()
         {
-            bool nonBinaryActive = ModsConfig.IsActive("divineDerivative.NonBinaryGender");
-            bool intimacyActive = ModsConfig.IsActive("LovelyDovey.Sex.WithEuterpe");
-
-            return nonBinaryActive && intimacyActive && TargetMethod() != null;
+            // Use cached values from SimpleTrans initialization
+            return SimpleTrans.NBGenderActive && SimpleTrans.IntimacyActive && TargetMethod() != null;
         }
 
         /// <summary>
@@ -314,10 +304,8 @@ namespace Simple_Trans.Patches
         /// </summary>
         public static bool Prepare()
         {
-            bool nonBinaryActive = ModsConfig.IsActive("divineDerivative.NonBinaryGender");
-            bool intimacyActive = ModsConfig.IsActive("LovelyDovey.Sex.WithEuterpe");
-
-            return nonBinaryActive && intimacyActive && TargetMethod() != null;
+            // Use cached values from SimpleTrans initialization
+            return SimpleTrans.NBGenderActive && SimpleTrans.IntimacyActive && TargetMethod() != null;
         }
 
         /// <summary>

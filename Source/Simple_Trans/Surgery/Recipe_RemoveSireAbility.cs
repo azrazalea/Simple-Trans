@@ -10,13 +10,13 @@ namespace Simple_Trans
         {
             if (!(thing is Pawn pawn)) return false;
             // Only available if pawn has sire ability to remove
-            return SimpleTransPregnancyUtility.CanSire(pawn);
+            return SimpleTransHediffs.CanSire(pawn);
         }
         public override void ApplyOnPawn(Pawn pawn, BodyPartRecord part, Pawn billDoer, List<Thing> ingredients, Bill bill)
         {
             Log.Message($"[Simple Trans] RemoveSireAbility.ApplyOnPawn called for {pawn.Name}");
             
-            if (!SimpleTransPregnancyUtility.CanSire(pawn))
+            if (!SimpleTransHediffs.CanSire(pawn))
             {
                 Log.Warning($"[Simple Trans] Pawn does not have sire ability to remove!");
                 return;
@@ -54,7 +54,7 @@ namespace Simple_Trans
                 // Record tale for surgery
                 TaleRecorder.RecordTale(TaleDefOf.DidSurgery, billDoer, pawn);
 
-                Log.Message($"[Simple Trans] After surgery - CanCarry: {SimpleTransPregnancyUtility.CanCarry(pawn)}, CanSire: {SimpleTransPregnancyUtility.CanSire(pawn)}");
+                Log.Message($"[Simple Trans] After surgery - CanCarry: {SimpleTransHediffs.CanCarry(pawn)}, CanSire: {SimpleTransHediffs.CanSire(pawn)}");
                 
                 Messages.Message("SimpleTransOrganExtracted".Translate(pawn.Named("PAWN"), extractedItem.Label), 
                     pawn, MessageTypeDefOf.NeutralEvent);

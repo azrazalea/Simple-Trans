@@ -6,7 +6,7 @@ using System.Reflection.Emit;
 using System.Reflection;
 using System.Linq;
 
-namespace Simple_Trans.Patches
+namespace Simple_Trans
 {
     [HarmonyPatch]
     public static class HumanEmbryoPatches
@@ -20,7 +20,7 @@ namespace Simple_Trans.Patches
             if (!__result.Accepted)
             {
                 // Check if this pawn can carry pregnancies regardless of gender
-                if (SimpleTransPregnancyUtility.CanCarry(pawn))
+                if (SimpleTransHediffs.CanCarry(pawn))
                 {
                     // Re-run all the checks except gender
                     SimpleTransDebug.Log($"Embryo implantation override: {pawn?.Name?.ToStringShort ?? "unknown"} - checking carry capability", 2);
@@ -60,7 +60,7 @@ namespace Simple_Trans.Patches
                     }
                     
                     // Check if the pawn can carry pregnancies (not sterilized for carrying)
-                    if (!SimpleTransPregnancyUtility.CanCarry(pawn))
+                    if (!SimpleTransHediffs.CanCarry(pawn))
                     {
                         __result = "CannotSterile".Translate();
                         return;

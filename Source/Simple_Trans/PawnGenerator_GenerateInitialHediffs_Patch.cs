@@ -52,7 +52,7 @@ public class PawnGenerator_GenerateInitialHediffs_Patch
 			}
 
 			// Early exit if pregnancy is not applicable
-			if (!ModsConfig.BiotechActive || pawn.Dead || !request.AllowPregnant || !SimpleTransPregnancyUtility.CanCarry(pawn))
+			if (!ModsConfig.BiotechActive || pawn.Dead || !request.AllowPregnant || !SimpleTransHediffs.CanCarry(pawn))
 			{
 				return;
 			}
@@ -73,7 +73,7 @@ public class PawnGenerator_GenerateInitialHediffs_Patch
 				request.AllowPregnant &&
 				Rand.Chance(pregnancyChance))
 			{
-				SimpleTransPregnancyUtility.TryCreatePregnancy(pawn, findRandomFather: true);
+				SimpleTransPregnancy.TryCreatePregnancy(pawn, findRandomFather: true);
 			}
 		}
 		catch (System.Exception ex)

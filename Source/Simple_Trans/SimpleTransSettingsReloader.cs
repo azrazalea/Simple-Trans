@@ -18,7 +18,7 @@ public class SimpleTransSettingsReloader : ActionContainer
 		try
 		{
 			// Reload all mod settings
-			SimpleTransPregnancyUtility.LoadSettings();
+			SimpleTransSettings.LoadSettings();
 			
 			// Reload debug mode setting
 			ReloadDebugMode();
@@ -45,22 +45,22 @@ public class SimpleTransSettingsReloader : ActionContainer
 
 			if (string.IsNullOrEmpty(debugSetting))
 			{
-				SimpleTrans.debugMode = false;
+				SimpleTrans.DebugMode = false;
 			}
 			else if (bool.TryParse(debugSetting, out bool result))
 			{
-				SimpleTrans.debugMode = result;
+				SimpleTrans.DebugMode = result;
 			}
 			else
 			{
 				Log.Warning($"[Simple Trans] Invalid debug mode setting '{debugSetting}', defaulting to false");
-				SimpleTrans.debugMode = false;
+				SimpleTrans.DebugMode = false;
 			}
 		}
 		catch (System.Exception ex)
 		{
 			Log.Error($"[Simple Trans] Error reloading debug mode setting: {ex}");
-			SimpleTrans.debugMode = false;
+			SimpleTrans.DebugMode = false;
 		}
 	}
 }

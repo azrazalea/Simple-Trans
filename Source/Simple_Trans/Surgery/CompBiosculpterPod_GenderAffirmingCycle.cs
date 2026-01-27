@@ -58,7 +58,7 @@ namespace Simple_Trans
             }
 
             // Handle pregnancy termination if removing carry ability
-            bool willRemoveCarry = SimpleTransPregnancyUtility.CanCarry(pawn) &&
+            bool willRemoveCarry = SimpleTransHediffs.CanCarry(pawn) &&
                                    (selectedChoices.ReproductiveCapability == ReproductiveCapability.None ||
                                     selectedChoices.ReproductiveCapability == ReproductiveCapability.SireOnly);
 
@@ -100,7 +100,7 @@ namespace Simple_Trans
             if (selectedChoices.ReproductiveCapability != currentCapability)
             {
                 // Clear existing reproductive hediffs and prosthetics, but preserve gender identity
-                SimpleTransPregnancyUtility.ClearGender(pawn, clearIdentity: false, clearCapabilities: true);
+                GenderAssignment.ClearGender(pawn, clearIdentity: false, clearCapabilities: true);
 
                 // Apply new reproductive capabilities
                 switch (selectedChoices.ReproductiveCapability)
@@ -109,14 +109,14 @@ namespace Simple_Trans
                         // No action needed - ClearGender already removed everything
                         break;
                     case ReproductiveCapability.CarryOnly:
-                        SimpleTransPregnancyUtility.SetCarry(pawn, false);
+                        GenderAssignment.SetCarry(pawn, false);
                         break;
                     case ReproductiveCapability.SireOnly:
-                        SimpleTransPregnancyUtility.SetSire(pawn, false);
+                        GenderAssignment.SetSire(pawn, false);
                         break;
                     case ReproductiveCapability.Both:
-                        SimpleTransPregnancyUtility.SetCarry(pawn, false);
-                        SimpleTransPregnancyUtility.SetSire(pawn, false);
+                        GenderAssignment.SetCarry(pawn, false);
+                        GenderAssignment.SetSire(pawn, false);
                         break;
                 }
 
@@ -126,9 +126,9 @@ namespace Simple_Trans
 
         private GenderIdentity GetCurrentIdentity(Pawn pawn)
         {
-            if (pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.transDef))
+            if (pawn.health.hediffSet.HasHediff(SimpleTransHediffs.transDef))
                 return GenderIdentity.Transgender;
-            else if (pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.cisDef))
+            else if (pawn.health.hediffSet.HasHediff(SimpleTransHediffs.cisDef))
                 return GenderIdentity.Cisgender;
             else
                 return GenderIdentity.Cisgender; // Default
@@ -136,8 +136,8 @@ namespace Simple_Trans
 
         private ReproductiveCapability GetCurrentReproductiveCapability(Pawn pawn)
         {
-            bool canCarry = SimpleTransPregnancyUtility.CanCarry(pawn);
-            bool canSire = SimpleTransPregnancyUtility.CanSire(pawn);
+            bool canCarry = SimpleTransHediffs.CanCarry(pawn);
+            bool canSire = SimpleTransHediffs.CanSire(pawn);
 
             if (canCarry && canSire)
                 return ReproductiveCapability.Both;

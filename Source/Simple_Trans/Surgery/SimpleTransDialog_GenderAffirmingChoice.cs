@@ -208,8 +208,8 @@ namespace Simple_Trans
 
         private ReproductiveCapability GetCurrentReproductiveCapability(Pawn pawn)
         {
-            bool canCarry = SimpleTransPregnancyUtility.CanCarry(pawn);
-            bool canSire = SimpleTransPregnancyUtility.CanSire(pawn);
+            bool canCarry = SimpleTransHediffs.CanCarry(pawn);
+            bool canSire = SimpleTransHediffs.CanSire(pawn);
 
             if (canCarry && canSire)
                 return ReproductiveCapability.Both;

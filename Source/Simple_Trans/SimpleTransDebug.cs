@@ -19,7 +19,7 @@ internal class SimpleTransDebug
 	{
 		foreach (Pawn item in PawnsFinder.All_AliveOrDead)
 		{
-			SimpleTransPregnancyUtility.ValidateOrSetGender(item);
+			SimpleTransCore.ValidateOrSetGender(item);
 		}
 	}
 
@@ -30,7 +30,7 @@ internal class SimpleTransDebug
 	[DebugAction("Simple Trans", "Set Transgender", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 	public static void SetTransgender(Pawn pawn)
 	{
-		SimpleTransPregnancyUtility.SetTrans(pawn);
+		GenderAssignment.SetTrans(pawn);
 	}
 
 	/// <summary>
@@ -40,7 +40,7 @@ internal class SimpleTransDebug
 	[DebugAction("Simple Trans", "Set Cisgender", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 	public static void SetCisgender(Pawn pawn)
 	{
-		SimpleTransPregnancyUtility.SetCis(pawn);
+		GenderAssignment.SetCis(pawn);
 	}
 
 	/// <summary>
@@ -50,7 +50,7 @@ internal class SimpleTransDebug
 	[DebugAction("Simple Trans", "Set Carrying Ability (exclusive)", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 	public static void SetAbleCarry(Pawn pawn)
 	{
-		SimpleTransPregnancyUtility.SetCarry(pawn, removeSire: true);
+		GenderAssignment.SetCarry(pawn, removeSire: true);
 	}
 
 	/// <summary>
@@ -60,7 +60,7 @@ internal class SimpleTransDebug
 	[DebugAction("Simple Trans", "Set Siring Ability (exclusive)", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 	public static void SetAbleSire(Pawn pawn)
 	{
-		SimpleTransPregnancyUtility.SetSire(pawn, removeCarry: true);
+		GenderAssignment.SetSire(pawn, removeCarry: true);
 	}
 
 	/// <summary>
@@ -71,13 +71,13 @@ internal class SimpleTransDebug
 	public static void SetDualReproductive(Pawn pawn)
 	{
 		// Ensure pawn is transgender to allow dual capabilities
-		if (!pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.transDef, false))
+		if (!pawn.health.hediffSet.HasHediff(SimpleTransHediffs.transDef, false))
 		{
-			SimpleTransPregnancyUtility.SetTrans(pawn);
+			GenderAssignment.SetTrans(pawn);
 		}
-		
-		SimpleTransPregnancyUtility.SetCarry(pawn, removeSire: false);
-		SimpleTransPregnancyUtility.SetSire(pawn, removeCarry: false);
+
+		GenderAssignment.SetCarry(pawn, removeSire: false);
+		GenderAssignment.SetSire(pawn, removeCarry: false);
 	}
 
 	/// <summary>
@@ -87,8 +87,8 @@ internal class SimpleTransDebug
 	[DebugAction("Simple Trans", "Reset Gender", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 	public static void ResetGender(Pawn pawn)
 	{
-		SimpleTransPregnancyUtility.ClearGender(pawn);
-		SimpleTransPregnancyUtility.ValidateOrSetGender(pawn);
+		GenderAssignment.ClearGender(pawn);
+		SimpleTransCore.ValidateOrSetGender(pawn);
 	}
 
 	/// <summary>
@@ -98,7 +98,7 @@ internal class SimpleTransDebug
 	[DebugAction("Simple Trans", "Clear Gender", actionType = DebugActionType.ToolMapForPawns, allowedGameStates = AllowedGameStates.PlayingOnMap)]
 	public static void ClearGender(Pawn pawn)
 	{
-		SimpleTransPregnancyUtility.ClearGender(pawn);
+		GenderAssignment.ClearGender(pawn);
 	}
 	
 	#endregion
@@ -112,9 +112,9 @@ internal class SimpleTransDebug
 	/// <param name="level">The log level (1-3, lower is more important)</param>
 	public static void Log(string message, int level = 1)
 	{
-		if (SimpleTrans.debugMode && level <= 3)
+		if (SimpleTrans.DebugMode && level <= 3)
 		{
-			Verse.Log.Message($"[SimpleTrans] {message}");
+			Verse.Log.Message($"[Simple Trans] {message}");
 		}
 	}
 	

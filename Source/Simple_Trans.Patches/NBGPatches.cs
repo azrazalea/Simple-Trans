@@ -22,7 +22,7 @@ public static class NBGPatches
 	{
 		// Patch IsEnby to return EnbyUtility.IsEnby(pawn) instead of false
 		harmony.Patch(
-			(MethodBase)typeof(SimpleTransPregnancyUtility).GetMethod("IsEnby"),
+			(MethodBase)typeof(SimpleTransHediffs).GetMethod("IsEnby"),
 			(HarmonyMethod)null,
 			new HarmonyMethod(IsEnbyPostfix),
 			(HarmonyMethod)null,

@@ -227,7 +227,7 @@ namespace Simple_Trans
         private static bool WillTerminatePregnancy(Pawn pawn, CompBiosculpterPod_Cycle cycle)
         {
             // Only matters if pawn is pregnant and has carry ability
-            if (RimWorld.PregnancyUtility.GetPregnancyHediff(pawn) == null || !SimpleTransPregnancyUtility.CanCarry(pawn))
+            if (RimWorld.PregnancyUtility.GetPregnancyHediff(pawn) == null || !SimpleTransHediffs.CanCarry(pawn))
                 return false;
 
             // Only terminate pregnancy when REMOVING carry ability (the metaphorical uterus)
@@ -318,9 +318,9 @@ namespace Simple_Trans
 
         private static GenderIdentity GetCurrentIdentity(Pawn pawn)
         {
-            if (pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.transDef))
+            if (pawn.health.hediffSet.HasHediff(SimpleTransHediffs.transDef))
                 return GenderIdentity.Transgender;
-            else if (pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.cisDef))
+            else if (pawn.health.hediffSet.HasHediff(SimpleTransHediffs.cisDef))
                 return GenderIdentity.Cisgender;
             else
                 return GenderIdentity.Cisgender; // Default
@@ -328,8 +328,8 @@ namespace Simple_Trans
 
         private static ReproductiveCapability GetCurrentReproductiveCapability(Pawn pawn)
         {
-            bool canCarry = SimpleTransPregnancyUtility.CanCarry(pawn);
-            bool canSire = SimpleTransPregnancyUtility.CanSire(pawn);
+            bool canCarry = SimpleTransHediffs.CanCarry(pawn);
+            bool canSire = SimpleTransHediffs.CanSire(pawn);
 
             if (canCarry && canSire)
                 return ReproductiveCapability.Both;

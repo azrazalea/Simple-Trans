@@ -184,9 +184,9 @@ namespace Simple_Trans
 
         private GenderIdentity GetCurrentIdentity(Pawn pawn)
         {
-            if (pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.transDef))
+            if (pawn.health.hediffSet.HasHediff(SimpleTransHediffs.transDef))
                 return GenderIdentity.Transgender;
-            else if (pawn.health.hediffSet.HasHediff(SimpleTransPregnancyUtility.cisDef))
+            else if (pawn.health.hediffSet.HasHediff(SimpleTransHediffs.cisDef))
                 return GenderIdentity.Cisgender;
             else
                 return GenderIdentity.Cisgender; // Default
@@ -248,16 +248,16 @@ namespace Simple_Trans
             if (selectedIdentity != currentIdentity)
             {
                 // Remove current identity hediffs only (not reproductive capabilities)
-                SimpleTransPregnancyUtility.ClearGender(celebrant, clearIdentity: true, clearCapabilities: false);
+                GenderAssignment.ClearGender(celebrant, clearIdentity: true, clearCapabilities: false);
 
                 // Add new identity hediff
                 if (selectedIdentity == GenderIdentity.Transgender)
                 {
-                    SimpleTransPregnancyUtility.SetTrans(celebrant);
+                    GenderAssignment.SetTrans(celebrant);
                 }
                 else
                 {
-                    SimpleTransPregnancyUtility.SetCis(celebrant);
+                    GenderAssignment.SetCis(celebrant);
                 }
 
                 anyChanges = true;

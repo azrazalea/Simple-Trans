@@ -24,10 +24,10 @@ public class PregnancyUtility_PregnancyChanceForPartners_Patch
 		Pawn second = man;
 
 		// Determine actual carrier and sirer based on Simple Trans capabilities
-		bool firstCanCarry = SimpleTransPregnancyUtility.CanCarry(first);
-		bool firstCanSire = SimpleTransPregnancyUtility.CanSire(first);
-		bool secondCanCarry = SimpleTransPregnancyUtility.CanCarry(second);
-		bool secondCanSire = SimpleTransPregnancyUtility.CanSire(second);
+		bool firstCanCarry = SimpleTransHediffs.CanCarry(first);
+		bool firstCanSire = SimpleTransHediffs.CanSire(first);
+		bool secondCanCarry = SimpleTransHediffs.CanCarry(second);
+		bool secondCanSire = SimpleTransHediffs.CanSire(second);
 
 		Pawn carrier = (firstCanCarry ? first : (secondCanCarry ? second : null));
 		Pawn sirer = (secondCanSire ? second : (firstCanSire ? first : null));
@@ -107,11 +107,11 @@ public class PregnancyUtility_PregnancyChanceForPartners_Patch
 	private static float GetCapabilityModifier(Pawn pawn, bool isSiring)
 	{
 		// Check if pawn has the required capability
-		if (isSiring && !SimpleTransPregnancyUtility.CanSire(pawn))
+		if (isSiring && !SimpleTransHediffs.CanSire(pawn))
 		{
 			return 0f; // Cannot sire at all
 		}
-		if (!isSiring && !SimpleTransPregnancyUtility.CanCarry(pawn))
+		if (!isSiring && !SimpleTransHediffs.CanCarry(pawn))
 		{
 			return 0f; // Cannot carry at all
 		}

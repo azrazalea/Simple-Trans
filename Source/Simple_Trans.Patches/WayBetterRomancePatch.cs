@@ -41,9 +41,8 @@ namespace Simple_Trans.Patches
         /// </summary>
         public static bool StandardPrepare()
         {
-            bool wayBetterRomanceActive = ModsConfig.IsActive("divineDerivative.Romance");
-            bool nonBinaryActive = ModsConfig.IsActive("divineDerivative.NonBinaryGender");
-            return wayBetterRomanceActive && nonBinaryActive;
+            // Use cached values from SimpleTrans initialization
+            return SimpleTrans.WBRActive && SimpleTrans.NBGenderActive;
         }
 
         /// <summary>
@@ -51,7 +50,8 @@ namespace Simple_Trans.Patches
         /// </summary>
         public static bool WayBetterRomancePrepare()
         {
-            return ModsConfig.IsActive("divineDerivative.Romance");
+            // Use cached value from SimpleTrans initialization  
+            return SimpleTrans.WBRActive;
         }
 
         /// <summary>
@@ -419,11 +419,11 @@ namespace Simple_Trans.Patches
         public static bool Prefix(Pawn first, Pawn second, ref AcceptanceReport __result)
         {
             // If either pawn is non-binary, use Simple Trans capability-based logic
-            if (SimpleTransPregnancyUtility.IsEnby(first) || SimpleTransPregnancyUtility.IsEnby(second))
+            if (SimpleTransHediffs.IsEnby(first) || SimpleTransHediffs.IsEnby(second))
             {
                 // Check if either pawn can carry and either can sire
-                bool canCarry = SimpleTransPregnancyUtility.CanCarry(first) || SimpleTransPregnancyUtility.CanCarry(second);
-                bool canSire = SimpleTransPregnancyUtility.CanSire(first) || SimpleTransPregnancyUtility.CanSire(second);
+                bool canCarry = SimpleTransHediffs.CanCarry(first) || SimpleTransHediffs.CanCarry(second);
+                bool canSire = SimpleTransHediffs.CanSire(first) || SimpleTransHediffs.CanSire(second);
 
                 if (canCarry && canSire)
                 {
@@ -472,13 +472,13 @@ namespace Simple_Trans.Patches
         public static bool Prefix(Pawn first, Pawn second, ref PawnRelationDef __result)
         {
             // If either pawn is non-binary, use capability-based parent assignment
-            if (SimpleTransPregnancyUtility.IsEnby(first) || SimpleTransPregnancyUtility.IsEnby(second))
+            if (SimpleTransHediffs.IsEnby(first) || SimpleTransHediffs.IsEnby(second))
             {
                 // Determine who can carry (mother) and who can sire (father)
-                bool firstCanCarry = SimpleTransPregnancyUtility.CanCarry(first);
-                bool secondCanCarry = SimpleTransPregnancyUtility.CanCarry(second);
-                bool firstCanSire = SimpleTransPregnancyUtility.CanSire(first);
-                bool secondCanSire = SimpleTransPregnancyUtility.CanSire(second);
+                bool firstCanCarry = SimpleTransHediffs.CanCarry(first);
+                bool secondCanCarry = SimpleTransHediffs.CanCarry(second);
+                bool firstCanSire = SimpleTransHediffs.CanSire(first);
+                bool secondCanSire = SimpleTransHediffs.CanSire(second);
 
                 // Assign parent relationships based on capabilities
                 if (firstCanCarry && secondCanSire)
@@ -534,7 +534,7 @@ namespace Simple_Trans.Patches
         public static bool Prefix(Pawn pawn, Pawn target, ref float __result)
         {
             // If either pawn is non-binary, use universal attraction logic
-            if (SimpleTransPregnancyUtility.IsEnby(pawn) || SimpleTransPregnancyUtility.IsEnby(target))
+            if (SimpleTransHediffs.IsEnby(pawn) || SimpleTransHediffs.IsEnby(target))
             {
                 // Non-binary pawns use universal attraction (no sexuality penalty)
                 // Unless they're aromantic, in which case they get a penalty
@@ -585,7 +585,7 @@ namespace Simple_Trans.Patches
         public static bool Prefix(Pawn pawn, ref Pawn __result)
         {
             // If pawn is non-binary, return any lover (no "opposite gender" concept)
-            if (SimpleTransPregnancyUtility.IsEnby(pawn))
+            if (SimpleTransHediffs.IsEnby(pawn))
             {
                 __result = LovePartnerRelationUtility.ExistingLovePartner(pawn);
                 SimpleTransDebug.Log($"WayBetterRomance GetFirstLoverOfOppositeGender patch: NBG {pawn.Name} returns any lover: {__result?.Name}", 2);
@@ -600,7 +600,7 @@ namespace Simple_Trans.Patches
 
             foreach (var lover in lovers)
             {
-                if (SimpleTransPregnancyUtility.IsEnby(lover))
+                if (SimpleTransHediffs.IsEnby(lover))
                 {
                     __result = lover; // NBG lovers count as "opposite" to binary pawns
                     SimpleTransDebug.Log($"WayBetterRomance GetFirstLoverOfOppositeGender patch: Binary {pawn.Name} has NBG lover {lover.Name}", 2);
@@ -642,7 +642,7 @@ namespace Simple_Trans.Patches
         public static bool Prefix(Pawn initiator, Pawn target, bool forOpinionExplanation, ref AcceptanceReport __result)
         {
             // If either pawn is non-binary, use universal attraction logic
-            if (SimpleTransPregnancyUtility.IsEnby(initiator) || SimpleTransPregnancyUtility.IsEnby(target))
+            if (SimpleTransHediffs.IsEnby(initiator) || SimpleTransHediffs.IsEnby(target))
             {
                 // Check basic eligibility first
                 if (initiator == target || initiator.Dead || target.Dead)
@@ -701,7 +701,7 @@ namespace Simple_Trans.Patches
         public static bool Prefix(Pawn target, Pawn asker, ref bool __result)
         {
             // If either pawn is non-binary, use universal attraction logic for dating
-            if (SimpleTransPregnancyUtility.IsEnby(target) || SimpleTransPregnancyUtility.IsEnby(asker))
+            if (SimpleTransHediffs.IsEnby(target) || SimpleTransHediffs.IsEnby(asker))
             {
                 // Basic eligibility checks
                 if (target == asker || target.Dead || asker.Dead)
@@ -768,7 +768,7 @@ namespace Simple_Trans.Patches
         public static bool Prefix(Pawn first, Pawn second, ref bool __result)
         {
             // If either pawn is non-binary, use universal compatibility logic
-            if (SimpleTransPregnancyUtility.IsEnby(first) || SimpleTransPregnancyUtility.IsEnby(second))
+            if (SimpleTransHediffs.IsEnby(first) || SimpleTransHediffs.IsEnby(second))
             {
                 // Basic checks
                 if (first == second || first.Dead || second.Dead)
@@ -820,7 +820,7 @@ namespace Simple_Trans.Patches
         public static bool Prefix(Pawn first, Pawn second, ref bool __result)
         {
             // If either pawn is non-binary, use universal compatibility logic
-            if (SimpleTransPregnancyUtility.IsEnby(first) || SimpleTransPregnancyUtility.IsEnby(second))
+            if (SimpleTransHediffs.IsEnby(first) || SimpleTransHediffs.IsEnby(second))
             {
                 // Basic checks
                 if (first == second || first.Dead || second.Dead)

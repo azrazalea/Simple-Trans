@@ -14,8 +14,8 @@ namespace Simple_Trans
         {
             if (!(thing is Pawn pawn)) return "SimpleTrans.Surgery.MustBePawn".Translate();
 
-            bool hasCarry = SimpleTransPregnancyUtility.CanCarry(pawn);
-            bool hasSire = SimpleTransPregnancyUtility.CanSire(pawn);
+            bool hasCarry = SimpleTransHediffs.CanCarry(pawn);
+            bool hasSire = SimpleTransHediffs.CanSire(pawn);
 
             // Must have at least one ability to replace
             if (!hasCarry && !hasSire) 
@@ -137,8 +137,8 @@ namespace Simple_Trans
                 var ingredientType = GetIngredientType(ingredients);
                 var ingredientAbility = GetIngredientAbilityType(ingredients);
                 
-                bool hasCarry = SimpleTransPregnancyUtility.CanCarry(pawn);
-                bool hasSire = SimpleTransPregnancyUtility.CanSire(pawn);
+                bool hasCarry = SimpleTransHediffs.CanCarry(pawn);
+                bool hasSire = SimpleTransHediffs.CanSire(pawn);
 
                 // Determine what to replace
                 AbilityType targetToReplace;
@@ -198,7 +198,7 @@ namespace Simple_Trans
                 // Record tale for surgery
                 TaleRecorder.RecordTale(TaleDefOf.DidSurgery, billDoer, pawn);
 
-                SimpleTransDebug.Log($"Surgery completed for {pawn.Name} - CanCarry: {SimpleTransPregnancyUtility.CanCarry(pawn)}, CanSire: {SimpleTransPregnancyUtility.CanSire(pawn)}", 2);
+                SimpleTransDebug.Log($"Surgery completed for {pawn.Name} - CanCarry: {SimpleTransHediffs.CanCarry(pawn)}, CanSire: {SimpleTransHediffs.CanSire(pawn)}", 2);
                 
                 Messages.Message("SimpleTransOrganTransplanted".Translate(pawn.Named("PAWN"), ingredient.Label), 
                     pawn, MessageTypeDefOf.PositiveEvent);
@@ -250,9 +250,9 @@ namespace Simple_Trans
         {
             // For now, assume all current abilities are natural organs
             // TODO: Add detection for prosthetics when we implement prosthetic hediffs
-            if (ability == AbilityType.Carry && SimpleTransPregnancyUtility.CanCarry(pawn))
+            if (ability == AbilityType.Carry && SimpleTransHediffs.CanCarry(pawn))
                 return PartType.Natural;
-            if (ability == AbilityType.Sire && SimpleTransPregnancyUtility.CanSire(pawn))
+            if (ability == AbilityType.Sire && SimpleTransHediffs.CanSire(pawn))
                 return PartType.Natural;
             
             return null;
@@ -260,7 +260,7 @@ namespace Simple_Trans
 
         private void ExtractCurrentPart(Pawn pawn, AbilityType targetToReplace)
         {
-            if (targetToReplace == AbilityType.Carry && SimpleTransPregnancyUtility.CanCarry(pawn))
+            if (targetToReplace == AbilityType.Carry && SimpleTransHediffs.CanCarry(pawn))
             {
                 // Determine what type to extract based on current hediffs
                 var itemToSpawn = GetItemForCurrentCarryType(pawn);
@@ -273,7 +273,7 @@ namespace Simple_Trans
                 Messages.Message("SimpleTransOrganExtracted".Translate(pawn.Named("PAWN"), extractedOrgans.Label), 
                     pawn, MessageTypeDefOf.NeutralEvent);
             }
-            else if (targetToReplace == AbilityType.Sire && SimpleTransPregnancyUtility.CanSire(pawn))
+            else if (targetToReplace == AbilityType.Sire && SimpleTransHediffs.CanSire(pawn))
             {
                 // Determine what type to extract based on current hediffs
                 var itemToSpawn = GetItemForCurrentSireType(pawn);

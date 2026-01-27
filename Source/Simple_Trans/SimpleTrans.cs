@@ -1,5 +1,6 @@
 using HarmonyLib;
 using Simple_Trans.Patches;
+using System.Linq;
 using Verse;
 using XmlExtensions;
 
@@ -18,11 +19,21 @@ public static class SimpleTrans
 	/// True if Non-Binary Gender mod is active
 	/// </summary>
 	public static bool NBGenderActive { get; private set; }
+	
+	/// <summary>
+	/// True if Way Better Romance mod is active
+	/// </summary>
+	public static bool WBRActive { get; private set; }
 
 	/// <summary>
 	/// True if Humanoid Alien Races mod is active
 	/// </summary>
 	public static bool HARActive { get; private set; }
+
+	/// <summary>
+	/// True if Intimacy mod is active
+	/// </summary>
+	public static bool IntimacyActive { get; private set; }
 
 	/// <summary>
 	/// True if Ideology DLC is active
@@ -32,24 +43,29 @@ public static class SimpleTrans
 	/// <summary>
 	/// True if debug mode is enabled in mod settings
 	/// </summary>
-	public static bool debugMode { get; set; }
+	public static bool DebugMode { get; set; }
 
 	#endregion
 
 	#region Initialization
 
 	/// <summary>
-	/// Static constructor - performs mod initialization and Harmony patching
+	/// Static constructor - called automatically when the class is first accessed
+	/// Performs mod initialization and Harmony patching
 	/// </summary>
 	static SimpleTrans()
 	{
 		try
 		{
+			Log.Message("[Simple Trans] Starting mod initialization...");
+
+			SimpleTransSettings.LoadSettings();
+			LoadDebugMode();
+			DetectActiveMods();
+
+
 			Harmony harmony = new Harmony("runaway.simple_trans");
 			harmony.PatchAll();
-
-			DetectActiveMods();
-			LoadDebugMode();
 
 			if (NBGenderActive)
 			{
@@ -64,7 +80,6 @@ public static class SimpleTrans
 
 			PregnancyApplicationPatches.TryPatchAllPregnancySystems(harmony);
 
-			SimpleTransPregnancyUtility.LoadSettings();
 			Log.Message("[Simple Trans] Mod initialized successfully");
 		}
 		catch (System.Exception ex)
@@ -72,6 +87,7 @@ public static class SimpleTrans
 			Log.Error($"[Simple Trans] Critical error during mod initialization: {ex}");
 		}
 	}
+
 
 	/// <summary>
 	/// Detects compatible mod dependencies
@@ -81,13 +97,12 @@ public static class SimpleTrans
 		try
 		{
 			HARActive = ModsConfig.IsActive("erdelf.humanoidalienraces") || ModsConfig.IsActive("erdelf.humanoidalienraces.dev");
-			NBGenderActive = ModsConfig.IsActive("divinederivative.nonbinarygender");
+			NBGenderActive = ModsConfig.IsActive("divineDerivative.NonBinaryGender") || ModsConfig.IsActive("divineDerivative.NonBinaryGender_steam");
+			WBRActive = ModsConfig.IsActive("divineDerivative.Romance");
+			IntimacyActive = ModsConfig.IsActive("LovelyDovey.Sex.WithEuterpe");
 			IdeologyActive = ModsConfig.IdeologyActive;
 
-			if (debugMode)
-			{
-				Log.Message($"[Simple Trans] Mod detection - HAR: {HARActive}, NBG: {NBGenderActive}, Ideology: {IdeologyActive}");
-			}
+			SimpleTransDebug.Log($"Mod detection - HAR: {HARActive}, NBG: {NBGenderActive}, WBR: {WBRActive}, Intimacy: {IntimacyActive}, Ideology: {IdeologyActive}", 1);
 		}
 		catch (System.Exception ex)
 		{
@@ -110,22 +125,22 @@ public static class SimpleTrans
 
 			if (string.IsNullOrEmpty(debugSetting))
 			{
-				debugMode = false;
+				DebugMode = false;
 			}
 			else if (bool.TryParse(debugSetting, out bool result))
 			{
-				debugMode = result;
+				DebugMode = result;
 			}
 			else
 			{
 				Log.Warning($"[Simple Trans] Invalid debug mode setting '{debugSetting}', defaulting to false");
-				debugMode = false;
+				DebugMode = false;
 			}
 		}
 		catch (System.Exception ex)
 		{
 			Log.Error($"[Simple Trans] Error loading debug mode setting: {ex}");
-			debugMode = false;
+			DebugMode = false;
 		}
 	}
 
@@ -144,9 +159,9 @@ public static class SimpleTrans
 			{
 				harmony.Patch(originalMethod, prefix: new HarmonyMethod(prefixMethod));
 
-				if (debugMode)
+				if (DebugMode)
 				{
-					Log.Message("[Simple Trans] Successfully patched biosculpter pod system");
+					SimpleTransDebug.Log("Successfully patched biosculpter pod system", 1);
 				}
 			}
 			else
@@ -171,9 +186,9 @@ public static class SimpleTrans
 			// are automatically registered when the mod loads, and the XML definitions are conditionally loaded
 			// via PatchOperationFindMod. No additional initialization is required.
 
-			if (debugMode)
+			if (DebugMode)
 			{
-				Log.Message("[Simple Trans] Ritual system initialized successfully");
+				SimpleTransDebug.Log("Ritual system initialized successfully", 1);
 			}
 		}
 		catch (System.Exception ex)

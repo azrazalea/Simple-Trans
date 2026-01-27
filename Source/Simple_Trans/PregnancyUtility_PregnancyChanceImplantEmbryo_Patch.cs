@@ -19,7 +19,7 @@ public class PregnancyUtility_PregnancyChanceImplantEmbryo_Patch
 	public static void Postfix(ref float __result, Pawn surrogate)
 	{
 		// Check if surrogate can actually carry pregnancies
-		if (!SimpleTransPregnancyUtility.CanCarry(surrogate))
+		if (!SimpleTransHediffs.CanCarry(surrogate))
 		{
 			SimpleTransDebug.Log($"Embryo implantation failed: {surrogate?.Name?.ToStringShort ?? "null"} cannot carry", 2);
 			__result = 0f;

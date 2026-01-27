@@ -234,7 +234,7 @@ public static class PregnancyApplicationPatches
 			}
 
 			// Use unified pregnancy method that handles capability-based role assignment and chance calculation
-			bool success = SimpleTransPregnancyUtility.TryCreatePregnancy(pawn1, pawn2, baseChance, showIncompatibilityMessage: true);
+			bool success = SimpleTransPregnancy.TryCreatePregnancy(pawn1, pawn2, baseChance, showIncompatibilityMessage: true);
 			
 			if (success)
 			{

@@ -37,7 +37,7 @@ public static class VECore_GeneUtilsApplyGeneEffects_Patch
 			// If gene forces gender changes and pawn is not cisgender, skip the effects
 			if ((extension.forceFemale == true || extension.forceMale == true))
 			{
-				bool isCisgender = SimpleTransPregnancyUtility.IsCisgender(gene.pawn);
+				bool isCisgender = SimpleTransHediffs.IsCisgender(gene.pawn);
 				if (!isCisgender)
 				{
 					SimpleTransDebug.Log($"Skipping gender-forcing gene effects for transgender pawn {gene.pawn.Name}", 3);

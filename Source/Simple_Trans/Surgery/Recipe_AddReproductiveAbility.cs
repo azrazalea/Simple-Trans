@@ -31,9 +31,9 @@ namespace Simple_Trans
                 bool isCarryIngredient = ingredientDefName.Contains("Carry");
                 bool isSireIngredient = ingredientDefName.Contains("Sire");
                 
-                if (isCarryIngredient && SimpleTransPregnancyUtility.CanCarry(pawn)) 
+                if (isCarryIngredient && SimpleTransHediffs.CanCarry(pawn))
                     return "SimpleTrans.Surgery.AlreadyHasCarry".Translate();
-                if (isSireIngredient && SimpleTransPregnancyUtility.CanSire(pawn)) 
+                if (isSireIngredient && SimpleTransHediffs.CanSire(pawn))
                     return "SimpleTrans.Surgery.AlreadyHasSire".Translate();
 
                 return AcceptanceReport.WasAccepted;
@@ -47,9 +47,9 @@ namespace Simple_Trans
             if (!isCarryRecipe && !isSireRecipe) 
                 return "SimpleTrans.Surgery.InvalidRecipeType".Translate();
 
-            if (isCarryRecipe && SimpleTransPregnancyUtility.CanCarry(pawn)) 
+            if (isCarryRecipe && SimpleTransHediffs.CanCarry(pawn))
                 return "SimpleTrans.Surgery.AlreadyHasCarry".Translate();
-            if (isSireRecipe && SimpleTransPregnancyUtility.CanSire(pawn)) 
+            if (isSireRecipe && SimpleTransHediffs.CanSire(pawn))
                 return "SimpleTrans.Surgery.AlreadyHasSire".Translate();
 
             return AcceptanceReport.WasAccepted;
@@ -128,7 +128,7 @@ namespace Simple_Trans
                 // Record tale for surgery
                 TaleRecorder.RecordTale(TaleDefOf.DidSurgery, billDoer, pawn);
 
-                Log.Message($"[Simple Trans] After surgery - CanCarry: {SimpleTransPregnancyUtility.CanCarry(pawn)}, CanSire: {SimpleTransPregnancyUtility.CanSire(pawn)}");
+                Log.Message($"[Simple Trans] After surgery - CanCarry: {SimpleTransHediffs.CanCarry(pawn)}, CanSire: {SimpleTransHediffs.CanSire(pawn)}");
                 
                 // Use appropriate message based on ingredient type
                 string messageKey = ingredient.def.defName.Contains("Prosthetic") ? "SimpleTransProstheticInstalled" : "SimpleTransOrganTransplanted";
@@ -144,14 +144,14 @@ namespace Simple_Trans
                 x.def.defName.Contains("ReproductiveProsthetic"));
         }
 
-        private SimpleTransPregnancyUtility.AbilityType? GetIngredientAbilityType(List<Thing> ingredients)
+        private SimpleTransPregnancy.AbilityType? GetIngredientAbilityType(List<Thing> ingredients)
         {
             var ingredient = GetReproductiveIngredient(ingredients);
             if (ingredient == null) return null;
 
-            if (ingredient.def.defName.Contains("Carry")) return SimpleTransPregnancyUtility.AbilityType.Carry;
-            if (ingredient.def.defName.Contains("Sire")) return SimpleTransPregnancyUtility.AbilityType.Sire;
-            
+            if (ingredient.def.defName.Contains("Carry")) return SimpleTransPregnancy.AbilityType.Carry;
+            if (ingredient.def.defName.Contains("Sire")) return SimpleTransPregnancy.AbilityType.Sire;
+
             return null;
         }
 
@@ -180,10 +180,10 @@ namespace Simple_Trans
         /// </summary>
         /// <param name="pawn">The pawn being operated on</param>
         /// <param name="newAbility">The ability being added</param>
-        private void ConvertVanillaSterilizedForAdd(Pawn pawn, SimpleTransPregnancyUtility.AbilityType? newAbility)
+        private void ConvertVanillaSterilizedForAdd(Pawn pawn, SimpleTransPregnancy.AbilityType? newAbility)
         {
             // Use the core conversion function with opposite capability logic
-            SimpleTransPregnancyUtility.ConvertVanillaSterilizedHediffCore(pawn, useOppositeCapabilityLogic: true, targetAbility: newAbility);
+            SimpleTransCore.ConvertVanillaSterilizedHediffCore(pawn, useOppositeCapabilityLogic: true, targetAbility: newAbility);
         }
     }
 }
