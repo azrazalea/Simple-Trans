@@ -34,6 +34,14 @@ public static class IntegratedImplants_InstallWomb_Patch
 			___recipe?.addsHediff?.defName != "Archowomb")
 			return;
 
+		// Only remove our hediffs if the womb was actually installed (surgery succeeded)
+		// If surgery failed, the womb hediff won't be present
+		if (!pawn.health.hediffSet.HasHediff(___recipe.addsHediff))
+		{
+			SimpleTransDebug.Log($"Womb surgery on {pawn.Name?.ToStringShort} did not add hediff (surgery may have failed), keeping existing carry hediffs", 2);
+			return;
+		}
+
 		SimpleTransDebug.Log($"Integrated Implants womb installed on {pawn.Name?.ToStringShort}, removing Simple Trans carry hediffs", 2);
 
 		// Remove Simple Trans carry hediffs

@@ -5,6 +5,7 @@
   [*] MechanicalBirthControl is recognized as sterilization
   [*] Installing a womb removes Simple Trans carry hediffs to prevent duplicate capabilities
   [*] Removed gender prerequisite from womb installation surgeries
+  [*] Fixed: Failed womb surgery no longer removes existing carry capability
 [*] Fixed: Missing translation keys for "Add Carrying/Siring Ability" in biosculpter consent dialog
 [*] Fixed: Gender affirmation ritual dialog now uses proper translation keys instead of hardcoded English
 [*] Cleaned up unused translation keys
