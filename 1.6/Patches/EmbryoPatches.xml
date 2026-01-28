@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+  <!-- Add our custom comp to HumanEmbryo to track parent roles explicitly -->
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/ThingDef[defName="HumanEmbryo"]/comps</xpath>
+    <value>
+      <li Class="Simple_Trans.CompProperties_EmbryoParentInfo"/>
+    </value>
+  </Operation>
+</Patch>
