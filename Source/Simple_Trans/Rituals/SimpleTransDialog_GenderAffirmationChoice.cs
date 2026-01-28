@@ -64,24 +64,26 @@ namespace Simple_Trans
         {
             Text.Font = GameFont.Medium;
             var titleRect = new Rect(0f, 0f, inRect.width, 35f);
-            Widgets.Label(titleRect, $"{celebrant.Name?.ToStringShort ?? "Someone"}'s Gender Affirmation");
+            string pawnName = celebrant.Name?.ToStringShort ?? "SimpleTrans.Ritual.Someone".Translate().ToString();
+            Widgets.Label(titleRect, "SimpleTrans.Ritual.Title".Translate(pawnName));
 
             Text.Font = GameFont.Small;
             float curY = 50f;
 
             // Description
             var descRect = new Rect(0f, curY, inRect.width, 60f);
-            Widgets.Label(descRect, "Choose the name and gender identity that " + celebrant.Name?.ToStringShort + " wishes to be known by:");
+            Widgets.Label(descRect, "SimpleTrans.Ritual.Description".Translate(pawnName));
             curY += 70f;
 
             // Current name display
             var currentNameRect = new Rect(0f, curY, inRect.width, 25f);
-            Widgets.Label(currentNameRect, "Current name: " + (celebrant.Name?.ToStringShort ?? "Unknown"));
+            string currentName = celebrant.Name?.ToStringShort ?? "SimpleTrans.Ritual.Unknown".Translate().ToString();
+            Widgets.Label(currentNameRect, "SimpleTrans.Ritual.CurrentName".Translate(currentName));
             curY += 30f;
 
             // First name input
             var firstNameLabelRect = new Rect(0f, curY, inRect.width, 25f);
-            Widgets.Label(firstNameLabelRect, "First name:");
+            Widgets.Label(firstNameLabelRect, "SimpleTrans.Ritual.FirstName".Translate());
             curY += 25f;
             var firstNameRect = new Rect(0f, curY, inRect.width, 30f);
             GUI.SetNextControlName("FirstNameField");
@@ -95,7 +97,7 @@ namespace Simple_Trans
 
             // Nickname input
             var nickNameLabelRect = new Rect(0f, curY, inRect.width, 25f);
-            Widgets.Label(nickNameLabelRect, "Nickname (optional):");
+            Widgets.Label(nickNameLabelRect, "SimpleTrans.Ritual.NicknameOptional".Translate());
             curY += 25f;
             var nickNameRect = new Rect(0f, curY, inRect.width, 30f);
             GUI.SetNextControlName("NickNameField");
@@ -109,7 +111,7 @@ namespace Simple_Trans
 
             // Last name input
             var lastNameLabelRect = new Rect(0f, curY, inRect.width, 25f);
-            Widgets.Label(lastNameLabelRect, "Last name:");
+            Widgets.Label(lastNameLabelRect, "SimpleTrans.Ritual.LastName".Translate());
             curY += 25f;
             var lastNameRect = new Rect(0f, curY, inRect.width, 30f);
             GUI.SetNextControlName("LastNameField");
@@ -123,7 +125,7 @@ namespace Simple_Trans
 
             // Gender selection
             var genderLabelRect = new Rect(0f, curY, inRect.width, 25f);
-            Widgets.Label(genderLabelRect, "Gender identity:");
+            Widgets.Label(genderLabelRect, "SimpleTrans.Ritual.GenderLabel".Translate());
             curY += 30f;
 
             var genderRect = new Rect(0f, curY, inRect.width, 30f);
@@ -131,14 +133,14 @@ namespace Simple_Trans
             {
                 var genderOptions = new List<FloatMenuOption>
                 {
-                    new FloatMenuOption("Male", () => selectedGender = Gender.Male),
-                    new FloatMenuOption("Female", () => selectedGender = Gender.Female)
+                    new FloatMenuOption(Gender.Male.GetLabel().CapitalizeFirst(), () => selectedGender = Gender.Male),
+                    new FloatMenuOption(Gender.Female.GetLabel().CapitalizeFirst(), () => selectedGender = Gender.Female)
                 };
 
                 // Add Enby option if NonBinary Gender mod is detected
                 if (SimpleTrans.NBGenderActive)
                 {
-                    genderOptions.Add(new FloatMenuOption("Enby", () => selectedGender = (Gender)3));
+                    genderOptions.Add(new FloatMenuOption("SimpleTrans.Gender.Enby".Translate(), () => selectedGender = (Gender)3));
                 }
 
                 Find.WindowStack.Add(new FloatMenu(genderOptions));
@@ -147,15 +149,15 @@ namespace Simple_Trans
 
             // Identity selection
             var identityLabelRect = new Rect(0f, curY, inRect.width, 25f);
-            Widgets.Label(identityLabelRect, "Gender identity (cis/trans):");
+            Widgets.Label(identityLabelRect, "SimpleTrans.Ritual.IdentityLabel".Translate());
             curY += 30f;
 
-            if (Widgets.ButtonText(new Rect(0f, curY, 120f, 30f), selectedIdentity.ToString()))
+            if (Widgets.ButtonText(new Rect(0f, curY, 120f, 30f), GetIdentityDisplayName(selectedIdentity)))
             {
                 var identityOptions = new List<FloatMenuOption>
                 {
-                    new FloatMenuOption("Cisgender", () => selectedIdentity = GenderIdentity.Cisgender),
-                    new FloatMenuOption("Transgender", () => selectedIdentity = GenderIdentity.Transgender)
+                    new FloatMenuOption("SimpleTrans.Identity.Cisgender".Translate(), () => selectedIdentity = GenderIdentity.Cisgender),
+                    new FloatMenuOption("SimpleTrans.Identity.Transgender".Translate(), () => selectedIdentity = GenderIdentity.Transgender)
                 };
 
                 Find.WindowStack.Add(new FloatMenu(identityOptions));
@@ -164,18 +166,18 @@ namespace Simple_Trans
 
             // Note about reproductive capabilities
             var noteRect = new Rect(0f, curY, inRect.width, 40f);
-            Widgets.Label(noteRect, "Note: This only changes name and gender identity.\nReproductive capabilities are unchanged.");
+            Widgets.Label(noteRect, "SimpleTrans.Ritual.Note".Translate());
             curY += 50f;
 
             // Buttons
             var buttonWidth = (inRect.width - 20f) / 2f;
 
-            if (Widgets.ButtonText(new Rect(0f, curY, buttonWidth, 35f), "Cancel"))
+            if (Widgets.ButtonText(new Rect(0f, curY, buttonWidth, 35f), "CancelButton".Translate()))
             {
                 Close();
             }
 
-            if (Widgets.ButtonText(new Rect(buttonWidth + 20f, curY, buttonWidth, 35f), "Confirm"))
+            if (Widgets.ButtonText(new Rect(buttonWidth + 20f, curY, buttonWidth, 35f), "Confirm".Translate()))
             {
                 ApplyChanges();
                 Close();
@@ -194,8 +196,19 @@ namespace Simple_Trans
 
         private string GetGenderDisplayName(Gender gender)
         {
-            // Always use Enum.GetName to hit any harmony patches (like NonBinary Gender mod)
-            return System.Enum.GetName(typeof(Gender), gender) ?? gender.ToString();
+            // Use RimWorld's built-in gender labels for Male/Female, custom for Enby
+            if ((int)gender == 3) // Enby from NonBinary Gender mod
+            {
+                return "SimpleTrans.Gender.Enby".Translate();
+            }
+            return gender.GetLabel().CapitalizeFirst();
+        }
+
+        private string GetIdentityDisplayName(GenderIdentity identity)
+        {
+            return identity == GenderIdentity.Cisgender
+                ? "SimpleTrans.Identity.Cisgender".Translate()
+                : "SimpleTrans.Identity.Transgender".Translate();
         }
 
         private void ApplyChanges()
@@ -273,18 +286,19 @@ namespace Simple_Trans
                 {
                     if (oldName != celebrant.Name?.ToStringFull)
                     {
-                        changeDetails.Add($"changed their name to {celebrant.Name?.ToStringFull}");
+                        changeDetails.Add("SimpleTrans.Ritual.ChangedNameTo".Translate(celebrant.Name?.ToStringFull ?? "").ToString());
                     }
                 }
 
+                string fullName = celebrant.Name?.ToStringFull ?? "SimpleTrans.Ritual.Someone".Translate().ToString();
                 string message;
                 if (changeDetails.Any())
                 {
-                    message = $"{celebrant.Name?.ToStringFull ?? "Someone"} has affirmed their identity and {string.Join(" and ", changeDetails)} during the celebration!";
+                    message = "SimpleTrans.Ritual.AffirmedIdentityWithChanges".Translate(fullName, string.Join(" and ", changeDetails));
                 }
                 else
                 {
-                    message = $"{celebrant.Name?.ToStringFull ?? "Someone"} has affirmed their identity during the celebration!";
+                    message = "SimpleTrans.Ritual.AffirmedIdentity".Translate(fullName);
                 }
 
                 // Send message about the changes

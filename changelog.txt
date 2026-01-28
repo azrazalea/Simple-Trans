@@ -1,4 +1,7 @@
 [h1]January 28th, 2026[/h1]
+[*] Fixed: Missing translation keys for "Add Carrying/Siring Ability" in biosculpter consent dialog
+[*] Fixed: Gender affirmation ritual dialog now uses proper translation keys instead of hardcoded English
+[*] Cleaned up unused translation keys
 [*] Fixed: Prosthetic reproductive organs (basic and bionic) now correctly grant pregnancy capability
   [*] Previously, pawns with only prosthetics (without the base hediff) couldn't initiate pregnancy
 [*] Added: Cis pawns can now spawn with neither reproductive capability

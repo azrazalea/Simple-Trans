@@ -27,12 +27,6 @@
   <SimpleTrans.Items.BionicCarryProsthetic>bionic carrying prosthetic</SimpleTrans.Items.BionicCarryProsthetic>
   <SimpleTrans.Items.BionicSireProsthetic>bionic siring prosthetic</SimpleTrans.Items.BionicSireProsthetic>
 
-  <!-- Consistent Terminology -->
-  <SimpleTrans.Terms.CarryingAbility>carrying ability</SimpleTrans.Terms.CarryingAbility>
-  <SimpleTrans.Terms.SiringAbility>siring ability</SimpleTrans.Terms.SiringAbility>
-  <SimpleTrans.Terms.BasicProsthetic>basic prosthetic</SimpleTrans.Terms.BasicProsthetic>
-  <SimpleTrans.Terms.BionicProsthetic>bionic prosthetic</SimpleTrans.Terms.BionicProsthetic>
-
   <!-- Informed Consent Dialog -->
   <SimpleTrans.ConsentDialogTitle>Informed Consent: {0} Transformation</SimpleTrans.ConsentDialogTitle>
   <SimpleTrans.ConsentDialogSubtitle>The following changes will be made to {PAWN_nameDef}:</SimpleTrans.ConsentDialogSubtitle>
@@ -47,8 +41,8 @@
   <SimpleTrans.Change.SetBodyTypeThin>Body type will be changed to thin/androgynous</SimpleTrans.Change.SetBodyTypeThin>
   <SimpleTrans.Change.RemoveCarryingAbility>Carrying capability will be removed</SimpleTrans.Change.RemoveCarryingAbility>
   <SimpleTrans.Change.RemoveSiringAbility>Siring capability will be removed</SimpleTrans.Change.RemoveSiringAbility>
-  <SimpleTrans.Change.SetCisgender>Gender identity will be set to cisgender</SimpleTrans.Change.SetCisgender>
-  <SimpleTrans.Change.SetTransgender>Gender identity will be set to transgender</SimpleTrans.Change.SetTransgender>
+  <SimpleTrans.Change.AddCarryingAbility>Carrying capability will be added</SimpleTrans.Change.AddCarryingAbility>
+  <SimpleTrans.Change.AddSiringAbility>Siring capability will be added</SimpleTrans.Change.AddSiringAbility>
   <SimpleTrans.Change.RemoveBasicCarryProsthetic>Basic carrying prosthetic will be removed</SimpleTrans.Change.RemoveBasicCarryProsthetic>
   <SimpleTrans.Change.RemoveBasicSireProsthetic>Basic siring prosthetic will be removed</SimpleTrans.Change.RemoveBasicSireProsthetic>
   <SimpleTrans.Change.RemoveBionicCarryProsthetic>Bionic carrying prosthetic will be removed</SimpleTrans.Change.RemoveBionicCarryProsthetic>
@@ -76,13 +70,29 @@
   <SimpleTrans.GenderAffirmingChoice.CurrentGender>Current gender: {0}</SimpleTrans.GenderAffirmingChoice.CurrentGender>
   <SimpleTrans.GenderAffirmingChoice.CurrentIdentity>Current identity: {0}</SimpleTrans.GenderAffirmingChoice.CurrentIdentity>
   <SimpleTrans.GenderAffirmingChoice.CurrentReproduction>Current capabilities: {0}</SimpleTrans.GenderAffirmingChoice.CurrentReproduction>
-  
-  <!-- Gender Options -->
-  <SimpleTrans.Gender.NonBinary>Non-binary</SimpleTrans.Gender.NonBinary>
-  
+
   <!-- Identity Options -->
   <SimpleTrans.Identity.Cisgender>Cisgender</SimpleTrans.Identity.Cisgender>
   <SimpleTrans.Identity.Transgender>Transgender</SimpleTrans.Identity.Transgender>
+
+  <!-- Gender Options -->
+  <SimpleTrans.Gender.Enby>Enby</SimpleTrans.Gender.Enby>
+
+  <!-- Gender Affirmation Ritual Dialog -->
+  <SimpleTrans.Ritual.Title>{0}'s Gender Affirmation</SimpleTrans.Ritual.Title>
+  <SimpleTrans.Ritual.Description>Choose the name and gender identity that {0} wishes to be known by:</SimpleTrans.Ritual.Description>
+  <SimpleTrans.Ritual.CurrentName>Current name: {0}</SimpleTrans.Ritual.CurrentName>
+  <SimpleTrans.Ritual.FirstName>First name:</SimpleTrans.Ritual.FirstName>
+  <SimpleTrans.Ritual.NicknameOptional>Nickname (optional):</SimpleTrans.Ritual.NicknameOptional>
+  <SimpleTrans.Ritual.LastName>Last name:</SimpleTrans.Ritual.LastName>
+  <SimpleTrans.Ritual.GenderLabel>Gender:</SimpleTrans.Ritual.GenderLabel>
+  <SimpleTrans.Ritual.IdentityLabel>Identity (cis/trans):</SimpleTrans.Ritual.IdentityLabel>
+  <SimpleTrans.Ritual.Note>Note: This only changes name and gender identity.\nReproductive capabilities are unchanged.</SimpleTrans.Ritual.Note>
+  <SimpleTrans.Ritual.AffirmedIdentity>{0} has affirmed their identity during the celebration!</SimpleTrans.Ritual.AffirmedIdentity>
+  <SimpleTrans.Ritual.AffirmedIdentityWithChanges>{0} has affirmed their identity and {1} during the celebration!</SimpleTrans.Ritual.AffirmedIdentityWithChanges>
+  <SimpleTrans.Ritual.ChangedNameTo>changed their name to {0}</SimpleTrans.Ritual.ChangedNameTo>
+  <SimpleTrans.Ritual.Someone>Someone</SimpleTrans.Ritual.Someone>
+  <SimpleTrans.Ritual.Unknown>Unknown</SimpleTrans.Ritual.Unknown>
   
   <!-- Reproductive Capability Options -->
   <SimpleTrans.Reproduction.None>None</SimpleTrans.Reproduction.None>
@@ -93,7 +103,6 @@
   <!-- Cycle Description Updates -->
   <SimpleTrans.GenderAffirmingChoice.SelectedChanges>Selected changes:</SimpleTrans.GenderAffirmingChoice.SelectedChanges>
   <SimpleTrans.GenderAffirmingChoice.WillChangeBodyType>Will change body type to {0}</SimpleTrans.GenderAffirmingChoice.WillChangeBodyType>
-  <SimpleTrans.GenderAffirmingChoice.WillChangeGender>Will change gender to {0}</SimpleTrans.GenderAffirmingChoice.WillChangeGender>
   <SimpleTrans.GenderAffirmingChoice.WillChangeIdentity>Will change identity to {0}</SimpleTrans.GenderAffirmingChoice.WillChangeIdentity>
   <SimpleTrans.GenderAffirmingChoice.WillChangeReproduction>Will change reproductive capabilities to {0}</SimpleTrans.GenderAffirmingChoice.WillChangeReproduction>
   <SimpleTrans.GenderAffirmingChoice.NoChoicesSelected>No transformation choices selected yet</SimpleTrans.GenderAffirmingChoice.NoChoicesSelected>
