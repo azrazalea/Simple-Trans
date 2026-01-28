@@ -1,3 +1,6 @@
+[h1]January 28th, 2026[/h1]
+[*] Fixed: RemoveIUD and ReverseVasectomy surgeries now correctly appear for sterilized pawns
+
 [h1]January 27th, 2026[/h1]
 [*] Internal code reorganization for easier future development. No gameplay changes.
 

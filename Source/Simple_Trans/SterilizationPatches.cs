@@ -30,16 +30,18 @@ namespace Simple_Trans
                 }
             }
 
-            // Surgeries that require carry ability
-            if (defName == "TerminatePregnancy" || defName == "TubalLigation" || defName == "ImplantIUD" || defName == "RemoveIUD" || defName == "ExtractOvum")
+            // Surgeries that require functional carry ability
+            // Note: RemoveIUD is handled by vanilla's removesHediff check
+            if (defName == "TerminatePregnancy" || defName == "TubalLigation" || defName == "ImplantIUD" || defName == "ExtractOvum")
             {
                 if (!SimpleTransHediffs.CanCarry(pawn))
                 {
                     __result = false;
                 }
             }
-            // Surgeries that require sire ability  
-            else if (defName == "Vasectomy" || defName == "ReverseVasectomy")
+            // Surgeries that require functional sire ability
+            // Note: ReverseVasectomy is handled by vanilla's removesHediff check
+            else if (defName == "Vasectomy")
             {
                 if (!SimpleTransHediffs.CanSire(pawn))
                 {
