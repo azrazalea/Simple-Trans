@@ -1,6 +1,8 @@
 [h1]January 28th, 2026[/h1]
 [*] Fixed: RemoveIUD and ReverseVasectomy surgeries now correctly appear for sterilized pawns
 [*] Fixed: IVF now correctly identifies parents based on who provided the ovum and who fertilized it, regardless of gender
+[*] Fixed: Biosculpter "both carry and sire" option now correctly grants both capabilities
+[*] Fixed: Biosculpter consent text now correctly says "biology" instead of "biology and identity"
 
 [h1]January 27th, 2026[/h1]
 [*] Internal code reorganization for easier future development. No gameplay changes.

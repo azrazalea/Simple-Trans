@@ -37,7 +37,7 @@
   <SimpleTrans.ConsentDialogTitle>Informed Consent: {0} Transformation</SimpleTrans.ConsentDialogTitle>
   <SimpleTrans.ConsentDialogSubtitle>The following changes will be made to {PAWN_nameDef}:</SimpleTrans.ConsentDialogSubtitle>
   <SimpleTrans.ConsentChangesHeader>Transformation Changes:</SimpleTrans.ConsentChangesHeader>
-  <SimpleTrans.ConsentWarning>This transformation will alter this person's biology and identity. Changes can be reversed with additional surgeries or biosculpter treatments. Please ensure this aligns with their wishes and your colony's needs.</SimpleTrans.ConsentWarning>
+  <SimpleTrans.ConsentWarning>This transformation will alter this person's biology. Changes can be reversed with additional surgeries or biosculpter treatments. Please ensure this aligns with their wishes and your colony's needs.</SimpleTrans.ConsentWarning>
   <SimpleTrans.ConsentPregnancyWarning>WARNING: {PAWN_nameDef} is currently pregnant. This transformation will terminate the pregnancy. This action cannot be undone.</SimpleTrans.ConsentPregnancyWarning>
   <SimpleTrans.ConsentProceed>I Understand - Proceed</SimpleTrans.ConsentProceed>
   <SimpleTrans.NoChangesConfirm>{PAWN_nameDef} already matches the target configuration for {1}. Proceed anyway?</SimpleTrans.NoChangesConfirm>

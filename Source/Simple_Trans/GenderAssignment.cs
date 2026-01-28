@@ -94,7 +94,8 @@ public static class GenderAssignment
 			if (!pawn.health.hediffSet.HasHediff(SimpleTransHediffs.canCarryDef, false))
 			{
 				pawn.health.GetOrAddHediff(SimpleTransHediffs.canCarryDef);
-				if ((removeSire || pawn.gender == Gender.Female) && pawn.health.hediffSet.HasHediff(SimpleTransHediffs.canSireDef, false))
+				// Only remove sire if explicitly requested - don't auto-remove based on gender
+				if (removeSire && pawn.health.hediffSet.HasHediff(SimpleTransHediffs.canSireDef, false))
 				{
 					pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(SimpleTransHediffs.canSireDef));
 				}
@@ -150,7 +151,8 @@ public static class GenderAssignment
 			if (!pawn.health.hediffSet.HasHediff(SimpleTransHediffs.canSireDef, false))
 			{
 				pawn.health.GetOrAddHediff(SimpleTransHediffs.canSireDef);
-				if ((removeCarry || pawn.gender == Gender.Male) && pawn.health.hediffSet.HasHediff(SimpleTransHediffs.canCarryDef, false))
+				// Only remove carry if explicitly requested - don't auto-remove based on gender
+				if (removeCarry && pawn.health.hediffSet.HasHediff(SimpleTransHediffs.canCarryDef, false))
 				{
 					pawn.health.RemoveHediff(pawn.health.GetOrAddHediff(SimpleTransHediffs.canCarryDef));
 				}
