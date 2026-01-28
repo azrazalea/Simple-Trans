@@ -49,15 +49,8 @@ public class PregnancyUtility_CanEverProduceChild_Patch
 			return;
 		}
 
-		bool firstCanSire = SimpleTransHediffs.CanSire(first);
-		bool firstCanCarry = SimpleTransHediffs.CanCarry(first);
-		bool secondCanSire = SimpleTransHediffs.CanSire(second);
-		bool secondCanCarry = SimpleTransHediffs.CanCarry(second);
-
-		// Determine reproductive roles
-		Pawn sirer = (firstCanSire ? first : (secondCanSire ? second : null));
-		Pawn carrier = (secondCanCarry ? second : (firstCanCarry ? first : null));
-
+		// Determine reproductive roles using unified logic
+		SimpleTransHediffs.DetermineRoles(first, second, out Pawn carrier, out Pawn sirer);
 
 		// Check for reproductive capability requirements
 		if (sirer == null)
@@ -77,9 +70,8 @@ public class PregnancyUtility_CanEverProduceChild_Patch
 		// Initially accept the pair - we have basic reproductive compatibility
 		result = true;
 
-
-		// Check fertility issues
-		CheckFertilityIssues(ref result, first, second, sirer);
+		// Check fertility issues using capability-based fertility
+		CheckFertilityIssues(ref result, carrier, sirer);
 		if (!result.Accepted) return;
 
 		// Check age issues
@@ -91,28 +83,32 @@ public class PregnancyUtility_CanEverProduceChild_Patch
 
 
 	/// <summary>
-	/// Checks for fertility issues between pawns
+	/// Checks for fertility issues using capability-based fertility (correct age curves)
 	/// </summary>
 	/// <param name="result">The acceptance report to modify</param>
-	/// <param name="first">First pawn in the pair</param>
-	/// <param name="second">Second pawn in the pair</param>
-	/// <param name="sirer">The pawn that can sire</param>
-	private static void CheckFertilityIssues(ref AcceptanceReport result, Pawn first, Pawn second, Pawn sirer)
+	/// <param name="carrier">The pawn who will carry</param>
+	/// <param name="sirer">The pawn who will sire</param>
+	private static void CheckFertilityIssues(ref AcceptanceReport result, Pawn carrier, Pawn sirer)
 	{
-		float firstFertility = StatExtension.GetStatValue((Thing)(object)first, StatDefOf.Fertility, true, -1);
-		float secondFertility = StatExtension.GetStatValue((Thing)(object)second, StatDefOf.Fertility, true, -1);
-		bool firstIsInfertile = firstFertility <= 0f;
-		bool secondIsInfertile = secondFertility <= 0f;
+		// Use capability-based fertility with correct age curves
+		float carrierFertility = SimpleTransHediffs.GetCarryFertility(carrier);
+		float sirerFertility = SimpleTransHediffs.GetSireFertility(sirer);
+		bool carrierIsInfertile = carrierFertility <= 0f;
+		bool sirerIsInfertile = sirerFertility <= 0f;
 
-
-		if (firstIsInfertile && secondIsInfertile)
+		if (carrierIsInfertile && sirerIsInfertile)
 		{
-			TaggedString message = TranslatorFormattedStringExtensions.Translate("PawnsAreInfertile", NamedArgumentUtility.Named((object)first, "PAWN1"), NamedArgumentUtility.Named((object)second, "PAWN2"));
+			TaggedString message = TranslatorFormattedStringExtensions.Translate("PawnsAreInfertile", NamedArgumentUtility.Named((object)carrier, "PAWN1"), NamedArgumentUtility.Named((object)sirer, "PAWN2"));
 			result = message.Resolve();
 		}
-		else if (firstIsInfertile != secondIsInfertile)
+		else if (carrierIsInfertile)
 		{
-			TaggedString message = TranslatorFormattedStringExtensions.Translate("PawnIsInfertile", NamedArgumentUtility.Named((object)(firstIsInfertile ? first : second), "PAWN"));
+			TaggedString message = TranslatorFormattedStringExtensions.Translate("PawnIsInfertile", NamedArgumentUtility.Named((object)carrier, "PAWN"));
+			result = message.Resolve();
+		}
+		else if (sirerIsInfertile)
+		{
+			TaggedString message = TranslatorFormattedStringExtensions.Translate("PawnIsInfertile", NamedArgumentUtility.Named((object)sirer, "PAWN"));
 			result = message.Resolve();
 		}
 	}

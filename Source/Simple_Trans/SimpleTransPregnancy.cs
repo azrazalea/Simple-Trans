@@ -46,15 +46,14 @@ public static class SimpleTransPregnancy
 				return false;
 			}
 
-			// Determine reproductive roles based on capabilities
+			// Determine reproductive roles using unified logic
 			Pawn sirer = null;
 			Pawn carrier = null;
 
 			if (pawn2 != null)
 			{
-				// Two-pawn scenario: determine roles from capabilities
-				sirer = SimpleTransHediffs.CanSire(pawn1) ? pawn1 : (SimpleTransHediffs.CanSire(pawn2) ? pawn2 : null);
-				carrier = SimpleTransHediffs.CanCarry(pawn1) ? pawn1 : (SimpleTransHediffs.CanCarry(pawn2) ? pawn2 : null);
+				// Two-pawn scenario: use unified role assignment
+				SimpleTransHediffs.DetermineRoles(pawn1, pawn2, out carrier, out sirer);
 			}
 			else
 			{

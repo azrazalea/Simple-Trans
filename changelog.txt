@@ -3,6 +3,14 @@
 [*] Fixed: IVF now correctly identifies parents based on who provided the ovum and who fertilized it, regardless of gender
 [*] Fixed: Biosculpter "both carry and sire" option now correctly grants both capabilities
 [*] Fixed: Biosculpter consent text now correctly says "biology" instead of "biology and identity"
+[*] Fixed: Fertility now correctly declines with age based on reproductive capability, not gender
+  [*] Carriers experience natural fertility decline (menopause)
+  [*] Sirers experience gradual decline into old age
+  [*] Prosthetic reproductive organs do not age - fertility remains constant
+  [*] Bionic prosthetics provide enhanced fertility (1.2x) and guaranteed success when trying for pregnancy
+[*] Fixed: Pawns with both carry and sire capabilities now correctly get assigned different roles when paired together
+[*] Fixed: Fertility stat display now shows correct values based on reproductive capability
+[*] Fixed: Embryo implantation now uses capability-based fertility and bionic guaranteed success
 
 [h1]January 27th, 2026[/h1]
 [*] Internal code reorganization for easier future development. No gameplay changes.
