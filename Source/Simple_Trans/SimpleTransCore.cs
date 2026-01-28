@@ -191,6 +191,12 @@ public static class SimpleTransCore
 					canCarry = true;
 					canSire = true;
 				}
+				else if (specialCaseRoll < SimpleTransSettings.cisBothRate + SimpleTransSettings.cisNeitherRate)
+				{
+					// Neither ability
+					canCarry = false;
+					canSire = false;
+				}
 				else if (pawn.gender == Gender.Male)
 				{
 					// Fresh roll for cis man ability determination

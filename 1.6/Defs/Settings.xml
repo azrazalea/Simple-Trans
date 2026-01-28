@@ -85,6 +85,14 @@
         <max>100</max>
         <decimals>0</decimals>
       </li>
+      <li Class="XmlExtensions.Setting.Slider">
+        <key>cisNeitherPercent</key>
+        <label>Percent of cis people with neither ability: {cisNeitherPercent}%</label>
+        <defaultValue>0</defaultValue>
+        <min>0</min>
+        <max>100</max>
+        <decimals>0</decimals>
+      </li>
       <li Class="XmlExtensions.Setting.GapLine" />
       <li Class="XmlExtensions.Setting.Text">
         <text>Non-Binary Reproduction</text>

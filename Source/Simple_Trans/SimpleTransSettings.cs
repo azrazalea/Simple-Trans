@@ -58,6 +58,11 @@ public static class SimpleTransSettings
 	public static float cisBothRate;
 
 	/// <summary>
+	/// Rate at which cis people have neither ability
+	/// </summary>
+	public static float cisNeitherRate;
+
+	/// <summary>
 	/// Rate at which non-binary people have both abilities
 	/// </summary>
 	public static float enbyBothRate;
@@ -152,6 +157,7 @@ public static class SimpleTransSettings
 			string cisManCarryPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "cisManCarryPercent");
 			string cisWomanSirePercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "cisWomanSirePercent");
 			string cisBothPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "cisBothPercent");
+			string cisNeitherPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "cisNeitherPercent");
 			string enbyBothPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "enbyBothPercent");
 			string enbyNeitherPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "enbyNeitherPercent");
 			string carrySterilizationPercentSetting = SettingsManager.GetSetting("runaway.simpletrans", "carrySterilizationPercent");
@@ -176,6 +182,7 @@ public static class SimpleTransSettings
 			cisManCarryRate = TryParseFloat(cisManCarryPercentSetting, 1f) / SimpleTransConstants.PercentageToDecimal;
 			cisWomanSireRate = TryParseFloat(cisWomanSirePercentSetting, 1f) / SimpleTransConstants.PercentageToDecimal;
 			cisBothRate = TryParseFloat(cisBothPercentSetting, 0f) / SimpleTransConstants.PercentageToDecimal;
+			cisNeitherRate = TryParseFloat(cisNeitherPercentSetting, 0f) / SimpleTransConstants.PercentageToDecimal;
 			enbyCarryRate = TryParseFloat(enbyCarryPercentSetting, SimpleTransConstants.DefaultEnbyCarryRate * SimpleTransConstants.PercentageToDecimal) / SimpleTransConstants.PercentageToDecimal;
 			enbyBothRate = TryParseFloat(enbyBothPercentSetting, 10f) / SimpleTransConstants.PercentageToDecimal;
 			enbyNeitherRate = TryParseFloat(enbyNeitherPercentSetting, 15f) / SimpleTransConstants.PercentageToDecimal;
@@ -203,6 +210,7 @@ public static class SimpleTransSettings
 			cisManCarryRate = 0.01f;
 			cisWomanSireRate = 0.01f;
 			cisBothRate = 0f;
+			cisNeitherRate = 0f;
 			enbyCarryRate = SimpleTransConstants.DefaultEnbyCarryRate;
 			enbyBothRate = 0.10f;
 			enbyNeitherRate = 0.15f;

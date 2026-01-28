@@ -1,4 +1,8 @@
 [h1]January 28th, 2026[/h1]
+[*] Fixed: Prosthetic reproductive organs (basic and bionic) now correctly grant pregnancy capability
+  [*] Previously, pawns with only prosthetics (without the base hediff) couldn't initiate pregnancy
+[*] Added: Cis pawns can now spawn with neither reproductive capability
+  [*] New setting in "Cisgender Variations" section (default 0% for backwards compatibility)
 [*] Fixed: RemoveIUD and ReverseVasectomy surgeries now correctly appear for sterilized pawns
 [*] Fixed: IVF now correctly identifies parents based on who provided the ovum and who fertilized it, regardless of gender
 [*] Fixed: Biosculpter "both carry and sire" option now correctly grants both capabilities

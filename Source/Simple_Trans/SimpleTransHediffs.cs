@@ -127,8 +127,12 @@ public static class SimpleTransHediffs
 			return "CannotNoAbility".Translate();
 		}
 
-		// Check if pawn has carry capability
-		if (!pawn.health.hediffSet.HasHediff(canCarryDef, false))
+		// Check if pawn has carry capability (base hediff OR prosthetic alternatives)
+		bool hasCarryCapability = pawn.health.hediffSet.HasHediff(canCarryDef, false)
+			|| HasBionicCarry(pawn)
+			|| pawn.health.hediffSet.HasHediff(HediffDef.Named("BasicProstheticCarry"));
+
+		if (!hasCarryCapability)
 		{
 			return "CannotNoAbility".Translate();
 		}
@@ -177,8 +181,12 @@ public static class SimpleTransHediffs
 			return "CannotNoAbility".Translate();
 		}
 
-		// Check if pawn has sire capability
-		if (!pawn.health.hediffSet.HasHediff(canSireDef, false))
+		// Check if pawn has sire capability (base hediff OR prosthetic alternatives)
+		bool hasSireCapability = pawn.health.hediffSet.HasHediff(canSireDef, false)
+			|| HasBionicSire(pawn)
+			|| pawn.health.hediffSet.HasHediff(HediffDef.Named("BasicProstheticSire"));
+
+		if (!hasSireCapability)
 		{
 			return "CannotNoAbility".Translate();
 		}
