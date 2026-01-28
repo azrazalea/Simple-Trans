@@ -13,13 +13,13 @@
         <!-- Allows trans men and others with carry intent to install wombs -->
         <li Class="PatchOperationRemove">
           <xpath>Defs/RecipeDef[defName="InstallSynthwomb"]/genderPrerequisite</xpath>
-          <success>Maybe</success>
+          <success>Always</success>
         </li>
 
         <!-- Remove gender prerequisite from Archowomb installation -->
         <li Class="PatchOperationRemove">
           <xpath>Defs/RecipeDef[defName="InstallArchowomb"]/genderPrerequisite</xpath>
-          <success>Maybe</success>
+          <success>Always</success>
         </li>
       </operations>
     </match>
