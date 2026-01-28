@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+  <!-- Integrated Implants compatibility patches -->
+  <!-- Only apply when Integrated Implants mod (lts.I) is loaded -->
+
+  <Operation Class="PatchOperationFindMod">
+    <mods>
+      <li>Integrated Implants</li>
+    </mods>
+    <match Class="PatchOperationSequence">
+      <operations>
+        <!-- Remove gender prerequisite from Synthwomb installation -->
+        <!-- Allows trans men and others with carry intent to install wombs -->
+        <li Class="PatchOperationRemove">
+          <xpath>Defs/RecipeDef[defName="InstallSynthwomb"]/genderPrerequisite</xpath>
+          <success>Maybe</success>
+        </li>
+
+        <!-- Remove gender prerequisite from Archowomb installation -->
+        <li Class="PatchOperationRemove">
+          <xpath>Defs/RecipeDef[defName="InstallArchowomb"]/genderPrerequisite</xpath>
+          <success>Maybe</success>
+        </li>
+      </operations>
+    </match>
+  </Operation>
+</Patch>

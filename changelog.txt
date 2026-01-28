@@ -1,4 +1,10 @@
 [h1]January 28th, 2026[/h1]
+[*] Added: Integrated Implants mod compatibility
+  [*] Synthwomb and Archowomb now grant carrying capability
+  [*] Archowomb provides 2.0x fertility, Synthwomb provides 1.5x fertility
+  [*] MechanicalBirthControl is recognized as sterilization
+  [*] Installing a womb removes Simple Trans carry hediffs to prevent duplicate capabilities
+  [*] Removed gender prerequisite from womb installation surgeries
 [*] Fixed: Missing translation keys for "Add Carrying/Siring Ability" in biosculpter consent dialog
 [*] Fixed: Gender affirmation ritual dialog now uses proper translation keys instead of hardcoded English
 [*] Cleaned up unused translation keys

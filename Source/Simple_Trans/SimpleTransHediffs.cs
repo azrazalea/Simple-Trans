@@ -40,16 +40,17 @@ public static class SimpleTransHediffs
 
 	/// <summary>
 	/// Gets the age factor for carrying capability.
-	/// Prosthetics don't age (return 1.0), natural organs use carry curve.
+	/// Prosthetics and Integrated Implants wombs don't age (return 1.0), natural organs use carry curve.
 	/// </summary>
 	public static float GetCarryAgeFactor(Pawn pawn)
 	{
 		if (pawn?.ageTracker == null)
 			return 1f;
 
-		// Prosthetics don't age
+		// Prosthetics and Integrated Implants wombs don't age
 		if (HasBionicCarry(pawn) ||
-			pawn.health?.hediffSet?.HasHediff(HediffDef.Named("BasicProstheticCarry")) == true)
+			pawn.health?.hediffSet?.HasHediff(HediffDef.Named("BasicProstheticCarry")) == true ||
+			HasIntegratedImplantsWomb(pawn))
 		{
 			return 1f;
 		}
@@ -127,10 +128,11 @@ public static class SimpleTransHediffs
 			return "CannotNoAbility".Translate();
 		}
 
-		// Check if pawn has carry capability (base hediff OR prosthetic alternatives)
+		// Check if pawn has carry capability (base hediff OR prosthetic alternatives OR Integrated Implants wombs)
 		bool hasCarryCapability = pawn.health.hediffSet.HasHediff(canCarryDef, false)
 			|| HasBionicCarry(pawn)
-			|| pawn.health.hediffSet.HasHediff(HediffDef.Named("BasicProstheticCarry"));
+			|| pawn.health.hediffSet.HasHediff(HediffDef.Named("BasicProstheticCarry"))
+			|| HasIntegratedImplantsWomb(pawn);
 
 		if (!hasCarryCapability)
 		{
@@ -151,6 +153,13 @@ public static class SimpleTransHediffs
 
 		var reversibleSterilizedCarryDef = DefDatabase<HediffDef>.GetNamedSilentFail("ReversibleSterilizedCarry");
 		if (reversibleSterilizedCarryDef != null && pawn.health.hediffSet.HasHediff(reversibleSterilizedCarryDef, false))
+		{
+			return "CannotSterile".Translate();
+		}
+
+		// Integrated Implants - MechanicalBirthControl acts as sterilization
+		var mechanicalBirthControlDef = DefDatabase<HediffDef>.GetNamedSilentFail("MechanicalBirthControl");
+		if (mechanicalBirthControlDef != null && pawn.health.hediffSet.HasHediff(mechanicalBirthControlDef, false))
 		{
 			return "CannotSterile".Translate();
 		}
@@ -261,6 +270,20 @@ public static class SimpleTransHediffs
 			return 0f;
 		}
 
+		// Integrated Implants wombs - use their fertility values (superior to prosthetics)
+		var archowombDef = DefDatabase<HediffDef>.GetNamedSilentFail("Archowomb");
+		if (archowombDef != null && pawn.health.hediffSet.HasHediff(archowombDef, false))
+		{
+			SimpleTransDebug.Log($"Carry fertility for {pawn.Name?.ToStringShort}: 2.0 (archowomb - no aging)", 3);
+			return 2.0f;
+		}
+		var synthwombDef = DefDatabase<HediffDef>.GetNamedSilentFail("Synthwomb");
+		if (synthwombDef != null && pawn.health.hediffSet.HasHediff(synthwombDef, false))
+		{
+			SimpleTransDebug.Log($"Carry fertility for {pawn.Name?.ToStringShort}: 1.5 (synthwomb - no aging)", 3);
+			return 1.5f;
+		}
+
 		// Prosthetics don't age - return fixed fertility values
 		if (HasBionicCarry(pawn))
 		{
@@ -338,6 +361,21 @@ public static class SimpleTransHediffs
 	public static bool HasBionicSire(Pawn pawn)
 	{
 		return pawn?.health?.hediffSet?.HasHediff(HediffDef.Named("BionicProstheticSire")) == true;
+	}
+
+	/// <summary>
+	/// Checks if pawn has Integrated Implants womb (Synthwomb or Archowomb)
+	/// </summary>
+	public static bool HasIntegratedImplantsWomb(Pawn pawn)
+	{
+		if (pawn?.health?.hediffSet == null)
+			return false;
+
+		var synthwombDef = DefDatabase<HediffDef>.GetNamedSilentFail("Synthwomb");
+		var archowombDef = DefDatabase<HediffDef>.GetNamedSilentFail("Archowomb");
+
+		return (synthwombDef != null && pawn.health.hediffSet.HasHediff(synthwombDef, false)) ||
+			   (archowombDef != null && pawn.health.hediffSet.HasHediff(archowombDef, false));
 	}
 
 	#endregion

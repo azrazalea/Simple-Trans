@@ -41,6 +41,11 @@ public static class SimpleTrans
 	public static bool IdeologyActive { get; private set; }
 
 	/// <summary>
+	/// True if Integrated Implants mod is active
+	/// </summary>
+	public static bool IntegratedImplantsActive { get; private set; }
+
+	/// <summary>
 	/// True if debug mode is enabled in mod settings
 	/// </summary>
 	public static bool DebugMode { get; set; }
@@ -101,8 +106,9 @@ public static class SimpleTrans
 			WBRActive = ModsConfig.IsActive("divineDerivative.Romance");
 			IntimacyActive = ModsConfig.IsActive("LovelyDovey.Sex.WithEuterpe");
 			IdeologyActive = ModsConfig.IdeologyActive;
+			IntegratedImplantsActive = ModsConfig.IsActive("lts.I");
 
-			SimpleTransDebug.Log($"Mod detection - HAR: {HARActive}, NBG: {NBGenderActive}, WBR: {WBRActive}, Intimacy: {IntimacyActive}, Ideology: {IdeologyActive}", 1);
+			SimpleTransDebug.Log($"Mod detection - HAR: {HARActive}, NBG: {NBGenderActive}, WBR: {WBRActive}, Intimacy: {IntimacyActive}, Ideology: {IdeologyActive}, IntegratedImplants: {IntegratedImplantsActive}", 1);
 		}
 		catch (System.Exception ex)
 		{
@@ -111,6 +117,7 @@ public static class SimpleTrans
 			HARActive = false;
 			NBGenderActive = false;
 			IdeologyActive = false;
+			IntegratedImplantsActive = false;
 		}
 	}
 
