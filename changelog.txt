@@ -1,3 +1,6 @@
+[h1]January 30th, 2026[/h1]
+[*] Fixed: Compatibility with "The topic of Gender" mod broken by code refactor
+
 [h1]January 28th, 2026[/h1]
 [*] Added: Integrated Implants mod compatibility
   [*] Synthwomb and Archowomb now grant carrying capability
