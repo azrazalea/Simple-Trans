@@ -5,9 +5,11 @@
     <key>enableProsthetics</key>
     <defaultValue>true</defaultValue>
     <caseTrue>
-      <Operation Class="PatchOperationAdd">
-        <xpath>Defs</xpath>
-        <value>
+      <Operation Class="PatchOperationSequence">
+        <operations>
+          <li Class="PatchOperationAdd">
+            <xpath>Defs</xpath>
+            <value>
           <!-- Basic Prosthetics -->
           <ThingDef ParentName="BodyPartProstheticMakeableBase">
             <defName>BasicReproductiveProsthetic_Carry</defName>
@@ -83,7 +85,6 @@
             </costList>
             <recipeMaker>
               <researchPrerequisites>
-                <li>FleshShaping</li>
                 <li>FertilityProcedures</li>
               </researchPrerequisites>
               <skillRequirements>
@@ -112,7 +113,6 @@
             </costList>
             <recipeMaker>
               <researchPrerequisites>
-                <li>FleshShaping</li>
                 <li>FertilityProcedures</li>
               </researchPrerequisites>
               <skillRequirements>
@@ -123,7 +123,32 @@
               </recipeUsers>
             </recipeMaker>
           </ThingDef>
-        </value>
+            </value>
+          </li>
+
+          <!-- Add FleshShaping research prerequisite for bionic prosthetics when Royalty DLC is active -->
+          <li Class="PatchOperationFindMod">
+            <mods>
+              <li>Royalty</li>
+            </mods>
+            <match Class="PatchOperationSequence">
+              <operations>
+                <li Class="PatchOperationAdd">
+                  <xpath>Defs/ThingDef[defName="BionicReproductiveProsthetic_Carry"]/recipeMaker/researchPrerequisites</xpath>
+                  <value>
+                    <li>FleshShaping</li>
+                  </value>
+                </li>
+                <li Class="PatchOperationAdd">
+                  <xpath>Defs/ThingDef[defName="BionicReproductiveProsthetic_Sire"]/recipeMaker/researchPrerequisites</xpath>
+                  <value>
+                    <li>FleshShaping</li>
+                  </value>
+                </li>
+              </operations>
+            </match>
+          </li>
+        </operations>
       </Operation>
     </caseTrue>
   </Operation>

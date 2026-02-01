@@ -1,5 +1,7 @@
 [h1]January 30th, 2026[/h1]
 [*] Fixed: Compatibility with "The topic of Gender" mod broken by code refactor
+[*] Fixed: Bionic reproductive prosthetics no longer require Royalty DLC
+  [*] FleshShaping research prerequisite is now only added when Royalty is installed
 
 [h1]January 28th, 2026[/h1]
 [*] Added: Integrated Implants mod compatibility
